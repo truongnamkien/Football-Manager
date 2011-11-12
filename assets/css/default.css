@@ -1,0 +1,38 @@
+﻿body { background:#FFFFFF; }
+button { background:#FE900E; color:#7F2002; height:36px; line-height:36px; font-size:22px; font-weight:bold; border:1px solid #FE900E; padding:0 10px; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; cursor:pointer;}
+a { color:#7F2002; text-decoration:none; }
+a:hover { color:#FE900E; }
+::-moz-selection { background:#FE900E; color:#7F2002; }
+
+#container { width:960px; margin:0 auto; }
+.clear { clear:both; }
+.rounded { -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; }
+
+.invoice_form_wrapper { width:700px; margin:20px auto 0; font-size:22px; font-family:arial; color:#7F2002; padding:20px; border:10px solid #AA4201; background:#AA4201; }
+.invoice_form_wrapper input { font-size:22px; height:35px; }
+.invoice_form_wrapper .number_input { background:#7F2002; color:#FE900E; text-align:center; border-width:0px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; cursor:pointer; }
+.invoice_form {  }
+.invoice_form .checked .item_name { background:#FE900E; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; }
+.invoice_form .item  * { float:left; padding:5px; margin:1px; }
+.invoice_form .item  input[type="text"] { width:25px; margin-left:10px; }
+.invoice_form .detail { float:right; display:none; color:#FE900E; }
+.invoice_form .total_detail { color:#FE900E; margin-left:30px; }
+.invoice_form .percent .item_cnt { visibility:hidden; }
+.invoice_form .item_name { width:350px; cursor:pointer; }
+.invoice_form .item_name input[type="checkbox"] { display:none; }
+.invoice_form .extra_price { margin-top:10px; display:block; }
+.invoice_form .extra_price_wrapper { display:none; }
+.invoice_form .extra_price_wrapper textarea { background:#7F2002; color:#FE900E; font-family:arial; font-size:22px; width:340px; padding:10px; border-width:0px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; vertical-align:top; resize:none; }
+.invoice_form .extra_price_wrapper .number_input { width:60px; margin-left:5px; }
+.invoice_form .submit { float:right; margin-top:30px; padding:10px; border-top:1px dashed #FE900E; }
+.invoice_form .submit .stat { margin-right:30px; }
+
+.detail_list { margin:20px auto; font-size:22px; font-family:arial; color:#7F2002; }
+.detail_list td { background:#FE900E; padding:10px; }
+.detail_list td:first-child { border:1px dashed #FE900E; -moz-border-radius:10px 0 0 10px; -webkit-border-radius:10px 0 0 10px; border-radius:10px 0 0 10px; }
+.detail_list td:last-child { border:1px dashed #FE900E; -moz-border-radius:0 10px 10px 0; -webkit-border-radius:0 10px 10px 0; border-radius:0 10px 10px 0; }
+
+.chart_wrapper { margin-top:20px; width:800px; height:500px; }
+.chart_detail { float: right; font-size:18px; font-family:arial; color:#7F2002; }
+.chart_detail .item { background:#FE900E; margin:1px; padding:10px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; }
+.chart_detail_total { font-size:22px; font-family:arial; color:#FE900E; padding:50px; }

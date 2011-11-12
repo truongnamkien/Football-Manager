@@ -1,0 +1,24 @@
+<?php
+$lang['required'] = 'Xin hãy nhập %s.';
+$lang['isset'] = 'Trường %s phải chứa giá trị.';
+$lang['valid_email'] = 'Bạn hãy nhập lại một địa chỉ email hợp lệ.';
+$lang['valid_emails'] = '%s phải chứa một hoặc nhiều địa chỉ email hợp lệ, cách nhau bằng dấu phẩy.';
+$lang['valid_url'] = 'Bạn hãy nhập lại một địa chỉ URL hợp lệ.';
+$lang['valid_ip'] = '%s phải chứa một địa chỉ IP hợp lệ.';
+$lang['min_length'] = '%s phải có ít nhất %s kí tự.';
+$lang['max_length'] = '%s không được dài quá %s kí tự.';
+$lang['exact_length'] = '%s phải có đúng %s kí tự.';
+$lang['alpha'] = '%s chỉ được phép chứa chữ cái.';
+$lang['alpha_numeric'] = '%s chỉ được phép chứa chữ cái hoặc chữ số.';
+$lang['alpha_dash'] = '%s chỉ được phép chứa chữ cái, chữ số, dấu gạch chân hoặc gạch ngang.';
+$lang['numeric'] = '%s phải là giá trị số.';
+$lang['is_numeric'] = '%s phải chứa các chữ số.';
+$lang['integer'] = '%s phải là một số nguyên.';
+$lang['matches'] = '%s bạn nhập không khớp với %s đã nhập.';
+$lang['is_natural'] = '%s phải chứa các số dương hoặc bằng không.';
+$lang['is_natural_no_zero'] = '%s phải là một số dương khác không.';
+$lang['unique'] = "%s đã được sử dụng"; 
+$lang['filter'] = "%s không được phép sử dụng";
+$lang['greater_than'] = "%s phải lớn hơn %s";
+$lang['less_than'] = "%s phải nhỏ hơn %s";
+$lang['year_less_than'] = "Xin lỗi bạn, bạn không thể đăng ký thành viên Trường Xưa";
