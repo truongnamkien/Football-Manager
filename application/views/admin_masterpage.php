@@ -21,7 +21,7 @@
         <![endif]-->
 
         <!-- jQuery -->
-        <?php echo asset_js('js/base/jquery-1.6.4.js') ?>
+        <?php echo asset_js('js/jquery-1.6.4.js') ?>
         <?php echo asset_js('js/admin/jquery.colorbox-min.js'); ?>
         <?php echo asset_js('js/admin/jquery.configuration.js'); ?>		
 

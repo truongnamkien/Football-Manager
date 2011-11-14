@@ -27,15 +27,15 @@ class Building_Type extends MY_Admin_Controller {
     public function create() {
         $validate = $this->_validate_building_type();
 
+        $collect = $this->_collect(array(
+            'name',
+            'description',
+            'beginning_fee',
+            'fee_rate',
+            'effect',
+            'effect_rate',
+            'street_cell'));
         if ($validate) {
-            $collect = $this->_collect(array(
-                'name',
-                'description',
-                'beginning_fee',
-                'fee_rate',
-                'effect',
-                'effect_rate',
-                'street_cell'));
             $building_type = $this->building_type_model->create_building_type($collect);
 
             if ($building_type['return_code'] === API_SUCCESS) {
@@ -43,7 +43,7 @@ class Building_Type extends MY_Admin_Controller {
             }
         }
 
-        $this->load->view('building_type_create_view');
+        $this->load->view('building_type_create_view', $collect);
     }
 
     public function edit() {
@@ -56,19 +56,20 @@ class Building_Type extends MY_Admin_Controller {
                 if ($new_val = $this->input->post($name)) {
                     if ($new_val != $val) {
                         $update_data[$name] = $new_val;
+                        $building_type[$name] = $new_val;
                     }
                 }
             }
             if (!empty($update_data)) {
-                $building_type = $this->building_type_model->update_building_type($update_data);
-                redirect('admin/building_type/view?building_type_id=' . $building_type['building_type_id']);
+                $building_type = $this->building_type_model->update_building_type($building_type['building_type_id'], $update_data);
             }
+            redirect('admin/building_type/show?building_type_id=' . $building_type['building_type_id']);
         }
 
         $this->load->view('building_type_edit_view', $building_type);
     }
 
-    public function view() {
+    public function show() {
         $building_type = $this->_get_building_type();
 
         $this->load->view('building_type_show_view', $building_type);

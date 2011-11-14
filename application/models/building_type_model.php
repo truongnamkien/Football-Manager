@@ -54,8 +54,8 @@ class Building_Type_Model extends CI_Model {
         if (!empty($query) && $query->num_rows() > 0) {
             $building_type = $query->row_array();
 
-            if (!empty($building_type_id)) {
-                return $this->_ret(API_SUCCESS, $building_type_id);
+            if (!empty($building_type)) {
+                return $this->_ret(API_SUCCESS, $building_type);
             }
         }
 
@@ -63,7 +63,7 @@ class Building_Type_Model extends CI_Model {
     }
 
     public function get_all_building_type() {
-        $query = $this->db->order_by('building_type_id', 'desc')->get('building_type');
+        $query = $this->db->order_by('building_type_id', 'asc')->get('building_type');
 
         if (!empty($query) && $query->num_rows() > 0) {
             return $this->_ret(API_SUCCESS, $query->result_array());

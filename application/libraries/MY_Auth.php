@@ -103,7 +103,6 @@ class MY_Auth {
      * @return mixed 
      */
     public function get_user_info() {
-        // dang nao cung phai lay, tien thi lay luon
         if ($this->user_info === FALSE) {
             $user_info = $this->CI->user_model->get_user($this->get_user_id());
 
