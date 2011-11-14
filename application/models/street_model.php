@@ -2,7 +2,7 @@
 
 (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class Street_model extends CI_Model {
+class Street_Model extends CI_Model {
     const MAP_WIDTH = 100;
     const MAP_HEIGHT = 100;
 

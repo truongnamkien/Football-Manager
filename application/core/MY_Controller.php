@@ -31,6 +31,24 @@ class MY_Controller extends MX_Controller {
         $this->_masterview_enabled = FALSE;
     }
 
+    /**
+     *
+     * @param type $params
+     * @return type 
+     */
+    protected function _collect($params) {
+        $this->load->helper('clear');
+        if (is_array($params)) {
+            foreach ($params as $item) {
+                $result[$item] = $this->input->get_post($item, TRUE);
+            }
+        } else {
+            $result = $this->input->get_post($params, TRUE);
+        }
+
+        return clear_my_ass($result);
+    }
+
 }
 
 class MY_Ajax extends MY_Controller {

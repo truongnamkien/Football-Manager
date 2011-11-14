@@ -51,7 +51,7 @@ class Admin extends MY_Admin_Controller {
 
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
-                ->set_rules('username', 'lang:authen_username', 'trim|required|valid_email|max_length[80]|unique[user.email]')
+                ->set_rules('username', 'lang:authen_username', 'trim|strip_tags|required|max_length[80]|unique[admin.username]')
                 ->set_rules('password', 'lang:authen_password', 'required|min_length[6]|max_length[32]')
                 ->set_rules('password_confirm', 'lang:authen_password_confirm', 'required|matches[password]');
 
@@ -70,18 +70,4 @@ class Admin extends MY_Admin_Controller {
 
         $this->load->view('frm_admin_register');
     }
-
-    private function _collect($params) {
-        $this->load->helper('clear');
-        if (is_array($params)) {
-            foreach ($params as $item) {
-                $result[$item] = $this->input->get_post($item, TRUE);
-            }
-        } else {
-            $result = $this->input->get_post($params, TRUE);
-        }
-
-        return clear_my_ass($result);
-    }
-
 }

@@ -2,7 +2,7 @@
 
 (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class Authen extends MY_Controller {
+class Authen extends MY_Outer_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -20,7 +20,7 @@ class Authen extends MY_Controller {
         }
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
-                ->set_rules('email', 'lang:authen_email', 'trim|required|valid_email|max_length[80]|unique[user.email]')
+                ->set_rules('email', 'lang:authen_email', 'trim|required|valid_email|max_length[80]|unique[users.email]')
                 ->set_rules('password', 'lang:authen_password', 'required|min_length[6]|max_length[32]')
                 ->set_rules('password_confirm', 'lang:authen_password_confirm', 'required|matches[password]');
 
@@ -106,24 +106,6 @@ class Authen extends MY_Controller {
     public function logout() {
         $this->my_auth->logout();
         redirect(site_url('login'));
-    }
-
-    /**
-     *
-     * @param type $params
-     * @return type 
-     */
-    private function _collect($params) {
-        $this->load->helper('clear');
-        if (is_array($params)) {
-            foreach ($params as $item) {
-                $result[$item] = $this->input->get_post($item, TRUE);
-            }
-        } else {
-            $result = $this->input->get_post($params, TRUE);
-        }
-
-        return clear_my_ass($result);
     }
 
 }

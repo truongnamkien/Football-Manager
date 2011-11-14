@@ -2,7 +2,7 @@
 
 (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class Admin_model extends CI_Model {
+class Admin_Model extends CI_Model {
 
     /**
      * $salt_length
