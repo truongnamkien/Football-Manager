@@ -14,7 +14,9 @@ class Admin extends MY_Admin_Controller {
     }
 
     public function index() {
-        $this->my_auth->login_required(TRUE);
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
         $admins = $this->admin_model->get_all_admin();
         $data = array();
         if ($admins['return_code'] == API_SUCCESS && !empty($admins['data'])) {
