@@ -47,6 +47,7 @@ class Admin_Model extends CI_Model {
                 $admin_info['role'] = self::ADMIN_ROLE_MODERATOR;
             }
 
+            $this->db->trans_start();
             if ($this->db->insert('admin', $admin_info)) {
                 $admin_id = $this->db->insert_id();
                 if ($admin_id > 0) {

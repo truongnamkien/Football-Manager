@@ -47,7 +47,8 @@ class User_Model extends CI_Model {
             if (!isset($user_info['user_status'])) {
                 $user_info['user_status'] = self::USER_STATUS_INACTIVE;
             }
-
+            
+            $this->db->trans_start();
             if ($this->db->insert('users', $user_info)) {
                 $user_id = $this->db->insert_id();
                 if ($user_id > 0) {

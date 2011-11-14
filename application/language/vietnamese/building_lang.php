@@ -18,3 +18,7 @@ $lang['building_type_street_cell'] = 'Vị trí';
 
 $lang['building_type_create_submit'] = 'Tạo';
 
+$lang['building_level'] = 'Cấp độ';
+$lang['building_upgrade'] = 'Nâng cấp';
+$lang['building_downgrade'] = 'Hạ cấp';
+

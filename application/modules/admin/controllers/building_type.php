@@ -10,7 +10,7 @@ class Building_Type extends MY_Admin_Controller {
         $this->my_auth->login_required(TRUE);
 
         $this->load->library(array('form_validation'));
-        $this->load->language('building_type');
+        $this->load->language('building');
         $this->load->model(array('building_type_model'));
     }
 

@@ -28,6 +28,7 @@ class Street_Model extends CI_Model {
         $coor = $this->generate_coordinate($area);
         $street_info = array_merge($street_info, $coor);
 
+        $this->db->trans_start();
         if ($this->db->insert('streets', $street_info)) {
             $street_id = $this->db->insert_id();
             if ($street_id > 0) {
@@ -123,7 +124,7 @@ class Street_Model extends CI_Model {
                 foreach ($streets as $street) {
                     $result[$street['x_coor'] / self::AREA_WIDTH][$street['y_coor'] / self::AREA_HEIGHT] = $street;
                 }
-                
+
                 return $this->_ret(API_SUCCESS, $result);
             }
         }

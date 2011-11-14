@@ -10,6 +10,7 @@ class Building_Type_Model extends CI_Model {
     }
 
     public function create_building_type($building_type) {
+        $this->db->trans_start();
         if ($this->db->insert('building_type', $building_type)) {
             $building_type_id = $this->db->insert_id();
             if ($building_type_id > 0) {
