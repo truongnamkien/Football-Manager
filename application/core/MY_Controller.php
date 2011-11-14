@@ -122,15 +122,10 @@ class MY_Inner_Controller extends MY_Controller {
 
 class MY_Admin_Controller extends MY_Controller {
 
-    protected $_require_logged_in = TRUE;
-
     public function __construct() {
         parent::__construct();
         $this->_masterview_enabled = TRUE;
         $this->_masterview = 'admin_masterpage';
-        if ($this->_require_logged_in) {
-            $this->my_auth->login_required(TRUE);
-        }
         $this->load->language('admin');
     }
 

@@ -25,7 +25,7 @@ class MY_Auth {
     }
 
     public function login_required($is_admin = FALSE) {
-        if (!$this->logged_in()) {
+        if (!$this->logged_in($is_admin)) {
             if (!$is_admin) {
                 $this->trigger_redirect();
                 redirect('login');
@@ -47,16 +47,17 @@ class MY_Auth {
             $user_info = $this->CI->user_model->get_user_by_email($email);
             $password = $this->CI->user_model->_hash_password($password);
         } else {
-            if ($email == 'root' && $password == 'code4food') {
-                return TRUE;
-            } else {
-                $user_info = $this->CI->admin_model->get_admin($email);
-                $password = $this->CI->admin_model->_hash_password($password);
-            }
+            $user_info = $this->CI->admin_model->get_admin($email);
+            $password = $this->CI->admin_model->_hash_password($password);
         }
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {
             if ($password == $user_info['data']['password']) {
                 $this->user_info = $user_info['data'];
+                if ($is_admin) {
+                    $this->CI->session->set_userdata($this->admin_identity_key, $user_info['data']['username']);
+                } else {
+                    $this->CI->session->set_userdata($this->identity_key, $user_info['data']['email']);
+                }
                 return TRUE;
             }
         }

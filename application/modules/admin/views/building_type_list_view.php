@@ -46,7 +46,7 @@
 
                                 <td class="inlineDisable">
                                     <a onclick="remove_building(<?php echo $building['building_type_id'] ?>);" href="#"><?php echo lang('building_type_remove') ?></a> | 
-                                    <a href="<?php echo site_url('admin/building_type/view?building_type_id=' . $building['building_type_id']) ?>"><?php echo lang('building_type_view') ?></a> | 
+                                    <a href="<?php echo site_url('admin/building_type/show?building_type_id=' . $building['building_type_id']) ?>"><?php echo lang('building_type_show') ?></a> | 
                                     <a href="<?php echo site_url('admin/building_type/edit?building_type_id=' . $building['building_type_id']) ?>"><?php echo lang('building_type_edit') ?></a>
                                 </td>
                             </tr>

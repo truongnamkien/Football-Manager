@@ -3,7 +3,7 @@ $lang['building_type_manager_title'] = 'Danh sách công trình';
 $lang['building_type_back_list'] = 'Quay lại trang danh sách';
 $lang['building_type_create'] = 'Thêm công trình mới';
 $lang['building_type_remove'] = 'Xóa';
-$lang['building_type_view'] = 'Xem';
+$lang['building_type_show'] = 'Xem';
 $lang['building_type_edit'] = 'Chỉnh sửa';
 $lang['building_type_remove_confirm'] = 'Chắc chắn xóa công trình này?';
 

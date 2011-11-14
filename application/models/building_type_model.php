@@ -62,7 +62,7 @@ class Building_Type_Model extends CI_Model {
         return $this->_ret(API_FAILED);
     }
 
-    public function get_all_building_type($building_type_id) {
+    public function get_all_building_type() {
         $query = $this->db->order_by('building_type_id', 'desc')->get('building_type');
 
         if (!empty($query) && $query->num_rows() > 0) {

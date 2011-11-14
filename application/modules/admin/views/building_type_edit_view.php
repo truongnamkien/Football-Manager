@@ -1,15 +1,17 @@
 <div class="content-box"><!-- Start Content Box -->
     <div class="content-box-header">
-        <h3 style="cursor: s-resize;"><?php echo lang('building_type_create') ?></h3>
+        <h3 style="cursor: s-resize;"><?php echo lang('building_type_edit') ?></h3>
         <ul class="content-box-tabs">
             <li><a href="<?php echo site_url('admin/building_type') ?>"><?php echo lang('building_type_back_list') ?></a></li>
+            <li><a href="<?php echo site_url('admin/building_type/show?building_type_id=' . $building_type_id) ?>"><?php echo lang('building_type_show') ?></a></li>
         </ul>
         <div class="clear"></div>
     </div>
 
     <div class="content-box-content">
         <div id="list" class="tab-content default-tab" style="display: block;">
-            <form action="<?php echo site_url('admin/building_type/create'); ?>" method="post">
+            <form action="<?php echo site_url('admin/building_type/edit'); ?>" method="post">
+                <input name="building_type_id" value="<?php echo $building_type_id ?>">
                 <div class="borderGrayLight pa15 feekback mv10">
                     <p><label class="labelField fLeft fwb"><?php echo lang('building_type_name'); ?></label></p>
                     <p><input class="mt10" name="name" value="<?php set_value('name') ?>"></p>
@@ -53,7 +55,7 @@
                         <?php echo form_error('street_cell', '<label>', '</label>') ?>
                     <?php endif; ?>                           
 
-                    <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('building_type_create_submit'); ?></button></p>
+                    <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('building_type_edit'); ?></button></p>
                 </div>
             </form>
         </div>
