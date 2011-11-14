@@ -13,15 +13,10 @@ class Admin extends MY_Admin_Controller {
     }
 
     public function index() {
-        if (!$this->my_auth->logged_in(TRUE)) {
-            $this->login();
-        } else {
-            redirect('/admin/building_type');
-        }
+        $this->my_auth->login_required(TRUE);
     }
 
     public function login() {
-        // set rule.
         $this->form_validation->set_rules('username', 'lang:authen_username', 'trim|strip_tags|required');
         $this->form_validation->set_rules('password', 'lang:authen_password', 'trim|required|min_length[6]|max_length[32]');
 
@@ -29,7 +24,7 @@ class Admin extends MY_Admin_Controller {
         if ($this->form_validation->run()) {
             $inputs = $this->_collect(array('username', 'password'));
             if ($this->my_auth->login($inputs['username'], $inputs['password'], TRUE)) {
-                redirect('/admin/building_type');
+                redirect('/admin');
             } else {
                 $data['login_failed'] = array(
                     'title' => $this->lang->line('authen_login_fail'),
@@ -43,7 +38,7 @@ class Admin extends MY_Admin_Controller {
 
     public function logout() {
         $this->my_auth->logout();
-        redirect('admin/admin');
+        redirect('admin');
     }
 
     public function register() {
@@ -64,7 +59,7 @@ class Admin extends MY_Admin_Controller {
             $user_info = $this->admin_model->create_admin($collect);
 
             if ($user_info['return_code'] === API_SUCCESS) {
-                redirect('admin/building_type');
+                redirect('admin');
             }
         }
 

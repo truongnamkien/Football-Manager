@@ -78,7 +78,9 @@
                             <li> 
                                 <?php
                                 $managers = array(
-                                    'users' => 'Users'
+                                    'admin' => lang('admin_manager_admin'),
+                                    'users' => lang('admin_manager_user'),
+                                    'building_type' => lang('admin_manager_building_type'),
                                         )
                                 ?>
                                 <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('admin_manager_submenu'); ?></a>
