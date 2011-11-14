@@ -71,9 +71,6 @@ class MY_Auth {
      */
     public function logout() {
         $this->CI->session->sess_destroy();
-
-        $this->CI->load->library('app');
-        $this->CI->app->app_destroy();
     }
 
     /**

@@ -10,10 +10,19 @@ class Admin extends MY_Admin_Controller {
 
         $this->load->library(array('form_validation'));
         $this->load->model(array('admin_model'));
+        $this->load->config('admins', TRUE);
     }
 
     public function index() {
         $this->my_auth->login_required(TRUE);
+        $admins = $this->admin_model->get_all_admin();
+        $data = array();
+        if ($admins['return_code'] == API_SUCCESS && !empty($admins['data'])) {
+            $data['admins'] = $admins['data'];
+        }
+        $data['roles'] = $this->config->item('admin_roles', 'admins');
+
+        $this->load->view('admins/admin_list_view', $data);
     }
 
     public function login() {
@@ -33,7 +42,7 @@ class Admin extends MY_Admin_Controller {
                 );
             }
         }
-        $this->load->view('frm_admin_login', $data);
+        $this->load->view('admins/frm_admin_login', $data);
     }
 
     public function logout() {
@@ -63,6 +72,7 @@ class Admin extends MY_Admin_Controller {
             }
         }
 
-        $this->load->view('frm_admin_register');
+        $this->load->view('admins/frm_admin_register');
     }
+
 }

@@ -51,7 +51,7 @@
             <!-- PASSWORD -->
             <div class="uiBox2Field grid_6 alpha mb10">
                 <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_register_password'); ?>
+                    <?php echo lang('authen_password'); ?>
                     <span class="require">*</span>
                 </label>
                 <div class="contentField">

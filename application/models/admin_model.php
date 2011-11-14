@@ -20,7 +20,7 @@ class Admin_Model extends CI_Model {
     private $store_salt = FALSE;
 
     const ADMIN_ROLE_ADMIN = 0;
-    const ADMIN_ROLE_MODERATOR = 0;
+    const ADMIN_ROLE_MODERATOR = 1;
 
     public function __construct() {
         parent::__construct();
@@ -61,12 +61,12 @@ class Admin_Model extends CI_Model {
     }
 
     public function delete_admin($admin) {
-        if(is_array($admin)) {
+        if (is_array($admin)) {
             $admin_id = $admin['admin_id'];
         } else if (is_numeric($admin)) {
             $admin_id = $admin;
         }
-        if(isset($admin_id)) {
+        if (isset($admin_id)) {
             $this->db->delete('admin', array('admin_id' => $admin_id));
         } else {
             $this->db->delete('admin', array('username' => $admin));
@@ -85,7 +85,7 @@ class Admin_Model extends CI_Model {
         } else {
             $query = $this->db->from('admin')->where('username', $admin)->get();
         }
-        
+
         if (!empty($query) && $query->num_rows() > 0) {
             $admin_info = $query->row_array();
 
@@ -231,6 +231,16 @@ class Admin_Model extends CI_Model {
         } else {
             return md5($password);
         }
+    }
+
+    public function get_all_admin() {
+        $query = $this->db->order_by('admin_id', 'asc')->get('admin');
+
+        if (!empty($query) && $query->num_rows() > 0) {
+            return $this->_ret(API_SUCCESS, $query->result_array());
+        }
+
+        return $this->_ret(API_FAILED);
     }
 
 }

@@ -21,7 +21,7 @@ class Building_Type extends MY_Admin_Controller {
             $data['building_types'] = $building_types['data'];
         }
 
-        $this->load->view('building_type_list_view', $data);
+        $this->load->view('building_type/building_type_list_view', $data);
     }
 
     public function create() {
@@ -43,7 +43,7 @@ class Building_Type extends MY_Admin_Controller {
             }
         }
 
-        $this->load->view('building_type_create_view', $collect);
+        $this->load->view('building_type/building_type_create_view', $collect);
     }
 
     public function edit() {
@@ -66,13 +66,13 @@ class Building_Type extends MY_Admin_Controller {
             redirect('admin/building_type/show?building_type_id=' . $building_type['building_type_id']);
         }
 
-        $this->load->view('building_type_edit_view', $building_type);
+        $this->load->view('building_type/building_type_edit_view', $building_type);
     }
 
     public function show() {
         $building_type = $this->_get_building_type();
 
-        $this->load->view('building_type_show_view', $building_type);
+        $this->load->view('building_type/building_type_show_view', $building_type);
     }
 
     public function remove() {
