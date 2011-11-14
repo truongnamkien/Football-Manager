@@ -14,7 +14,7 @@
         <!-- end validation error -->
 
         <?php
-        echo form_open(site_url('authen/register'), array(
+        echo form_open(site_url('admin/admin/register'), array(
             'id' => 'registerForm',
         ));
         ?>
@@ -37,13 +37,13 @@
             <!-- EMAIL -->
             <div id="email">
                 <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_email') ?>
+                    <?php echo lang('authen_username') ?>
                     <span class="require">*</span>
                 </label>
                 <div class="contentField">
-                    <input name="email" id="email" type="text" value="<?php echo set_value('email') ?>" />
-                    <?php if (form_error('email')): ?>
-                        <?php echo form_error('email', '<label class="error">', '</label>') ?>
+                    <input name="username" id="username" type="text" value="<?php echo set_value('username') ?>" />
+                    <?php if (form_error('username')): ?>
+                        <?php echo form_error('username', '<label class="error">', '</label>') ?>
                     <?php endif; ?>
                 </div>
             </div>

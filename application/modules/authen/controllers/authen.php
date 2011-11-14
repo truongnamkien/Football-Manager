@@ -30,13 +30,16 @@ class Authen extends MY_Controller {
                 'email',
                 'password',
                     ));
+            $this->load->model(array('street_model'));
+            $street = $this->street_model->create_street(FALSE, array('street_type' => Street_model::STREET_TYPE_PLAYER));
+            if ($street['return_code'] == API_SUCCESS) {
+                $collect['street_id'] = $street['data']['street_id'];
+            }
 
-            $this->user_model->create_user($collect);
+            $user_info = $this->user_model->create_user($collect);
 
             //Dang ky thanh cong, goi email yeu cau verify             
-            if ($return['return_code'] === API_SUCCESS) {
-                $user_info = $return['data'];
-
+            if ($user_info['return_code'] === API_SUCCESS) {
                 // nếu có redirect thì sau khi register sẽ đá qua đó
                 // nếu ko thì nhảy về trang chọn lớp
                 $redirect = $this->input->post('redirect');
@@ -80,8 +83,6 @@ class Authen extends MY_Controller {
                 if ($inputs['remember_me'] == 1) {
                     ini_set('session.cookie_lifetime', 2592000);
                 }
-                $user_info = $this->my_auth->get_user_info();
-
                 if ($page == '') {
                     $page = 'welcome';
                 }
@@ -106,7 +107,7 @@ class Authen extends MY_Controller {
         $this->my_auth->logout();
         redirect(site_url('login'));
     }
-    
+
     /**
      *
      * @param type $params
@@ -116,10 +117,10 @@ class Authen extends MY_Controller {
         $this->load->helper('clear');
         if (is_array($params)) {
             foreach ($params as $item) {
-                $result[$item] = $this->input->get_post($item);
+                $result[$item] = $this->input->get_post($item, TRUE);
             }
         } else {
-            $result = $this->input->get_post($params);
+            $result = $this->input->get_post($params, TRUE);
         }
 
         return clear_my_ass($result);

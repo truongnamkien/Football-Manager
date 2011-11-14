@@ -15,11 +15,11 @@
     <!-- end validation error -->
 
     <!-- begin form -->
-    <?php echo form_open('login', array('id' => 'frm_login'), array(), FALSE); ?>
+    <?php echo form_open('admin/login', array('id' => 'frm_login'), array(), FALSE); ?>
     <!-- uiBox2Field -->
     <div class="uiBox2Field mb15">
-        <label><?php echo lang('authen_email'); ?></label>
-        <input name="email" value="<?php echo set_value('email') ?>" type="text" />
+        <label><?php echo lang('authen_username'); ?></label>
+        <input name="username" value="<?php echo set_value('username') ?>" type="text" />
     </div><!-- end uiBox2Field -->
 
     <!-- uiBox2Field -->
@@ -31,13 +31,7 @@
     <!-- uiBox2Field -->
     <div class="uiBox2Field mb15">
         <button type="submit" class="uiBtn fLeft"><?php echo lang('authen_login'); ?></button>
-        <ul class="loginFeatures fLeft ml15">
-            <li>
-                <input value="1" type="checkbox" name="remember_me" class="fLeft mr5" />
-                <label for="remember"><?php echo lang('authen_remember_me'); ?></label>
-            </li>
-        </ul>
-    </div><!-- end uiBox2Field -->
+    </div>
     <?php echo form_close(); ?>
     <div class="clear"></div>
-</div><!-- end uiBox2 -->        
+</div>

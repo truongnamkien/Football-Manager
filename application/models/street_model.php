@@ -39,7 +39,7 @@ class Street_model extends CI_Model {
 
         return $this->_ret(API_FAILED);
     }
-    
+
     public function delete_street($street_id) {
         $this->db->delete('streets', array('street_id' => $street_id));
     }
@@ -96,6 +96,42 @@ class Street_model extends CI_Model {
     }
 
     /**
+     * get_street_by_area
+     * Tra ve thong tin nhung street nam trong khu vuc
+     * @param int $area
+     * @return array
+     */
+    public function get_street_by_area($area) {
+        $row = $area / $total_row;
+        $col = $area % $total_row;
+
+        $min_x = $col * self::AREA_WIDTH;
+        $min_y = $row * self::AREA_HEIGHT;
+        $max_x = $min_x + self::AREA_WIDTH - 1;
+        $max_y = $min_y + self::AREA_HEIGHT - 1;
+
+        $query = $this->db->where('x_coor >=', $min_x)
+                ->where('x_coor <=', $max_x)
+                ->where('y_coor >=', $min_y)
+                ->where('y_coor <=', $max_y)
+                ->get('streets');
+
+        if ($query && $query->num_rows() > 0) {
+            $streets = $query->result_array();
+            if (!empty($streets)) {
+                $result = array();
+                foreach ($streets as $street) {
+                    $result[$street['x_coor'] / self::AREA_WIDTH][$street['y_coor'] / self::AREA_HEIGHT] = $street;
+                }
+                
+                return $this->_ret(API_SUCCESS, $result);
+            }
+        }
+
+        return $this->_ret(API_FAILED);
+    }
+
+    /**
      * Lay thong tin street qua toa do.
      * @param string $x_coor, $y_coor
      * @return array
@@ -121,13 +157,13 @@ class Street_model extends CI_Model {
         $min_y = 0;
         $max_x = self::MAP_WIDTH;
         $max_y = self::MAP_HEIGHT;
-        
+
         $total_row = self::MAP_HEIGHT / self::AREA_HEIGHT;
-        
+
         if ($area !== FALSE) {
             $row = $area / $total_row;
             $col = $area % $total_row;
-            
+
             $min_x = $col * self::AREA_WIDTH;
             $min_y = $row * self::AREA_HEIGHT;
             $max_x = $min_x + self::AREA_WIDTH - 1;
