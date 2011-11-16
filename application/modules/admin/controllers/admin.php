@@ -116,7 +116,6 @@ class Admin extends MY_Admin_Controller {
             redirect('admin/admin/show?admin_id=' . $admin_data['data']['admin_id']);
         }
         $admin_data['roles'] = $this->config->item('admin_roles', 'admins');
-//        $this->print_array($admin_data);
         $this->load->view('admins/frm_admin_edit', $admin_data);
 
     }
@@ -145,13 +144,5 @@ class Admin extends MY_Admin_Controller {
         $this->form_validation
                 ->set_rules('role', 'lang:building_type_fee', 'numeric|required');
         return $this->form_validation->run();
-    }
-    
-    public function print_array($array)
-    {
-        echo "<pre>";
-        print_r($array);
-        echo "</pre>";
-        die;
     }
 }

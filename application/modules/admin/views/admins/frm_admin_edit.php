@@ -26,8 +26,15 @@
 
                     <p><label class="labelField fLeft fwb"><?php echo lang('admin_role'); ?></label></p>
                     <p><select class="mt10" name="role" > 
-                            <option value=0> <?php echo $roles[0] ?> 
-                            <option value=1> <?php echo $roles[1] ?> 
+                            <?php 
+                            if (isset($roles)):
+                                foreach ($roles as $index => $value ):
+                            ?>
+                                    <option value="<?php echo $index ?>"> <?php echo $value ?> </option>
+                            <?php 
+                                endforeach;
+                            endif;
+                            ?>
                         </select>
                     </p>
 
