@@ -42,11 +42,11 @@ class Street_Library {
     }
 
     public static function upgrade($building_type_id) {
-        self::change_level($building_type_id, TRUE);
+        return self::change_level($building_type_id, TRUE);
     }
 
     public static function downgrade($building_type_id) {
-        self::change_level($building_type_id, FALSE);
+        return self::change_level($building_type_id, FALSE);
     }
 
     private function change_level($building_type_id, $is_upgrade = TRUE) {
