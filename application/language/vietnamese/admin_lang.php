@@ -23,3 +23,4 @@ $lang['admin_role'] = 'Vai trò';
 
 $lang['admin_create_submit'] = 'Tạo';
 
+$lang['admin_back_list'] = 'Quay lại trang danh sách';

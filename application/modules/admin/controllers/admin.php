@@ -76,5 +76,46 @@ class Admin extends MY_Admin_Controller {
 
         $this->load->view('admins/frm_admin_register');
     }
-
+    
+    public function show(){
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        $id = $this->input->get_post('admin_id');
+        $admin= $this->admin_model->get_admin($id);
+        
+        if($admin['return_code'] != API_SUCCESS || empty($admin['data'])){
+            show_404();
+        }
+        else
+        {
+            $admin_data = $admin['data'];
+            $this->load->view('admins/frm_admin_show_view', $admin_data);
+        }
+    }
+    
+    public function edit(){
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        $id = $this->input->get_post('admin_id');
+        $admin= $this->admin_model->get_admin($id);
+        
+        if($admin['return_code'] != API_SUCCESS || empty($admin['data'])){
+            show_404();
+        }
+        else
+        {
+            $admin_data = $admin['data'];
+            //$this->load->view('admins/frm_admin_edit', $admin_data);
+        }
+    }
+    
+    public function print_array($array)
+    {
+        echo "<pre>";
+        print_r($array);
+        echo "</pre>";
+        die;
+    }
 }
