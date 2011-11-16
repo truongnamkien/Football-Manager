@@ -28,14 +28,12 @@ class Street_Model extends CI_Model {
         $coor = $this->generate_coordinate($area);
         $street_info = array_merge($street_info, $coor);
 
-        $this->db->trans_start();
         if ($this->db->insert('streets', $street_info)) {
             $street_id = $this->db->insert_id();
             if ($street_id > 0) {
                 $street_info['street_id'] = $street_id;
                 return $this->_ret(API_SUCCESS, $street_info);
             }
-            $this->db->trans_rollback();
         }
 
         return $this->_ret(API_FAILED);

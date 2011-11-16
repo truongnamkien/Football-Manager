@@ -17,8 +17,8 @@
                     <td><?php echo $building['street_cell'] ?></td>
                     <td><?php echo $building['name'] ?></td>
                     <td><?php echo $building['level'] ?></td>
-                    <td><?php echo lang('building_upgrade') ?></td>
-                    <td><?php echo lang('building_downgrade') ?></td>
+                    <td><a href="#" ajaxify="<?php echo site_url('ajax/street_ajax/upgrade?bs=' . $building['street_building_id'] . '&st=' . $street['street_id']); ?>" rel="async"><?php echo lang('building_upgrade') ?></a></td>
+                    <td><a href="#" ajaxify="<?php echo site_url('ajax/street_ajax/downgrade?bs=' . $building['street_building_id'] . '&st=' . $street['street_id']); ?>" rel="async"><?php echo lang('building_downgrade') ?></a></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>

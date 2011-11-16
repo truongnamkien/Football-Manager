@@ -7,6 +7,7 @@ class Authen extends MY_Outer_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model(array('user_model'));
+        $this->load->library('user_library');
     }
 
     public function index() {
@@ -16,7 +17,7 @@ class Authen extends MY_Outer_Controller {
     public function register() {
 
         if ($this->my_auth->logged_in()) {
-            redirect('welcome');
+            redirect('street');
         }
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
@@ -30,21 +31,15 @@ class Authen extends MY_Outer_Controller {
                 'email',
                 'password',
                     ));
-            $this->load->model(array('street_model'));
-            $street = $this->street_model->create_street(FALSE, array('street_type' => Street_model::STREET_TYPE_PLAYER));
-            if ($street['return_code'] == API_SUCCESS) {
-                $collect['street_id'] = $street['data']['street_id'];
-            }
-
-            $user_info = $this->user_model->create_user($collect);
+            $user_info = User_Library::create($collect);
 
             //Dang ky thanh cong, goi email yeu cau verify             
-            if ($user_info['return_code'] === API_SUCCESS) {
-                // nếu có redirect thì sau khi register sẽ đá qua đó
-                // nếu ko thì nhảy về trang chọn lớp
+            if (!empty($user_info)) {
+                $this->my_auth->login($user_info['email'], $user_info['password']);
+                
                 $redirect = $this->input->post('redirect');
                 if (empty($redirect)) {
-                    $redirect = 'authen/login';
+                    $redirect = 'street';
                 }
             }
             redirect($redirect);
@@ -58,7 +53,7 @@ class Authen extends MY_Outer_Controller {
             $url = $this->session->userdata('login_redirect');
         }
 
-        $page = (empty($url)) ? 'welcome' : $url;
+        $page = (empty($url)) ? 'street' : $url;
 
         if ($this->my_auth->logged_in()) {
             redirect($page);
@@ -84,7 +79,7 @@ class Authen extends MY_Outer_Controller {
                     ini_set('session.cookie_lifetime', 2592000);
                 }
                 if ($page == '') {
-                    $page = 'welcome';
+                    $page = 'street';
                 }
 
                 redirect($page);

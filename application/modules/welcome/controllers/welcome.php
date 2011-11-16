@@ -9,6 +9,8 @@ class Welcome extends MY_Controller {
     }
 
     public function index() {
+        $user_id = $this->my_auth->get_user_id();
+        
         $this->load->view('welcome_home_page');
     }
 

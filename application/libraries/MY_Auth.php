@@ -5,7 +5,6 @@
 class MY_Auth {
 
     private static $CI = NULL;
-    private static $user_info = FALSE;
     private $identity_key = 'user:id';
     private $admin_identity_key = 'admin:username';
 
@@ -52,11 +51,10 @@ class MY_Auth {
         }
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {
             if ($password == $user_info['data']['password']) {
-                $this->user_info = $user_info['data'];
                 if ($is_admin) {
                     $this->CI->session->set_userdata($this->admin_identity_key, $user_info['data']['username']);
                 } else {
-                    $this->CI->session->set_userdata($this->identity_key, $user_info['data']['email']);
+                    $this->CI->session->set_userdata($this->identity_key, $user_info['data']['user_id']);
                 }
                 return TRUE;
             }
@@ -89,35 +87,6 @@ class MY_Auth {
         }
 
         return FALSE;
-    }
-
-    /**
-     * Lấy thông tin cơ bản của user.
-     * 
-     * @param string $field
-     * @param int $user_id
-     * @param type $user
-     * @return mixed 
-     */
-    public function get_user_info() {
-        if ($this->user_info === FALSE) {
-            $user_info = $this->CI->user_model->get_user($this->get_user_id());
-
-            if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {
-                $user_info = $user_info['data'];
-
-                $street = $this->CI->street_model->get_street($user_info['street_id']);
-                if ($street['return_code'] == API_SUCCESS && !empty($street['data'])) {
-                    $user_info['street'] = $street['data'];
-                }
-
-                self::$user_info = $user_info;
-            } else {
-                self::$user_info = FALSE;
-            }
-        }
-
-        return self::$user_info;
     }
 
     /**
