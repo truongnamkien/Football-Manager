@@ -11,51 +11,27 @@
     <div class="content-box-content">
         <div id="list" class="tab-content default-tab" style="display: block;">
             <form action="<?php echo site_url('admin/admin/edit'); ?>" method="post">
-                <input name="building_type_id" type="hidden" value="<?php echo $building_type_id ?>">
+                <input name="admin_id" type="hidden" value="<?php echo $admin_id ?>">
+                <input name="username" type="hidden" value="<?php echo $username ?>">
+                <input name="password" type="hidden" value="<?php echo $password ?>">
                 <div class="borderGrayLight pa15 feekback mv10">
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_name'); ?></label></p>
-                    <p><input class="mt10" name="name" value="<?php echo $name ?>"></p>
-                    <?php if (form_error('name')): ?>
-                        <?php echo form_error('name', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
+                    <p><label class="labelField fLeft fwb"><?php echo lang('admin_username'); ?></label></p>
+                    <p><label class="textarea rounded" disabled="disabled" name="username"><?php echo $username ?> </label></p>
 
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_description'); ?></label></p>
-                    <p><textarea class="textarea rounded" name="description"><?php echo $description ?></textarea></p>
-                    <?php if (form_error('description')): ?>
-                        <?php echo form_error('description', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
+                    <p><label class="labelField fLeft fwb"><?php echo lang('admin_display_name'); ?></label></p>
+                    <p><input class="mt10" name="display_name" value="<?php echo $display_name ?>"></p>
+                    <?php if (form_error('display_name')): ?>
+                        <?php echo form_error('display_name', '<label>', '</label>') ?>
+                    <?php endif; ?>    
 
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_fee'); ?></label></p>
-                    <p><input class="mt10" name="beginning_fee" value="<?php echo $beginning_fee ?>"></p>
-                    <?php if (form_error('beginning_fee')): ?>
-                        <?php echo form_error('beginning_fee', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
+                    <p><label class="labelField fLeft fwb"><?php echo lang('admin_role'); ?></label></p>
+                    <p><select class="mt10" name="role" > 
+                            <option value=0> <?php echo $roles[0] ?> 
+                            <option value=1> <?php echo $roles[1] ?> 
+                        </select>
+                    </p>
 
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_fee_rate'); ?></label></p>
-                    <p><input class="mt10" name="fee_rate" value="<?php echo $fee_rate ?>"></p>
-                    <?php if (form_error('fee_rate')): ?>
-                        <?php echo form_error('fee_rate', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
-
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_effect'); ?></label></p>
-                    <p><input class="mt10" name="effect" value="<?php echo $effect ?>"></p>
-                    <?php if (form_error('effect')): ?>
-                        <?php echo form_error('effect', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
-
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_effect_rate'); ?></label></p>
-                    <p><input class="mt10" name="effect_rate" value="<?php echo $effect_rate ?>"></p>
-                    <?php if (form_error('effect_rate')): ?>
-                        <?php echo form_error('effect_rate', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
-
-                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_street_cell'); ?></label></p>
-                    <p><input class="mt10" name="street_cell" value="<?php echo $street_cell ?>"></p>
-                    <?php if (form_error('street_cell')): ?>
-                        <?php echo form_error('street_cell', '<label>', '</label>') ?>
-                    <?php endif; ?>                           
-
-                    <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('building_type_edit'); ?></button></p>
+                    <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('admin_edit'); ?></button></p>
                 </div>
             </form>
         </div>
