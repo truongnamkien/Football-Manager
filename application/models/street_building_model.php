@@ -11,7 +11,6 @@ class Street_Building_Model extends CI_Model {
     }
 
     public function create_street_building($street_id, $building_types) {
-        $this->db->trans_start();
         $buildings = array();
         foreach ($building_types as $type) {
             $data = array(
@@ -24,11 +23,9 @@ class Street_Building_Model extends CI_Model {
                 if ($street_building_id > 0) {
                     $buildings[] = array_merge($data, array('street_building_id' => $street_building_id));
                 } else {
-                    $this->db->trans_rollback();
                     return $this->_ret(API_FAILED);
                 }
             } else {
-                $this->db->trans_rollback();
                 return $this->_ret(API_FAILED);
             }
         }
@@ -39,32 +36,18 @@ class Street_Building_Model extends CI_Model {
         $this->db->delete('street_building', array('street_building_id' => $street_building_id));
     }
 
-    public function upgrade_street_building($street_building_id) {
-        $building = $this->get_street_building($street_building_id);
-        if ($building['return_code'] == API_SUCCESS && !empty($building['data'])) {
-            $level = $building['data']['level'];
-            if ($level < self::MAX_LEVEL) {
-                $data = array('level' => ($level + 1));
-                return $this->update_street_building($building, $data);
-            }
-        }
-        return $this->_ret(API_FAILED);
-    }
-
-    public function downgrade_street_building($street_building_id) {
-        $building = $this->get_street_building($street_building_id);
-        if ($building['return_code'] == API_SUCCESS && !empty($building['data'])) {
-            $level = $building['data']['level'];
-            if ($level > 0) {
-                $data = array('level' => ($level - 1));
-                return $this->update_street_building($building, $data);
-            }
-        }
-        return $this->_ret(API_FAILED);
-    }
-
-    private function update_street_building($building, $update_data) {
+    public function update_street_building($building, $update_data) {
         $this->db->trans_start();
+        if (isset($update_data['level'])) {
+            if ($update_data['level'] > self::MAX_LEVEL) {
+                return $this->_ret(API_FAILED);
+            } else if ($update_data['level'] < 1 && $building['building_type_id'] == 1) {
+                return $this->_ret(API_FAILED);
+            } else if ($update_data['level'] < 0 ) {
+                return $this->_ret(API_FAILED);
+            }
+        }
+
         $this->db->where('street_building_id', $building['street_building_id'])->update('street_building', $update_data);
 
         if ($this->db->trans_status() === FALSE) {

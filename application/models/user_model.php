@@ -48,7 +48,6 @@ class User_Model extends CI_Model {
                 $user_info['user_status'] = self::USER_STATUS_INACTIVE;
             }
             
-            $this->db->trans_start();
             if ($this->db->insert('users', $user_info)) {
                 $user_id = $this->db->insert_id();
                 if ($user_id > 0) {
@@ -56,7 +55,6 @@ class User_Model extends CI_Model {
                     return $this->_ret(API_SUCCESS, $user_info);
                 }
             }
-            $this->db->trans_rollback();
         }
 
         return $this->_ret(API_FAILED);
