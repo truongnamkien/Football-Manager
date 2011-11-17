@@ -23,8 +23,7 @@ class Admin extends MY_Admin_Controller {
             $data['admins'] = $admins['data'];
         }
         $data['roles'] = $this->config->item('admin_roles', 'admins');
-
-        $this->load->view('admins/admin_list_view', $data);
+        $this->load->view('admins/frm_admin_list_view', $data);
     }
 
     public function login() {
@@ -94,7 +93,7 @@ class Admin extends MY_Admin_Controller {
             redirect('admin_login');
         }
         $admin_data = $this->_get_admin();
-        $validate = $this->_validate_admin_role();
+        $validate = $this->_validate_admin();
         
         if($validate)
         {
@@ -138,7 +137,7 @@ class Admin extends MY_Admin_Controller {
         return $admin;
     }
     
-    private function _validate_admin_role() {
+    private function _validate_admin() {
         $this->load->library('form_validation');
         $this->form_validation->CI = & $this;
         $this->form_validation

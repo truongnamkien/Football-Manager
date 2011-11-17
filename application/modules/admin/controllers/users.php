@@ -9,6 +9,7 @@ class Users extends MY_Admin_Controller {
         $this->load->library(array('form_validation'));
         $this->load->model(array('user_model'));
         $this->load->language(array('user'));
+        $this->load->config('admins', TRUE);
     }
 
     public function index() {
@@ -29,7 +30,11 @@ class Users extends MY_Admin_Controller {
         if ($users['return_code'] == API_SUCCESS && !empty($users['data'])) {
             $data['users'] = $users['data'];
         }
-        $this->load->view('users/users_list_view', $data);
+        
+        
+        $data['status'] = $this->config->item('user_status', 'admins');
+
+        $this->load->view('users/frm_users_list_view', $data);
 
     }
 
@@ -86,70 +91,74 @@ class Users extends MY_Admin_Controller {
     }
     
     public function show(){
-//        if (!$this->my_auth->logged_in(TRUE)) {
-//            redirect('admin_login');
-//        }
-//        
-//        $admin_data = $this->_get_admin();
-//        $admin_data['roles'] = $this->config->item('admin_roles', 'admins');
-//        $this->load->view('admins/frm_admin_show_view', $admin_data);
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        $user = $this->_get_user();
+        $user['status'] = $this->config->item('user_status', 'admins');
+        $this->load->view('users/frm_user_show_view', $user);
     }
     
     public function edit(){
-//        if (!$this->my_auth->logged_in(TRUE)) {
-//            redirect('admin_login');
-//        }
-//        $admin_data = $this->_get_admin();
-//        $validate = $this->_validate_admin_role();
-//        
-//        if($validate)
-//        {
-//            $update_data = array();
-//            
-//            foreach ($admin_data as $name => $val) {
-//                $new_val = $this->input->post($name);
-//                {
-//                    if($new_val != $val )
-//                    {
-//                        $update_data[$name] = $new_val;
-//                        $admin_data[$name] = $new_val;
-//                    }
-//                }
-//            }
-//            if (!empty($update_data)) {
-//                $admin_data = $this->admin_model->update_admin($admin_data['admin_id'], $update_data);
-//            }
-//            redirect('admin/admin/show?admin_id=' . $admin_data['data']['admin_id']);
-//        }
-//        $admin_data['roles'] = $this->config->item('admin_roles', 'admins');
-//        $this->load->view('admins/frm_admin_edit', $admin_data);
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        $user_data = $this->_get_user();
+        $validate = $this->_validate_user();
+        
+        if($validate)
+        {
+            $update_data = array();
+            
+            foreach ($user_data as $name => $val) {
+                $new_val = $this->input->post($name);
+                {
+                    if($new_val != $val )
+                    {
+                        $update_data[$name] = $new_val;
+                        $user_data[$name] = $new_val;
+                    }
+                }
+            }
+            if (!empty($update_data)) {
+                $user_data = $this->user_model->update_user($user_data['user_id'], $update_data);
+            }
+            redirect('admin/users/show?user_id=' . $user_data['data']['user_id']);
+        }
+        $user_data['status'] = $this->config->item('user_status', 'admins');
+//        echo "<pre>";
+//        print_r($user_data);
+//        echo "</pre>";
+//        die;
+        $this->load->view('users/frm_user_edit', $user_data);
 
     }
     
-    private function _get_admin() {
-//        if (FALSE == ($id = $this->input->get_post('admin_id'))){
-//            show_404();
-//        }
-//        $admin= $this->admin_model->get_admin($id);
-//        
-//        if($admin['return_code'] != API_SUCCESS || empty($admin['data'])){
-//            show_404();
-//        }
-//        else
-//        {
-//            $admin = $admin['data'];
-//
-//        }
-//        
-//        return $admin;
+    private function _get_user() {
+        if (FALSE == ($id = $this->input->get_post('user_id'))){
+            show_404();
+        }
+        $user= $this->user_model->get_user($id);
+        
+        if($user['return_code'] != API_SUCCESS || empty($user['data'])){
+            show_404();
+        }
+        else
+        {
+            $user = $user['data'];
+
+        }
+        
+        return $user;
     }
     
-    private function _validate_admin_role() {
+    private function _validate_user() {
         $this->load->library('form_validation');
         $this->form_validation->CI = & $this;
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
-                ->set_rules('role', 'lang:building_type_fee', 'numeric|required');
+                ->set_rules('user_status', 'lang:building_type_fee', 'numeric|required');
+        
         return $this->form_validation->run();
     }
 }

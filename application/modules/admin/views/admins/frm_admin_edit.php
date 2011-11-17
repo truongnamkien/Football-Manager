@@ -3,7 +3,7 @@
         <h3 style="cursor: s-resize;"><?php echo lang('admin_edit') ?></h3>
         <ul class="content-box-tabs">
             <li><a href="<?php echo site_url('admin/admin') ?>"><?php echo lang('building_type_back_list') ?></a></li>
-            <li><a href="<?php echo site_url('admin/adin/show?admin_id=' . $admin_id) ?>"><?php echo lang('admin_show') ?></a></li>
+            <li><a href="<?php echo site_url('admin/admin/show?admin_id=' . $admin_id) ?>"><?php echo lang('admin_show') ?></a></li>
         </ul>
         <div class="clear"></div>
     </div>
