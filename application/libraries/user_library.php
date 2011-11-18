@@ -11,6 +11,7 @@ class User_Library {
         self::$CI = & get_instance();
         self::$CI->load->model(array('user_model', 'street_model'));
         self::$CI->load->library('street_library');
+        self::$CI->load->config('user', TRUE);
     }
 
     /**
@@ -35,7 +36,8 @@ class User_Library {
     public static function create($data) {
         $street_info = Street_Library::create(FALSE, Street_Model::STREET_TYPE_PLAYER);
         $data['street_id'] = $street_info['street_id'];
-        
+        $data['balance'] = self::$CI->config->item('user_beginning_balance', 'user');
+
         $user_info = self::$CI->user_model->create_user($data);
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {
             $user_info = $user_info['data'];
@@ -44,6 +46,23 @@ class User_Library {
         }
 
         return $user_info;
+    }
+
+    public static function check_enough_balance($fee = 0) {
+        $user_info = self::execute();
+        return $user_info['balance'] >= $fee;
+    }
+
+    public static function update_balance($fee = 0) {
+        $user_info = self::execute();
+        $balance = $user_info['balance'];
+        $balance -= $fee;
+        $ret = self::$CI->user_model->update_user($user_info['user_id'], array('balance' => $balance));
+        if($ret['return_code'] == API_SUCCESS && !empty($ret['data']['balance'])) {
+            $user_info['balance'] = $ret['data']['balance'];
+            self::$instance->full_info = $user_info;
+        }
+        return $ret;
     }
 
     /**

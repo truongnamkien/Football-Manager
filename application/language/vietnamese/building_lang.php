@@ -20,12 +20,11 @@ $lang['building_type_create_submit'] = 'Tạo';
 
 $lang['building_level'] = 'Cấp độ';
 $lang['building_upgrade'] = 'Nâng cấp';
-$lang['building_downgrade'] = 'Hạ cấp';
 
-// Upgrade - Downgrade
-$lang['building_success'] = 'thành công';
-$lang['building_failed'] = 'thất bại';
+// Upgrade
+$lang['building_upgrade_success'] = 'Nâng cấp thành công';
+$lang['building_upgrade_failed'] = 'Thời gian chờ vẫn còn, bạn không thể nâng cấp công trình';
 $lang['building_upgrade_non_permission'] = 'Bạn không có quyền nâng cấp công trình này!';
-$lang['building_downgrade_non_permission'] = 'Bạn không có quyền hạ cấp công trình này!';
+$lang['building_not_enough_money'] = 'Bạn không có đủ tiền';
 
 

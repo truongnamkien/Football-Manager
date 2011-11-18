@@ -1,3 +1,16 @@
+var Cooldown = function(_time, _elem) {
+    var _last_time = _time - 1;
+    var _second = _time % 60;
+    _time = Math.floor(_time / 60);
+    var _minute = Math.floor(_time % 60);
+    var _hour = Math.floor(_time / 60);
+    var _html = _hour + ':' + _minute + ':' + _second;
+
+    $("#" + _elem).html(_html);
+    setTimeout('Cooldown(' + _last_time + ', "' + _elem + '");', 1000);
+}
+
+
 function URI(uri) {
     if(uri === window) return;
     if(this === window) return new URI(uri||window.location.href);

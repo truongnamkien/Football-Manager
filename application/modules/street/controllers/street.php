@@ -17,9 +17,19 @@ class Street extends MY_Inner_Controller {
         $user_info = User_Library::execute();
         $street_info = $user_info['street'];
         $buildings = $street_info['building_types'];
-        
+
         $data['buildings'] = $buildings;
         $data['street'] = $street_info;
+        $data['balance'] = $user_info['balance'];
+        $data['current_time'] = now();
+        
+        $data['cooldowns'] = array();
+        foreach ($street_info['cooldowns']['buildings'] as $cd) {
+            if ($cd['end_time'] != NULL && $cd['end_time'] > $data['current_time']) {
+                $data['cooldowns'][$cd['cooldown_id']] = $cd;
+            }
+        }
+        
         $this->load->view('street_building_view', $data);
     }
 

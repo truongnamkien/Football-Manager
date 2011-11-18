@@ -4,6 +4,7 @@
 
 class Street_Building_Model extends CI_Model {
     const MAX_LEVEL = 20;
+    const LEVEL_PER_SECTION = 5;
 
     public function __construct() {
         parent::__construct();
