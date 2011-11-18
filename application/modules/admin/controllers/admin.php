@@ -23,8 +23,7 @@ class Admin extends MY_Admin_Controller {
             $data['admins'] = $admins['data'];
         }
         $data['roles'] = $this->config->item('admin_roles', 'admins');
-
-        $this->load->view('admins/admin_list_view', $data);
+        $this->load->view('admins/frm_admin_list_view', $data);
     }
 
     public function login() {
@@ -53,7 +52,9 @@ class Admin extends MY_Admin_Controller {
     }
 
     public function register() {
-        $this->my_auth->login_required(TRUE);
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
 
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
@@ -76,5 +77,71 @@ class Admin extends MY_Admin_Controller {
 
         $this->load->view('admins/frm_admin_register');
     }
+    
+    public function show(){
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        
+        $admin_data = $this->_get_admin();
+        $admin_data['roles'] = $this->config->item('admin_roles', 'admins');
+        $this->load->view('admins/frm_admin_show_view', $admin_data);
+    }
+    
+    public function edit(){
+        if (!$this->my_auth->logged_in(TRUE)) {
+            redirect('admin_login');
+        }
+        $admin_data = $this->_get_admin();
+        $validate = $this->_validate_admin();
+        
+        if($validate)
+        {
+            $update_data = array();
+            
+            foreach ($admin_data as $name => $val) {
+                $new_val = $this->input->post($name);
+                {
+                    if($new_val != $val )
+                    {
+                        $update_data[$name] = $new_val;
+                        $admin_data[$name] = $new_val;
+                    }
+                }
+            }
+            if (!empty($update_data)) {
+                $admin_data = $this->admin_model->update_admin($admin_data['admin_id'], $update_data);
+            }
+            redirect('admin/admin/show?admin_id=' . $admin_data['data']['admin_id']);
+        }
+        $admin_data['roles'] = $this->config->item('admin_roles', 'admins');
+        $this->load->view('admins/frm_admin_edit', $admin_data);
 
+    }
+    
+    private function _get_admin() {
+        if (FALSE == ($id = $this->input->get_post('admin_id'))){
+            show_404();
+        }
+        $admin= $this->admin_model->get_admin($id);
+        
+        if($admin['return_code'] != API_SUCCESS || empty($admin['data'])){
+            show_404();
+        }
+        else
+        {
+            $admin = $admin['data'];
+
+        }
+        
+        return $admin;
+    }
+    
+    private function _validate_admin() {
+        $this->load->library('form_validation');
+        $this->form_validation->CI = & $this;
+        $this->form_validation
+                ->set_rules('role', 'lang:building_type_fee', 'numeric|required');
+        return $this->form_validation->run();
+    }
 }

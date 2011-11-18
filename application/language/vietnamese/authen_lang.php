@@ -14,3 +14,4 @@ $lang['authen_login_fail'] = 'Email hoặc mật khẩu sai';
 $lang['authen_login_fail_helper'] = 'Mật khẩu bạn nhập vào chưa chính xác';
 
 $lang['authen_please_register'] = 'Bạn chưa có tài khoản trên Football Manager?';
+$lang['authen_old_password'] = 'Mật khẩu';
