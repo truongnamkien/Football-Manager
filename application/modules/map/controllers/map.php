@@ -19,7 +19,7 @@ class Map extends MY_Controller {
             $area = $info['area'];
         } else {
             $street = $info['street'];
-            $area = $street['x_coor'] / Street_model::AREA_WIDTH + intval($street['y_coor'] / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
+            $area = intval($street['x_coor'] / Street_model::AREA_WIDTH) + intval($street['y_coor'] / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
         }
 
         $data = array();
