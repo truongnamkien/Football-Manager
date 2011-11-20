@@ -3,9 +3,9 @@
 (defined('BASEPATH')) OR exit('No direct script access allowed');
 
 class Cooldown_Model extends CI_Model {
-    const COOLDOWN_TYPE_BUILDING = 0;
-    const COOLDOWN_TYPE_RESEARCH = 1;
-    const COOLDOWN_TYPE_MATCHING = 2;
+    const COOLDOWN_TYPE_BUILDING = 'building';
+    const COOLDOWN_TYPE_RESEARCH = 'research';
+    const COOLDOWN_TYPE_MATCHING = 'marching';
 
     const MAX_COOLDOWN_SLOT_BUILDING = 3;
     const MAX_COOLDOWN_SLOT_RESEARCHING = 1;

@@ -25,6 +25,7 @@
                         <th><?php echo lang('building_type_effect') ?></th>
                         <th><?php echo lang('building_type_effect_rate') ?></th>
                         <th><?php echo lang('building_type_street_cell') ?></th>
+                        <th><?php echo lang('building_type_type') ?></th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@
                                 <td class="inlineDisable" field="effect"><?php echo $building['effect'] ?></td>
                                 <td class="inlineDisable" field="effect_rate"><?php echo $building['effect_rate'] ?></td>
                                 <td class="inlineDisable" field="street_cell"><?php echo $building['street_cell'] ?></td>
+                                <td class="inlineDisable" field="street_cell"><?php echo $building['type'] ?></td>
 
                                 <td class="inlineDisable">
                                     <a onclick="remove_building(<?php echo $building['building_type_id'] ?>);" href="#"><?php echo lang('building_type_remove') ?></a> | 

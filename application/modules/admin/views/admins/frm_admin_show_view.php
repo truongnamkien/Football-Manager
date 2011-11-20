@@ -28,7 +28,7 @@
 
                 <tr>
                     <td class="fwb"><?php echo lang('admin_role'); ?></td>
-                    <td><?php echo $roles[$role] ?></td>
+                    <td><?php echo $role ?></td>
                 </tr>
             </table><!-- End Table Listing Records -->
         </div>

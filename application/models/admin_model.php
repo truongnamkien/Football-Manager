@@ -19,8 +19,8 @@ class Admin_Model extends CI_Model {
      */
     private $store_salt = FALSE;
 
-    const ADMIN_ROLE_ADMIN = 0;
-    const ADMIN_ROLE_MODERATOR = 1;
+    const ADMIN_ROLE_ADMIN = 'admin';
+    const ADMIN_ROLE_MODERATOR = 'moderator';
 
     public function __construct() {
         parent::__construct();

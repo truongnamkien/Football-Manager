@@ -19,9 +19,9 @@ class User_Model extends CI_Model {
      */
     private $store_salt = FALSE;
 
-    const USER_STATUS_INACTIVE = 0;
-    const USER_STATUS_ACTIVE = 1;
-    const USER_STATUS_RECOVERY_PASSWORD = 2;
+    const USER_STATUS_INACTIVE = 'inactive';
+    const USER_STATUS_ACTIVE = 'active';
+    const USER_STATUS_RECOVERY_PASSWORD = 'recovery';
 
     public function __construct() {
         parent::__construct();

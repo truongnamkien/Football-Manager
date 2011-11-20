@@ -9,8 +9,8 @@ class Street_Model extends CI_Model {
     const AREA_WIDTH = 10;
     const AREA_HEIGHT = 10;
 
-    const STREET_TYPE_PLAYER = 0;
-    const STREET_TYPE_NPC = 1;
+    const STREET_TYPE_PLAYER = 'player';
+    const STREET_TYPE_NPC = 'npc';
 
     public function __construct() {
         parent::__construct();

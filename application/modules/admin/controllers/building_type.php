@@ -34,15 +34,16 @@ class Building_Type extends MY_Admin_Controller {
             'fee_rate',
             'effect',
             'effect_rate',
-            'street_cell'));
+            'street_cell',
+            'type'));
         if ($validate) {
             $building_type = $this->building_type_model->create_building_type($collect);
 
             if ($building_type['return_code'] === API_SUCCESS) {
-                redirect('admin/building_type');
+                redirect(site_url('admin/building_type'));
             }
         }
-
+        $collect['types'] = $this->_get_types();
         $this->load->view('building_type/building_type_create_view', $collect);
     }
 
@@ -61,11 +62,12 @@ class Building_Type extends MY_Admin_Controller {
                 }
             }
             if (!empty($update_data)) {
-                $building_type = $this->building_type_model->update_building_type($building_type['building_type_id'], $update_data);
+                $this->building_type_model->update_building_type($building_type['building_type_id'], $update_data);
             }
-            redirect('admin/building_type/show?building_type_id=' . $building_type['building_type_id']);
+            redirect(site_url('admin/building_type/show?building_type_id=' . $building_type['building_type_id']));
         }
 
+        $building_type['types'] = $this->_get_types();
         $this->load->view('building_type/building_type_edit_view', $building_type);
     }
 
@@ -79,7 +81,7 @@ class Building_Type extends MY_Admin_Controller {
         $building_type_id = $this->input->get_post('building_type_id');
         $this->building_type_model->delete_building_type($building_type_id);
 
-        redirect('admin/building_type');
+        redirect(site_url('admin/building_type'));
     }
 
     private function _get_building_type() {
@@ -88,8 +90,7 @@ class Building_Type extends MY_Admin_Controller {
         }
 
         $building_type = $this->building_type_model->get_building_type($building_type_id);
-
-        if ($building_type['return_code'] != API_SUCCESS || empty($building_type['data'])) { // khong tim thay event 
+        if ($building_type['return_code'] != API_SUCCESS || empty($building_type['data'])) {
             show_404();
         } else {
             $building_type = $building_type['data'];
@@ -109,6 +110,19 @@ class Building_Type extends MY_Admin_Controller {
                 ->set_rules('effect_rate', 'lang:building_type_effect_rate', 'numeric|required')
                 ->set_rules('street_cell', 'lang:building_type_street_cell', 'numeric|required|unique[building_type.street_cell]');
         return $this->form_validation->run();
+    }
+
+    private function _get_types() {
+        return array(Building_Type_Model::BUILDING_TYPE_MANAGEMENT,
+            Building_Type_Model::BUILDING_TYPE_STADIUM_CONTAINER,
+            Building_Type_Model::BUILDING_TYPE_TRANSPORT,
+            Building_Type_Model::BUILDING_TYPE_TRAINING,
+            Building_Type_Model::BUILDING_TYPE_SUPPORT,
+            Building_Type_Model::BUILDING_TYPE_RECOVERY,
+            Building_Type_Model::BUILDING_TYPE_SERVICE,
+            Building_Type_Model::BUILDING_TYPE_RESEARCH,
+            Building_Type_Model::BUILDING_TYPE_STORAGE,
+            Building_Type_Model::BUILDING_TYPE_TRANSFER);
     }
 
 }

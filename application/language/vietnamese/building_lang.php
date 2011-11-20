@@ -15,6 +15,7 @@ $lang['building_type_fee_rate'] = '% tăng phí';
 $lang['building_type_effect'] = 'Hiệu quả';
 $lang['building_type_effect_rate'] = '% tăng hiệu quả';
 $lang['building_type_street_cell'] = 'Vị trí';
+$lang['building_type_type'] = 'Loại công trình';
 
 $lang['building_type_create_submit'] = 'Tạo';
 
