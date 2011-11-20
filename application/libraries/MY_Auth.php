@@ -14,8 +14,8 @@ class MY_Auth {
     public function __construct() {
         $this->CI = & get_instance();
         $this->CI->load->helper('cookie');
-        $this->CI->load->library('session');
-        $this->CI->load->model(array('user_model', 'admin_model', 'street_model'));
+        $this->CI->load->library(array('session', 'user_library'));
+        $this->CI->load->model(array('user_model', 'admin_model'));
     }
 
     public function trigger_redirect() {
@@ -101,6 +101,18 @@ class MY_Auth {
             $user_id = $this->CI->session->userdata($this->identity_key);
         }
         return $user_id;
+    }
+
+    public function get_street_id() {
+        $user_id = $this->get_user_id();
+        if ($user_id == FALSE || $user_id == NULL) {
+            return FALSE;
+        }
+        $user = User_Library::get($user_id);
+        if ($user == FALSE || $user == NULL) {
+            return FALSE;
+        }
+        return $user['street_id'];
     }
 
 }

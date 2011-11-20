@@ -2,40 +2,36 @@
 
 class Street_Library {
 
-    public static $instance = NULL;
-    private $street_info = FALSE;
-    private $CI = NULL;
-    private $cache_key = 'street.info:';
+    private static $street_info = FALSE;
+    private static $CI = NULL;
+    private static $cache_key = 'street.info:';
 
     function __construct() {
-        if (is_null(self::$instance)) {
-            self::$instance = new self;
-        }
-        self::$instance->CI = & get_instance();
-        self::$instance->CI->load->model(array('street_model', 'cooldown_model'));
-        self::$instance->CI->load->driver('cache');
-        self::$instance->CI->load->library('building_library');
+        self::$CI = & get_instance();
+        self::$CI->load->model(array('street_model', 'cooldown_model'));
+        self::$CI->load->driver('cache');
+        self::$CI->load->library('building_library');
     }
 
     public static function get($street_id) {
-        if (self::$instance->street_info != FALSE && isset(self::$instance->street_info[$street_id]) && !empty(self::$instance->street_info[$street_id])) {
-            return self::$instance->street_info[$street_id];
+        if (self::$street_info != FALSE && isset(self::$street_info[$street_id]) && !empty(self::$street_info[$street_id])) {
+            return self::$street_info[$street_id];
         }
-        $cache_data = self::$instance->CI->cache->get(self::$instance->cache_key . $street_id);
+        $cache_data = self::$CI->cache->get(self::$cache_key . $street_id);
         if ($cache_data) {
-            self::$instance->street_info[$street_id] = $cache_data;
-            return self::$instance->street_info[$street_id];
+            self::$street_info[$street_id] = $cache_data;
+            return self::$street_info[$street_id];
         }
-        $street = self::$instance->CI->street_model->get_street($street_id);
+        $street = self::$CI->street_model->get_street($street_id);
         if ($street['return_code'] == API_SUCCESS && !empty($street['data'])) {
             $street = $street['data'];
-            if ($street_id == self::$instance->CI->my_auth->get_street_id()) {
+            if ($street_id == self::$CI->my_auth->get_street_id()) {
                 $buildings = Building_Library::get_all_buildings($street_id);
                 $street['buildings'] = $buildings;
             }
 
             // Lấy Cooldown list của Street
-            $cooldowns = self::$instance->CI->cooldown_model->get_cooldown_by_street($street_id);
+            $cooldowns = self::$CI->cooldown_model->get_cooldown_by_street($street_id);
             if ($cooldowns['return_code'] == API_SUCCESS && !empty($cooldowns['data'])) {
                 $cooldowns = $cooldowns['data'];
             } else {
@@ -59,7 +55,7 @@ class Street_Library {
                     'street_id' => $street_id,
                     'end_time' => NULL,
                 );
-                $cooldown = self::$instance->CI->cooldown_model->create_cooldown($data);
+                $cooldown = self::$CI->cooldown_model->create_cooldown($data);
                 $street_cooldowns['research'] = $cooldown['data'];
             }
             if (count($street_cooldowns['buildings']) < Cooldown_Model::MAX_COOLDOWN_SLOT_BUILDING) {
@@ -70,16 +66,16 @@ class Street_Library {
                         'street_id' => $street_id,
                         'end_time' => NULL,
                     );
-                    $cooldown = self::$instance->CI->cooldown_model->create_cooldown($data);
+                    $cooldown = self::$CI->cooldown_model->create_cooldown($data);
                     $cooldown = $cooldown['data'];
                     $street_cooldowns['buildings'][$cooldown['cooldown_id']] = $cooldown;
                 }
             }
             $street['cooldowns'] = $street_cooldowns;
 
-            self::$instance->CI->cache->save(self::$instance->cache_key . $street_id, $street);
-            self::$instance->street_info[$street_id] = $street;
-            return self::$instance->street_info[$street_id];
+            self::$CI->cache->save(self::$cache_key . $street_id, $street);
+            self::$street_info[$street_id] = $street;
+            return self::$street_info[$street_id];
         }
         return FALSE;
     }
@@ -87,31 +83,31 @@ class Street_Library {
     public static function upgrade($street_building_id) {
         $current_time = now();
         $available_cd = self::get_available_building_cooldown();
-        $street = self::get(self::$instance->CI->my_auth->get_street_id());
+        $street = self::get(self::$CI->my_auth->get_street_id());
 
         if ($available_cd == FALSE) {
-            return FALSE;
+            return lang('building_upgrade_non_cooldown');
         } else {
-            $cooldown_time = self::get_cooldown_time($building_type_id);
+            $cooldown_time = self::get_cooldown_time($street_building_id);
             $building = Building_Library::upgrade($street_building_id);
-            if ($building == FALSE) {
-                return FALSE;
+            if ($building == FALSE || is_string($building)) {
+                return $building;
             }
 
             $cooldown = self::update_cooldown($available_cd, $current_time + $cooldown_time);
             $street['cooldowns']['buildings'][$available_cd] = $cooldown;
             $street['buildings'][$street_building_id] = $building;
             $street_id = $street['street_id'];
-            self::$instance->CI->cache->delete(self::$instance->cache_key . $street_id);
-            self::$instance->CI->cache->save(self::$instance->cache_key . $street_id, $street);
-            self::$instance->street_info[$street_id] = $street;
-            return self::$instance->street_info[$street_id];
+            self::$CI->cache->delete(self::$cache_key . $street_id);
+            self::$CI->cache->save(self::$cache_key . $street_id, $street);
+            self::$street_info[$street_id] = $street;
+            return self::$street_info[$street_id];
         }
     }
 
     private static function get_available_building_cooldown() {
         $current_time = now();
-        $street = self::get(self::$instance->CI->my_auth->get_street_id());
+        $street = self::get(self::$CI->my_auth->get_street_id());
         foreach ($street['cooldowns']['buildings'] as $cd) {
             if ($cd['end_time'] == NULL || $cd['end_time'] <= $current_time) {
                 return $cd['cooldown_id'];
@@ -121,7 +117,7 @@ class Street_Library {
     }
 
     private static function update_cooldown($cooldown_id, $time) {
-        $cooldown = self::$instance->CI->cooldown_model->update_cooldown($cooldown_id, array('end_time' => $time));
+        $cooldown = self::$CI->cooldown_model->update_cooldown($cooldown_id, array('end_time' => $time));
         if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
             return $cooldown['data'];
         }
@@ -139,24 +135,24 @@ class Street_Library {
         return $fee;
     }
 
-    public static function get_cooldown_time($building_type_id) {
+    public static function get_cooldown_time($street_building_id) {
         $building = Building_Library::get($street_building_id);
         $level = $building['level'];
-        $fee = self::get_fee($building_type_id);
+        $fee = self::get_fee($street_building_id);
         $rate = intval($level / Street_Building_Model::LEVEL_PER_SECTION) + 1;
         return $fee / $rate;
     }
 
     public static function create($area, $street_type) {
-        $street = self::$instance->CI->street_model->create_street($area, array('street_type' => $street_type));
+        $street = self::$CI->street_model->create_street($area, array('street_type' => $street_type));
         if ($street['return_code'] != API_SUCCESS || empty($street['data'])) {
             return FALSE;
         }
         $street = $street['data'];
         $buildings = Building_Library::create_building_for_street($street['street_id']);
         $street['buildings'] = $buildings;
-        self::$instance->CI->cache->save(self::$instance->cache_key . $street['street_id'], $street);
-        self::$instance->street_info[$street['street_id']] = $street;
+        self::$CI->cache->save(self::$cache_key . $street['street_id'], $street);
+        self::$street_info[$street['street_id']] = $street;
         return $street;
     }
 
