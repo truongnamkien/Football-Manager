@@ -119,12 +119,13 @@ class Building_Library extends Abstract_Library {
     }
 
     public static function create_building_for_street($street_id) {
+        parent::$CI->load->model(array('street_building_model', 'building_type_model'));
         $building_types = parent::$CI->building_type_model->get_all_building_type();
         if ($building_types['return_code'] !== API_SUCCESS || empty($building_types['data'])) {
             return FALSE;
         }
         $building_types = $building_types['data'];
-        $buildings = parent::$CI->street_building_model->create_street_building($street_info['street_id'], $building_types);
+        $buildings = parent::$CI->street_building_model->create_street_building($street_id, $building_types);
         if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
             $buildings = $buildings['data'];
         } else {

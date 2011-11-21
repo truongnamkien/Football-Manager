@@ -18,15 +18,9 @@ class MY_Auth {
         $this->CI->load->model(array('user_model', 'admin_model'));
     }
 
-    public function trigger_redirect() {
-        $login_redirect = $_SERVER['REQUEST_URI'];
-        $this->CI->session->set_userdata('login_redirect', $login_redirect);
-    }
-
     public function login_required($is_admin = FALSE) {
         if (!$this->logged_in($is_admin)) {
             if (!$is_admin) {
-                $this->trigger_redirect();
                 redirect('login');
             } else {
                 redirect('admin/admin');

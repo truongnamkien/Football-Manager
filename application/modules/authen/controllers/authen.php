@@ -17,7 +17,7 @@ class Authen extends MY_Outer_Controller {
     public function register() {
 
         if ($this->my_auth->logged_in()) {
-            redirect('street');
+            redirect(site_url('street'));
         }
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
@@ -36,27 +36,16 @@ class Authen extends MY_Outer_Controller {
             //Dang ky thanh cong, goi email yeu cau verify             
             if (!empty($user_info)) {
                 $this->my_auth->login($user_info['email'], $user_info['password']);
-                
-                $redirect = $this->input->post('redirect');
-                if (empty($redirect)) {
-                    $redirect = 'street';
-                }
             }
-            redirect($redirect);
+            redirect(site_url('street'));
         }
 
         $this->load->view('frm_authen_register');
     }
 
     public function login() {
-        if ($this->session->userdata('login_redirect')) {
-            $url = $this->session->userdata('login_redirect');
-        }
-
-        $page = (empty($url)) ? 'street' : $url;
-
         if ($this->my_auth->logged_in()) {
-            redirect($page);
+            redirect(site_url('street'));
         }
 
         // set rule.
@@ -78,11 +67,7 @@ class Authen extends MY_Outer_Controller {
                 if ($inputs['remember_me'] == 1) {
                     ini_set('session.cookie_lifetime', 2592000);
                 }
-                if ($page == '') {
-                    $page = 'street';
-                }
-
-                redirect($page);
+                redirect(site_url('street'));
             } else {
                 $data['login_failed'] = array(
                     'title' => $this->lang->line('authen_login_fail'),

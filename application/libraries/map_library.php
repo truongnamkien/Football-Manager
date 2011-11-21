@@ -78,10 +78,10 @@ class Map_Library extends Abstract_Library {
         $street = $street['data'];
 
         // Cập nhật cache
-        $area = intval($street['x_coor'] / Street_model::AREA_WIDTH) + intval($street['y_coor'] / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
+        $area = intval($street['x_coor'] / Street_Model::AREA_WIDTH) + intval($street['y_coor'] / Street_Model::AREA_HEIGHT) * (Street_Model::MAP_HEIGHT / Street_Model::AREA_HEIGHT);
         $streets = self::get_area($area);
-        $x_coor = $street['x_coor'] % self::AREA_WIDTH;
-        $y_coor = $street['y_coor'] % self::AREA_HEIGHT;
+        $x_coor = $street['x_coor'] % Street_Model::AREA_WIDTH;
+        $y_coor = $street['y_coor'] % Street_Model::AREA_HEIGHT;
         $streets[$x_coor][$y_coor] = $street;
         parent::$CI->cache->delete(self::$cache_key . $area);
         parent::$CI->cache->save(self::$cache_key . $area, $streets);
@@ -119,7 +119,7 @@ class Map_Library extends Abstract_Library {
     }
 
     public static function get_area_by_coor($x_coor, $y_coor) {
-        $area = intval($x_coor / Street_model::AREA_WIDTH) + intval($y_coor / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
+        $area = intval($x_coor / Street_Model::AREA_WIDTH) + intval($y_coor / Street_Model::AREA_HEIGHT) * (Street_Model::MAP_HEIGHT / Street_Model::AREA_HEIGHT);
         return self::get_area($area);
     }
 

@@ -21,8 +21,10 @@ class Street extends MY_Inner_Controller {
         $data['current_time'] = now();
 
         $data['cooldowns'] = array();
-        foreach ($street['cooldowns']['buildings'] as $cd) {
-            $data['cooldowns'][$cd['cooldown_id']] = $cd;
+        if (isset($street['cooldowns']['buildings'])) {
+            foreach ($street['cooldowns']['buildings'] as $cd) {
+                $data['cooldowns'][$cd['cooldown_id']] = $cd;
+            }
         }
 
         $this->load->view('street_building_view', $data);
