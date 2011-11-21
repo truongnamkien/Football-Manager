@@ -76,7 +76,7 @@ class Map_Library extends Abstract_Library {
             return FALSE;
         }
         $street = $street['data'];
-        
+
         // Cập nhật cache
         $area = intval($street['x_coor'] / Street_model::AREA_WIDTH) + intval($street['y_coor'] / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
         $streets = self::get_area($area);
@@ -116,6 +116,11 @@ class Map_Library extends Abstract_Library {
         parent::$CI->cache->save(self::$cache_key . $area, $streets);
         self::$map_info[$area] = $streets;
         return self::$map_info[$area];
+    }
+
+    public static function get_area_by_coor($x_coor, $y_coor) {
+        $area = intval($x_coor / Street_model::AREA_WIDTH) + intval($y_coor / Street_model::AREA_HEIGHT) * (Street_model::MAP_HEIGHT / Street_model::AREA_HEIGHT);
+        return self::get_area($area);
     }
 
 }
