@@ -89,6 +89,7 @@ class Admin_Model extends CI_Model {
             $admin_info = $query->row_array();
 
             if (!empty($admin_info)) {
+                unset($admin_info['password']);
                 return $this->_ret(API_SUCCESS, $admin_info);
             }
         }
@@ -234,12 +235,21 @@ class Admin_Model extends CI_Model {
 
     public function get_all_admin() {
         $query = $this->db->order_by('admin_id', 'asc')->get('admin');
-
         if (!empty($query) && $query->num_rows() > 0) {
-            return $this->_ret(API_SUCCESS, $query->result_array());
+            $admins = $query->result_array();
+            $result = array();
+            foreach ($admins as $admin) {
+                unset($admin['password']);
+                $result[] = $admin;
+            }
+            return $this->_ret(API_SUCCESS, $result);
         }
 
         return $this->_ret(API_FAILED);
+    }
+
+    public function count_all_admin() {
+        return $this->db->count_all('admin');
     }
 
 }

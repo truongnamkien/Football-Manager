@@ -9,7 +9,6 @@ class Building_Type extends MY_Admin_Controller {
 
         $this->my_auth->login_required(TRUE);
 
-        $this->load->library(array('form_validation'));
         $this->load->language('building');
         $this->load->model(array('building_type_model'));
     }
@@ -99,7 +98,6 @@ class Building_Type extends MY_Admin_Controller {
     }
 
     private function _validate_building_type() {
-        $this->load->library('form_validation');
         $this->form_validation->CI = & $this;
         $this->form_validation
                 ->set_rules('name', 'lang:building_type_name', 'trim|strip_tags|max_length[40]|required|unique[building_type.name]')

@@ -3,7 +3,6 @@
 (defined('BASEPATH')) OR exit('No direct script access allowed');
 
 class Building_Type_Model extends CI_Model {
-    
     const BUILDING_TYPE_MANAGEMENT = 'quản lý';
     const BUILDING_TYPE_STADIUM_CONTAINER = 'sức chứa';
     const BUILDING_TYPE_TRANSPORT = 'giao thông';
@@ -74,12 +73,15 @@ class Building_Type_Model extends CI_Model {
 
     public function get_all_building_type() {
         $query = $this->db->order_by('building_type_id', 'asc')->get('building_type');
-
         if (!empty($query) && $query->num_rows() > 0) {
             return $this->_ret(API_SUCCESS, $query->result_array());
         }
 
         return $this->_ret(API_FAILED);
+    }
+
+    public function count_all_building_type() {
+        return $this->db->count_all('building_type');
     }
 
 }

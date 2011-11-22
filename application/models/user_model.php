@@ -47,7 +47,7 @@ class User_Model extends CI_Model {
             if (!isset($user_info['user_status'])) {
                 $user_info['user_status'] = self::USER_STATUS_INACTIVE;
             }
-            
+
             if ($this->db->insert('users', $user_info)) {
                 $user_id = $this->db->insert_id();
                 if ($user_id > 0) {
@@ -238,13 +238,18 @@ class User_Model extends CI_Model {
             return md5($password);
         }
     }
-    public function get_all_users() {
-        $query = $this->db->order_by('user_id', 'asc')->get('users');
 
+    public function get_all_user() {
+        $query = $this->db->order_by('user_id', 'asc')->get('users');
         if (!empty($query) && $query->num_rows() > 0) {
             return $this->_ret(API_SUCCESS, $query->result_array());
         }
 
         return $this->_ret(API_FAILED);
     }
+
+    public function count_all_user() {
+        return $this->db->count_all('users');
+    }
+
 }

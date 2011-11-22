@@ -6,7 +6,6 @@ class Users extends MY_Admin_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library(array('form_validation'));
         $this->load->model(array('user_model'));
         $this->load->language(array('user'));
     }
@@ -15,7 +14,7 @@ class Users extends MY_Admin_Controller {
         if (!$this->my_auth->logged_in(TRUE)) {
             redirect('admin_login');
         }
-        $users = $this->user_model->get_all_users();
+        $users = $this->user_model->get_all_user();
         $data = array();
         if ($users['return_code'] == API_SUCCESS && !empty($users['data'])) {
             $data['users'] = $users['data'];
@@ -79,7 +78,6 @@ class Users extends MY_Admin_Controller {
     }
 
     private function _validate_user() {
-        $this->load->library('form_validation');
         $this->form_validation->CI = & $this;
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')

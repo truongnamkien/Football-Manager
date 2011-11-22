@@ -2,51 +2,13 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends MY_Admin_Controller {
+class Admin extends MY_Inner_Admin_Controller {
 
     public function __construct() {
-        $this->_require_logged_in = FALSE;
         parent::__construct();
-
-        $this->load->library(array('form_validation'));
+        $this->data['type'] = 'admin';
         $this->load->model(array('admin_model'));
-    }
-
-    public function index() {
-        if (!$this->my_auth->logged_in(TRUE)) {
-            redirect(site_url('admin_login'));
-        }
-        $admins = $this->admin_model->get_all_admin();
-        $data = array();
-        if ($admins['return_code'] == API_SUCCESS && !empty($admins['data'])) {
-            $data['admins'] = $admins['data'];
-        }
-        $this->load->view('admins/frm_admin_list_view', $data);
-    }
-
-    public function login() {
-        $this->form_validation->set_rules('username', 'lang:authen_username', 'trim|strip_tags|required');
-        $this->form_validation->set_rules('password', 'lang:authen_password', 'trim|required|min_length[6]|max_length[32]');
-
-        $data = array();
-        if ($this->form_validation->run()) {
-            $inputs = $this->_collect(array('username', 'password'));
-            if ($this->my_auth->login($inputs['username'], $inputs['password'], TRUE)) {
-                redirect(site_url('admin'));
-            } else {
-                $data['login_failed'] = array(
-                    'title' => $this->lang->line('authen_login_fail'),
-                    'messages' => array($this->lang->line('authen_login_fail_helper'),
-                        $this->lang->line('authen_please_register')),
-                );
-            }
-        }
-        $this->load->view('admins/frm_admin_login', $data);
-    }
-
-    public function logout() {
-        $this->my_auth->logout();
-        redirect(site_url('admin'));
+        $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
     }
 
     public function register() {
@@ -76,22 +38,12 @@ class Admin extends MY_Admin_Controller {
         $this->load->view('admins/frm_admin_register');
     }
 
-    public function show() {
-        if (!$this->my_auth->logged_in(TRUE)) {
-            redirect(site_url('admin_login'));
-        }
-
-        $admin_data = $this->_get_admin();
-        $this->load->view('admins/frm_admin_show_view', $admin_data);
-    }
-
     public function edit() {
         if (!$this->my_auth->logged_in(TRUE)) {
             redirect(site_url('admin_login'));
         }
         $admin_data = $this->_get_admin();
 
-        $this->load->library('form_validation');
         $this->form_validation->CI = & $this;
         $this->form_validation->set_rules('role', 'lang:admin_role', 'required');
         $validate = $this->form_validation->run();
@@ -100,7 +52,8 @@ class Admin extends MY_Admin_Controller {
             $update_data = array();
 
             foreach ($admin_data as $name => $val) {
-                $new_val = $this->input->post($name); {
+                $new_val = $this->input->post($name);
+                {
                     if ($new_val != $val) {
                         $update_data[$name] = $new_val;
                         $admin_data[$name] = $new_val;
@@ -141,4 +94,38 @@ class Admin extends MY_Admin_Controller {
 
         redirect('admin/admin');
     }
+
+    protected function set_actions($id) {
+        $actions = parent::set_actions($id);
+        $path = 'admin/' . $this->data['type'] . '/';
+
+        return $actions;
+    }
+
+    protected function set_validation_rules($action) {
+        if ($action == 'create') {
+            $rules = array(
+                array('field' => 'display_name', 'rules' => 'trim|strip_tags|max_length[40]|required'),
+                array('field' => 'username', 'rules' => 'trim|strip_tags|required|max_length[80]|unique[admin.username]'),
+                array('field' => 'password', 'rules' => 'required|min_length[6]|max_length[32]'),
+                array('field' => 'password_confirm', 'rules' => 'required|matches[password]'),
+            );
+        } else {
+            $rules = array(
+                array('field' => 'role', 'rules' => 'required'),
+            );
+        }
+        return $rules;
+    }
+    protected function get_object($id = FALSE) {
+        $object = parent::get_object($id);
+        if($object == FALSE) {
+            $object = array(
+                'username' => '',
+                'display_name' => '',
+            );
+        }
+
+    }
+
 }

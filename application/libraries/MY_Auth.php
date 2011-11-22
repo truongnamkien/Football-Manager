@@ -23,7 +23,7 @@ class MY_Auth {
             if (!$is_admin) {
                 redirect('login');
             } else {
-                redirect('admin/admin');
+                redirect('admin_login');
             }
         }
         return TRUE;

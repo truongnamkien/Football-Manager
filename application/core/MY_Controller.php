@@ -125,7 +125,7 @@ class MY_Admin_Controller extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->_masterview_enabled = TRUE;
-        if($this->my_auth->logged_in()) {
+        if ($this->my_auth->logged_in(TRUE)) {
             $this->_masterview = 'admin_masterpage_logged';
         } else {
             $this->_masterview = 'admin_masterpage_not_logged';
@@ -135,44 +135,46 @@ class MY_Admin_Controller extends MY_Controller {
 
 }
 
-class MY_Inner_Admin_Controller extends MY_Admin_Controller {
+abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
 
     public function __construct() {
         parent::__construct();
         $this->my_auth->login_required(TRUE);
-        $this->load->library(array('table', 'pagination'));
-        $this->load->helper(array('form', 'url'));
         $this->data = array();
-        $this->data['per_page'] = 10;
     }
 
     public function index() {
-        $this->read();
-    }
-
-    public function read($offset = 0) {
-        $config['base_url'] = base_url() . 'admin/' . $this->data['type'] . '/read';
-        $config['total_rows'] = $this->count_all_objects();
-        $config['per_page'] = $this->data['per_page'];
-        $config['uri_segment'] = '4';
-
-        if (isset($_POST['search'])) {
-            if ($_POST['search'] != $this->session->userdata('admin_search')) {
-                $this->session->set_userdata('admin_search', $_POST['search']);
-            }
-        }
-
-        $search = $this->session->userdata('admin_search');
-
-        $this->pagination->initialize($config);
-
-        $data['objects'] = $this->get_objects($this->data['per_page'], $offset, $search);
+        $data['objects'] = $this->get_all_objects();
         $data['type'] = $this->data['type'];
-        $data['total_rows'] = $config['total_rows'];
+        $data['total_rows'] = $this->count_all_objects();
 
         $data['mass_action_options'] = $this->set_mass_action_options();
 
         $this->load->view('list_view', $data);
+    }
+
+    public function show($id = FALSE) {
+        $data['object'] = $this->get_object($id);
+        $data['id'] = $id;
+        $data['type'] = $this->data['type'];
+        $this->load->view('show_view', $data);
+    }
+
+    public function create() {
+        $this->data['form_data'] = $this->get_object($id); // abstract
+        $this->data['id'] = $id;
+
+        $validation_rules = $this->set_validation_rules(); // abstract
+        $this->form_validation->set_rules($validation_rules);
+
+
+        if ($id == FALSE || !is_numeric($id)) {
+            show_404();
+        }
+        $data['object'] = $this->get_object($id);
+        $data['id'] = $id;
+        $data['type'] = $this->data['type'];
+        $this->load->view('show_view', $data);
     }
 
     protected function set_mass_action_options() {
@@ -191,12 +193,12 @@ class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         return $actions;
     }
 
-    protected function get_objects($how_many, $offset) {
-        $model_name = get_model_name();
+    protected function get_all_objects() {
+        $model_name = $this->get_model_name();
         $method_name = 'get_all_' . $this->data['type'];
 
         $result = array();
-        $objects = $this->$model_name->$method_name($offset, $how_many);
+        $objects = $this->$model_name->$method_name();
         if ($objects['return_code'] == API_SUCCESS && !empty($objects['data'])) {
             $objects = $objects['data'];
             foreach ($objects as $obj) {
@@ -207,15 +209,33 @@ class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         return $result;
     }
 
+    protected function get_object($id = FALSE) {
+        $object = FALSE;
+        if ($id !== FALSE) {
+            if (!is_numeric($id)) {
+                show_404();
+            }
+            $model_name = $this->get_model_name();
+            $method_name = 'get_' . $this->data['type'];
+            $object = $this->$model_name->$method_name($id);
+            if ($object['return_code'] != API_SUCCESS || empty($object['data'])) {
+                show_404();
+            }
+            $object = $object['data'];
+        }
+        return $object;
+    }
+
     protected function count_all_objects() {
-        $model_name = get_model_name();
+        $model_name = $this->get_model_name();
         $method_name = 'count_all_' . $this->data['type'];
         return $this->$model_name->$method_name();
     }
-    
+
     protected function get_model_name() {
         return $this->data['type'] . '_model';
     }
 
+    abstract protected function set_validation_rules($action);
 }
 

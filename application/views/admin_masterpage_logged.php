@@ -74,13 +74,7 @@
                             </li>
 
                             <li> 
-                                <?php
-                                $managers = array(
-                                    'admin' => lang('admin_manager_admin'),
-                                    'users' => lang('admin_manager_user'),
-                                    'building_type' => lang('admin_manager_building_type'),
-                                        )
-                                ?>
+                                <?php $managers = array('admin', 'user', 'building_type'); ?>
                                 <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('manager_submenu'); ?></a>
                                 <ul>
                                     <?php admin_menu_render($managers); ?>
@@ -127,10 +121,10 @@ function admin_menu_current($menu_name) {
  */
 function admin_menu_render($params) {
     $menu = '';
-    foreach ($params as $type => $text) {
+    foreach ($params as $type) {
         $menu .= '<li><a href="' . site_url('admin/' . $type) . '"';
         $menu .= 'class="' . admin_menu_current($type) . '">';
-        $menu .= $text . '</a></li>';
+        $menu .= lang('manager_' . $type) . '</a></li>';
     }
     echo $menu;
 }
