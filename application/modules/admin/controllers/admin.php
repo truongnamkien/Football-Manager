@@ -144,4 +144,11 @@ class Admin extends MY_Admin_Controller {
                 ->set_rules('role', 'lang:building_type_fee', 'numeric|required');
         return $this->form_validation->run();
     }
+    
+    public function remove() {
+        $admin_id = $this->input->get_post('admin_id');
+        $this->admin_model->delete_admin($admin_id);
+
+        redirect('admin/admin');
+    }
 }

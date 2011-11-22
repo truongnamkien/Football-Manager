@@ -34,7 +34,7 @@
                                 <td class="inlineDisable" field="user_status"><?php echo $status[$user['user_status']] ?></td>
                                 <td class="inlineDisable" field="street_id"><?php echo $user['street_id'] ?></td>
                                 <td class="inlineDisable">
-                                    <a onclick="remove_building(<?php echo $user['user_id'] ?>);" href="#"><?php echo lang('user_remove') ?></a> | 
+                                    <a onclick="remove_user(<?php echo $user['user_id'] ?>);" href="#"><?php echo lang('user_remove') ?></a> | 
                                     <a href="<?php echo site_url('admin/users/show?user_id=' . $user['user_id']) ?>"><?php echo lang('user_show') ?></a> | 
                                     <a href="<?php echo site_url('admin/users/edit?user_id=' . $user['user_id']) ?>"><?php echo lang('user_edit') ?></a>
                                 </td>
@@ -50,7 +50,7 @@
 </div>
 
 <script type="text/javascript">
-    function remove_building(building_id) {
+    function remove_user(user_id) {
         if (confirm('<?php echo lang('user_remove_confirm') ?>')) {
             $('input[name="user_id"]').val(user_id);
             $('#frm_remove_user').submit();

@@ -13,3 +13,6 @@ $lang['user_show'] = 'Hiện thị chi tiết';
 $lang['user_edit'] = 'Sửa thông tin';
 $lang['user_remove_confirm'] = 'Bạn có chắc là sẽ xóa user này?';
 $lang['user_back_list'] = 'Quay lại trang danh sách';
+$lang['user_reset_password'] = 'Reset password';
+$lang['user_reset_password_confirm'] = 'Bạn có muốn reset password không?';
+

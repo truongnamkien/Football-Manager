@@ -10,6 +10,9 @@
 
     <div class="content-box-content">
         <div id="list" class="tab-content default-tab" style="display: block;">
+            <?php echo form_open('admin/users/reset_password', array('id' => 'frm_reset_password_user')) ?>
+                <input type="hidden" name="user_id" value=""/>
+            <?php echo form_close() ?>
             <form action="<?php echo site_url('admin/users/edit'); ?>" method="post">
                 <input name="user_id" type="hidden" value="<?php echo $user_id ?>">
                 <input name="password" type="hidden" value="<?php echo $password ?>">
@@ -40,10 +43,19 @@
                             ?>
                         </select>
                     </p>
-
+                    <a onclick="reset_password(<?php echo $user_id ?>);" href="#"><?php echo lang('user_reset_password') ?></a>
                     <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('admin_edit'); ?></button></p>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function reset_password(user_id) {
+        if (confirm('<?php echo lang('user_reset_password_confirm') ?>')) {
+            $('input[name="user_id"]').val(user_id);
+            alert ( "Default pass la: 123456");
+            $('#frm_reset_password_user').submit();
+        }
+    }
+</script>

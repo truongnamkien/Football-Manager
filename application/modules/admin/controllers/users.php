@@ -161,4 +161,25 @@ class Users extends MY_Admin_Controller {
         
         return $this->form_validation->run();
     }
+    public function remove() {
+        $user_id = $this->input->get_post('user_id');
+        $this->user_model->delete_user($user_id);
+
+        redirect('admin/users');
+    }
+    
+    public function reset_password()
+    {
+        $user_id = $this->_get_user();
+        $new_password = 123456;
+        $result = $this->user_model->change_password($user_id['user_id'], $user_id['password'],$new_password);
+        if($result['return_code'] == API_SUCCESS)
+        {
+            redirect('admin/users');
+        }
+        else
+        {
+            show_404();
+        }
+    }
 }
