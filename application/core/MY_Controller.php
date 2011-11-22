@@ -161,20 +161,35 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     public function create() {
-        $this->data['form_data'] = $this->get_object($id); // abstract
-        $this->data['id'] = $id;
+        $this->create_update();
+    }
 
-        $validation_rules = $this->set_validation_rules(); // abstract
+    public function update($id) {
+        $this->create_update($id);
+    }
+
+    public function remove($id) {
+        $model_name = $this->get_model_name();
+        $method_name = 'delete_' . $this->data['type'];
+        $this->$model_name->$method_name($id);
+        redirect(site_url('admin/' . $this->data['type']));
+    }
+
+    protected function create_update($id = FALSE) {
+        $this->data['action'] = ($id == FALSE ? 'create' : 'update');
+        if ($id != FALSE) {
+            $this->data['id'] = $id;
+        }
+        $this->data['form_data'] = $this->prepare_object($id);
+        $validation_rules = $this->set_validation_rules($this->data['action']);
         $this->form_validation->set_rules($validation_rules);
 
-
-        if ($id == FALSE || !is_numeric($id)) {
-            show_404();
+        if ($this->form_validation->run() == FALSE) {
+            $this->load->view('create_update_view', $this->data);
+        } else {
+            $params = $this->handle_post_inputs();
+            $this->handle_create_update_object($params, $this->data['action'], $id);
         }
-        $data['object'] = $this->get_object($id);
-        $data['id'] = $id;
-        $data['type'] = $this->data['type'];
-        $this->load->view('show_view', $data);
     }
 
     protected function set_mass_action_options() {
@@ -187,7 +202,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     protected function set_actions($id) {
         $type = $this->data['type'];
         $path = 'admin/' . $type . '/';
-        $actions = anchor($path . 'edit/' . $id, lang($type . '_edit'));
+        $actions = anchor($path . 'update/' . $id, lang($type . '_update'));
         $actions .= ' | ' . anchor($path . 'show/' . $id, lang($type . '_show'));
         $actions .= ' | ' . anchor($path . 'remove/' . $id, lang($type . '_remove'), 'class="remove"');
         return $actions;
@@ -210,11 +225,9 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     protected function get_object($id = FALSE) {
-        $object = FALSE;
-        if ($id !== FALSE) {
-            if (!is_numeric($id)) {
-                show_404();
-            }
+        if ($id == FALSE || !is_numeric($id)) {
+            show_404();
+        } else {
             $model_name = $this->get_model_name();
             $method_name = 'get_' . $this->data['type'];
             $object = $this->$model_name->$method_name($id);
@@ -236,6 +249,31 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         return $this->data['type'] . '_model';
     }
 
+    protected function handle_post_inputs() {
+        $params = array();
+        foreach ($this->input->post() as $key => $value) {
+            if (!empty($value)) {
+                $params[$key] = $value;
+            }
+        }
+        return $params;
+    }
+
+    protected function handle_create_update_object($params, $action, $id = FALSE) {
+        unset($params['submit']);
+        $model_name = $this->get_model_name();
+        $method_name = $action . '_' . $this->data['type'];
+        if ($id !== FALSE) {
+            $this->$model_name->$method_name($id, $params);
+            redirect(site_url('admin/' . $this->data['type'] . '/show/' . $id));
+        } else {
+            $this->$model_name->$method_name($params);
+            redirect(site_url('admin/' . $this->data['type']));
+        }
+    }
+
     abstract protected function set_validation_rules($action);
+
+    abstract protected function prepare_object($id = FALSE);
 }
 

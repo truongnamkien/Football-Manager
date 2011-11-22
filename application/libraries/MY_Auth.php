@@ -25,6 +25,13 @@ class MY_Auth {
             } else {
                 redirect('admin_login');
             }
+        } else if ($is_admin) {
+            $admin_id = $this->get_user_id();
+            $admin_info = $this->CI->admin_model->get_admin($email);
+            if ($user_info['return_code'] != API_SUCCESS || empty($user_info['data'])) {
+                $this->logout();
+                redirect('admin_login');
+            }
         }
         return TRUE;
     }
@@ -87,12 +94,18 @@ class MY_Auth {
      * get_user_id
      * Trả về user_id của user hiện tại.
      */
-    public function get_user_id() {
+    public function get_user_id($is_admin = FALSE) {
         $user_id = FALSE;
-        if ($this->CI->input->cookie($this->identity_key)) {
-            $user_id = $this->CI->input->cookie($this->identity_key);
-        } else if ($this->CI->session->userdata($this->identity_key)) {
-            $user_id = $this->CI->session->userdata($this->identity_key);
+        if ($is_admin) {
+            $key = $this->admin_identity_key;
+        } else {
+            $key = $this->identity_key;
+        }
+
+        if ($this->CI->input->cookie($key)) {
+            $user_id = $this->CI->input->cookie($key);
+        } else if ($this->CI->session->userdata($key)) {
+            $user_id = $this->CI->session->userdata($key);
         }
         return $user_id;
     }

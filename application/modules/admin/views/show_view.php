@@ -3,7 +3,7 @@
         <h3><?php echo lang($type . '_show') ?></h3>
         <ul class="content-box-tabs">
             <li><a class="current" href="<?php echo site_url('admin/' . $type) ?>"><?php echo lang('back_list') ?></a></li>
-            <li><a class="current" href="<?php echo site_url('admin/' . $type . '/edit/' . $id) ?>"><?php echo lang($type . '_edit') ?></a></li>
+            <li><a class="current" href="<?php echo site_url('admin/' . $type . '/update/' . $id) ?>"><?php echo lang($type . '_update') ?></a></li>
             <li><a class="current" href="<?php echo site_url('admin/' . $type . '/remove/' . $id) ?>"><?php echo lang($type . '_remove') ?></a></li>
         </ul>
         <div class="clear"></div>

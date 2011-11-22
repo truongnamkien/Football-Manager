@@ -11,88 +11,11 @@ class Admin extends MY_Inner_Admin_Controller {
         $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
     }
 
-    public function register() {
-        if (!$this->my_auth->logged_in(TRUE)) {
-            redirect(site_url('admin_login'));
-        }
-
-        $this->form_validation
-                ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
-                ->set_rules('username', 'lang:authen_username', 'trim|strip_tags|required|max_length[80]|unique[admin.username]')
-                ->set_rules('password', 'lang:authen_password', 'required|min_length[6]|max_length[32]')
-                ->set_rules('password_confirm', 'lang:authen_password_confirm', 'required|matches[password]');
-
-        if ($this->form_validation->run()) {
-            $collect = $this->_collect(array(
-                'display_name',
-                'username',
-                'password',
-                    ));
-            $user_info = $this->admin_model->create_admin($collect);
-
-            if ($user_info['return_code'] === API_SUCCESS) {
-                redirect(site_url('admin'));
-            }
-        }
-
-        $this->load->view('admins/frm_admin_register');
-    }
-
-    public function edit() {
-        if (!$this->my_auth->logged_in(TRUE)) {
-            redirect(site_url('admin_login'));
-        }
-        $admin_data = $this->_get_admin();
-
-        $this->form_validation->CI = & $this;
-        $this->form_validation->set_rules('role', 'lang:admin_role', 'required');
-        $validate = $this->form_validation->run();
-
-        if ($validate) {
-            $update_data = array();
-
-            foreach ($admin_data as $name => $val) {
-                $new_val = $this->input->post($name);
-                {
-                    if ($new_val != $val) {
-                        $update_data[$name] = $new_val;
-                        $admin_data[$name] = $new_val;
-                    }
-                }
-            }
-            if (!empty($update_data)) {
-                $this->admin_model->update_admin($admin_data['admin_id'], $update_data);
-            }
-            redirect(site_url('admin/admin/show?admin_id=' . $admin_data['admin_id']));
-        }
-        $admin_data['roles'] = $this->_get_roles();
-        $this->load->view('admins/frm_admin_edit', $admin_data);
-    }
-
-    private function _get_admin() {
-        if (FALSE == ($id = $this->input->get_post('admin_id'))) {
-            show_404();
-        }
-        $admin = $this->admin_model->get_admin($id);
-
-        if ($admin['return_code'] != API_SUCCESS || empty($admin['data'])) {
-            show_404();
-        } else {
-            $admin = $admin['data'];
-        }
-
-        return $admin;
-    }
-
     private function _get_roles() {
-        return array(Admin_Model::ADMIN_ROLE_ADMIN, Admin_Model::ADMIN_ROLE_MODERATOR);
-    }
-
-    public function remove() {
-        $admin_id = $this->input->get_post('admin_id');
-        $this->admin_model->delete_admin($admin_id);
-
-        redirect('admin/admin');
+        return array(
+            Admin_Model::ADMIN_ROLE_ADMIN => Admin_Model::ADMIN_ROLE_ADMIN,
+            Admin_Model::ADMIN_ROLE_MODERATOR => Admin_Model::ADMIN_ROLE_MODERATOR
+        );
     }
 
     protected function set_actions($id) {
@@ -105,27 +28,67 @@ class Admin extends MY_Inner_Admin_Controller {
     protected function set_validation_rules($action) {
         if ($action == 'create') {
             $rules = array(
-                array('field' => 'display_name', 'rules' => 'trim|strip_tags|max_length[40]|required'),
-                array('field' => 'username', 'rules' => 'trim|strip_tags|required|max_length[80]|unique[admin.username]'),
-                array('field' => 'password', 'rules' => 'required|min_length[6]|max_length[32]'),
-                array('field' => 'password_confirm', 'rules' => 'required|matches[password]'),
+                array('field' => 'display_name', 'label' => lang('admin_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
+                array('field' => 'username', 'label' => 'lang:admin_username', 'rules' => 'trim|strip_tags|required|max_length[80]|unique[admin.username]'),
+                array('field' => 'password', 'label' => lang('admin_password'), 'rules' => 'required|min_length[6]|max_length[32]'),
+                array('field' => 'password_confirm', 'label' => lang('admin_password_confirm'), 'rules' => 'required|matches[password]'),
+                array('field' => 'role', 'label' => lang('admin_role'), 'rules' => 'required'),
             );
         } else {
             $rules = array(
-                array('field' => 'role', 'rules' => 'required'),
+                array('field' => 'display_name', 'label' => lang('admin_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
+                array('field' => 'password_confirm', 'label' => lang('admin_password_confirm'), 'rules' => 'matches[password]'),
+                array('field' => 'role', 'label' => lang('admin_role'), 'rules' => 'required'),
             );
         }
         return $rules;
     }
+
+    protected function prepare_object($id = FALSE) {
+        $object = array(
+            'username' => '',
+            'display_name' => '',
+            'role' => ''
+        );
+        if ($id != FALSE) {
+            $object = $this->get_object($id);
+        }
+        $object = array_merge($object, array('password' => '', 'password_confirm' => ''));
+
+        $result = array();
+        foreach ($object as $key => $val) {
+            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
+            $value = array('name' => $key, 'value' => $val);
+
+            if ($key == 'admin_id' || ($key == 'username' && !empty($val))) {
+                $value = array_merge($value, array('disabled' => 'disabled'));
+            }
+
+            if ($key == 'password' || $key == 'password_confirm') {
+                $value = form_password($value);
+            } else if ($key == 'role') {
+                $roles = $this->_get_roles();
+                $value = form_dropdown($key, $roles, $val);
+            } else {
+                $value = form_input($value);
+            }
+            $result[] = array($label => $value);
+        }
+        return $result;
+    }
+
     protected function get_object($id = FALSE) {
         $object = parent::get_object($id);
-        if($object == FALSE) {
-            $object = array(
-                'username' => '',
-                'display_name' => '',
-            );
-        }
+        unset($object['password']);
+        return $object;
+    }
 
+    protected function get_all_objects() {
+        $objects = parent::get_all_objects();
+        foreach ($objects as &$obj) {
+            unset($obj['password']);
+        }
+        return $objects;
     }
 
 }

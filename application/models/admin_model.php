@@ -38,7 +38,7 @@ class Admin_Model extends CI_Model {
     public function create_admin($admin_info) {
         $ret = $this->check_username_exists($admin_info['username']);
 
-        if (($ret['return_code'] == API_SUCCESS) && $ret['data'] === FALSE) {
+        if ($ret['return_code'] == API_SUCCESS && $ret['data'] == FALSE) {
             /* salt la key ngau nhien co do dai co dinh duoc gan vo password */
             $salt = $this->store_salt === TRUE ? $this->_salt() : FALSE;
 
@@ -46,6 +46,8 @@ class Admin_Model extends CI_Model {
             if (!isset($admin_info['role'])) {
                 $admin_info['role'] = self::ADMIN_ROLE_MODERATOR;
             }
+            unset($admin_info['admin_id']);
+            unset($admin_info['password_confirm']);
 
             if ($this->db->insert('admin', $admin_info)) {
                 $admin_id = $this->db->insert_id();
@@ -89,7 +91,6 @@ class Admin_Model extends CI_Model {
             $admin_info = $query->row_array();
 
             if (!empty($admin_info)) {
-                unset($admin_info['password']);
                 return $this->_ret(API_SUCCESS, $admin_info);
             }
         }
@@ -166,6 +167,7 @@ class Admin_Model extends CI_Model {
         if ($admin_info['return_code'] == API_SUCCESS && !empty($admin_info['data'])) {
             unset($update_data['username']);
             unset($update_data['admin_id']);
+            unset($update_data['password_confirm']);
 
             if (isset($update_data['password'])) {
                 /* salt la key ngau nhien co do dai co dinh duoc gan vo password */
@@ -237,12 +239,7 @@ class Admin_Model extends CI_Model {
         $query = $this->db->order_by('admin_id', 'asc')->get('admin');
         if (!empty($query) && $query->num_rows() > 0) {
             $admins = $query->result_array();
-            $result = array();
-            foreach ($admins as $admin) {
-                unset($admin['password']);
-                $result[] = $admin;
-            }
-            return $this->_ret(API_SUCCESS, $result);
+            return $this->_ret(API_SUCCESS, $admins);
         }
 
         return $this->_ret(API_FAILED);

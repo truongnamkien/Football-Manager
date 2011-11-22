@@ -992,3 +992,5 @@ textarea {  resize: none; color: #7B7B7B; overflow: auto}
 .w215{width:215px;} .w300{width:300px;} .w288{width:288px;} .w220{width: 220px;} .w340{width: 340px;} .w425{width:425px;} .w375{width:375px;} .w250{width:250px;}
 /*list-style*/
 .lsDisc{list-style:disc;}
+.fLeft { float: left; }
+.fRight { float: right; }

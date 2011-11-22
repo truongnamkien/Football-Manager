@@ -25,12 +25,12 @@ class Admin_Authen extends MY_Admin_Controller {
                 );
             }
         }
-        $this->load->view('admins/frm_admin_login', $data);
+        $this->load->view('authen/frm_admin_login', $data);
     }
 
     public function logout() {
         $this->my_auth->logout();
-        redirect(site_url('admin'));
+        redirect(site_url('admin_login'));
     }
 
 }
