@@ -1,4 +1,7 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
@@ -12,7 +15,6 @@
  * @since		Version 1.0
  * @filesource
  */
-
 // ------------------------------------------------------------------------
 
 /**
@@ -24,7 +26,6 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/helpers/language_helper.html
  */
-
 // ------------------------------------------------------------------------
 
 /**
@@ -37,21 +38,43 @@
  * @param	string	the id of the form element
  * @return	string
  */
-if ( ! function_exists('lang'))
-{
-	function lang($line, $id = '')
-	{
-		$CI =& get_instance();
-		$line = $CI->lang->line($line);
+if (!function_exists('lang')) {
 
-		if ($id != '')
-		{
-			$line = '<label for="'.$id.'">'.$line."</label>";
-		}
+    function lang($line, $id = '') {
+        $CI = & get_instance();
+        $line = $CI->lang->line($line);
 
-		return $line;
-	}
+        if ($id != '') {
+            $line = '<label for="' . $id . '">' . $line . "</label>";
+        }
+
+        return $line;
+    }
+
 }
+
+if (!function_exists('lang_key')) {
+
+    function lang_key($line, $id = '', $data = array()) {
+        $CI = & get_instance();
+        $line = $CI->lang->line($line);
+
+        if ($line) {
+            foreach ($data as $key => $val) {
+
+                $line = str_replace("%$key", $val, $line);
+            }
+        }
+
+        if ($id != '') {
+            $line = '<label for="' . $id . '">' . $line . "</label>";
+        }
+
+        return $line;
+    }
+
+}
+
 
 // ------------------------------------------------------------------------
 /* End of file language_helper.php */

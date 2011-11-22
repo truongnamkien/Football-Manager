@@ -34,7 +34,7 @@
                                 <td class="inlineDisable inline_id"><?php echo $admin['admin_id'] ?></td>
                                 <td class="inlineDisable" field="display_name"><?php echo $admin['display_name'] ?></td>
                                 <td class="inlineDisable" field="username"><?php echo $admin['username'] ?></td>
-                                <td class="inlineDisable" field="role"><?php echo $roles[$admin['role']] ?></td>
+                                <td class="inlineDisable" field="role"><?php echo $admin['role'] ?></td>
 
                                 <td class="inlineDisable">
                                     <a onclick="remove_admin(<?php echo $admin['admin_id'] ?>);" href="#"><?php echo lang('admin_remove') ?></a> | 

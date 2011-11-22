@@ -48,6 +48,10 @@
                     <td class="fwb"><?php echo lang('building_type_street_cell'); ?></td>
                     <td><?php echo $street_cell ?></td>
                 </tr>
+                <tr>
+                    <td class="fwb"><?php echo lang('building_type_type'); ?></td>
+                    <td><?php echo $type ?></td>
+                </tr>
             </table><!-- End Table Listing Records -->
         </div>
     </div>

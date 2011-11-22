@@ -53,6 +53,18 @@
                         <?php echo form_error('street_cell', '<label>', '</label>') ?>
                     <?php endif; ?>                           
 
+                    <p><label class="labelField fLeft fwb"><?php echo lang('building_type_type'); ?></label></p>
+                    <p>
+                        <select class="mt10" name="type"> 
+                            <?php foreach ($types as $value): ?>
+                                <option value="<?php echo $value ?>" <?php echo($value == $type ? 'selected="selected"' : ''); ?>><?php echo $value ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </p>
+                    <?php if (form_error('type')): ?>
+                        <?php echo form_error('type', '<label>', '</label>') ?>
+                    <?php endif; ?>                           
+
                     <p class="tac pt10"><button class="uiBtn dpi" name="submit"><?php echo lang('building_type_create_submit'); ?></button></p>
                 </div>
             </form>

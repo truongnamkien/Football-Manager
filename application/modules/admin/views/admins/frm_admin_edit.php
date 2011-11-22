@@ -25,16 +25,11 @@
                     <?php endif; ?>    
 
                     <p><label class="labelField fLeft fwb"><?php echo lang('admin_role'); ?></label></p>
-                    <p><select class="mt10" name="role" > 
-                            <?php 
-                            if (isset($roles)):
-                                foreach ($roles as $index => $value ):
-                            ?>
-                                    <option value="<?php echo $index ?>"> <?php echo $value ?> </option>
-                            <?php 
-                                endforeach;
-                            endif;
-                            ?>
+                    <p>
+                        <select class="mt10" name="role"> 
+                            <?php foreach ($roles as $value): ?>
+                                <option value="<?php echo $value ?>" <?php echo($value == $role ? 'selected="selected"' : ''); ?>><?php echo $value ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </p>
 

@@ -14,19 +14,13 @@ class MY_Auth {
     public function __construct() {
         $this->CI = & get_instance();
         $this->CI->load->helper('cookie');
-        $this->CI->load->library('session');
-        $this->CI->load->model(array('user_model', 'admin_model', 'street_model'));
-    }
-
-    public function trigger_redirect() {
-        $login_redirect = $_SERVER['REQUEST_URI'];
-        $this->CI->session->set_userdata('login_redirect', $login_redirect);
+        $this->CI->load->library(array('session', 'user_library'));
+        $this->CI->load->model(array('user_model', 'admin_model'));
     }
 
     public function login_required($is_admin = FALSE) {
         if (!$this->logged_in($is_admin)) {
             if (!$is_admin) {
-                $this->trigger_redirect();
                 redirect('login');
             } else {
                 redirect('admin/admin');
@@ -101,6 +95,18 @@ class MY_Auth {
             $user_id = $this->CI->session->userdata($this->identity_key);
         }
         return $user_id;
+    }
+
+    public function get_street_id() {
+        $user_id = $this->get_user_id();
+        if ($user_id == FALSE || $user_id == NULL) {
+            return FALSE;
+        }
+        $user = User_Library::get($user_id);
+        if ($user == FALSE || $user == NULL) {
+            return FALSE;
+        }
+        return $user['street_id'];
     }
 
 }

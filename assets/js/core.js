@@ -1,5 +1,29 @@
-var Cooldown = function(_time, _elem) {
-    var _last_time = _time - 1;
+var Cooldown = {};
+Cooldown.data = [];
+
+Cooldown.init = function(_time, _elem) {
+    for (var _index in Cooldown.data) {
+        if (Cooldown.data[_index] == _elem) {
+            return;
+        }
+    }
+    Cooldown.data.push(_elem);
+    Cooldown.run(_time, _elem);
+}
+
+Cooldown.run = function(_time, _elem) {
+    if(_time <= 0) {
+        $("#" + _elem).html("");
+        for (var _index in Cooldown.data) {
+            if (Cooldown.data[_index] == _elem) {
+                Cooldown.data.splice(_index, 1);
+                break;
+            }
+        }
+        return;
+    }
+    var _last_time = _time - 500;
+    _time = Math.floor(_time / 1000);
     var _second = _time % 60;
     _time = Math.floor(_time / 60);
     var _minute = Math.floor(_time % 60);
@@ -7,9 +31,113 @@ var Cooldown = function(_time, _elem) {
     var _html = _hour + ':' + _minute + ':' + _second;
 
     $("#" + _elem).html(_html);
-    setTimeout('Cooldown(' + _last_time + ', "' + _elem + '");', 1000);
+    setTimeout('Cooldown.run(' + _last_time + ', "' + _elem + '");', 500);
 }
 
+var show_alert = function (msg, options) {
+    var _default = {
+        header: 'Thông Báo',
+        btnOk: 'Đồng ý',
+        callback : function() {}
+    };
+    _default.html = '\
+        <div class="lightbox ma20 blueColor">'
+    + '<div class="lbTop"></div>'
+    + '<div class="lbMid por">'
+    + '<h3 class="fs24 mb20">' + _default.header + '</h3>'
+    + '<div class="clear"></div>'
+    + '<div class="lbContent">'
+    + '<div class="lbBody">'
+    + '<div class="lbLine mb20"></div>'
+    + '<div class="lbMainBody"><p class="lbDescTitle fwb">' + msg + '</p></div>'
+    + '</div>'
+    + '<div class="lbFooter mt10">'
+    + '<button class="uiBtn uiBtn1 fRight mr10" id="btn_colorbox_close">' + _default.btnOk + '</button>'
+    + '<div class="clear"></div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="lbPen"></div>'
+    + '</div>'
+    + '<div class="lbBot"></div>'
+    + '</div>';	
+
+    $.extend(_default, options);
+
+    $.colorbox({
+        close: 'x',
+        transition: 'none',
+        scrolling: false,
+        html: _default.html,
+        onClosed: function() {
+            _default.callback();
+        }
+    });
+
+    $('#btn_colorbox_close').click(function(e) {
+        $.colorbox.close();
+        e.preventDefault();
+    });
+};
+
+/**
+ * Show confirm dialog
+ */
+var show_confirm = function (params) {
+    var result = false;
+    
+    var opts = {
+        content  : '',
+        title    : '',
+        btnOk    : 'Đồng ý',
+        btnCancel: 'Đóng',
+        callback : function(result) {}
+    };
+    
+    $.extend(opts, params);
+    var html = '\
+        <div class="lightbox ma20 blueColor">'
+    + '<div class="lbTop"></div>'
+    + '<div class="lbMid por">'
+    + '<h3 class="fs24 mb20">' + opts.title + '</h3>'
+    + '<div class="clear"></div>'
+    + '<div class="lbContent">'
+    + '<div class="lbBody">'
+    + '<div class="lbLine mb20"></div>'
+    + '<div class="lbMainBody"><p class="lbDescTitle fwb">' + opts.content + '</p></div>'
+    + '</div>'
+    + '<div class="lbFooter mt10">'
+    + '<button class="uiBtn uiBtn3 fRight mr10" id="confirm_btn_no">' + opts.btnCancel + '</button>'
+    + '<button class="uiBtn uiBtn1 fRight mr10" id="confirm_btn_yes">' + opts.btnOk + '</button>'
+    + '<div class="clear"></div>'
+    + '</div>'
+    + '</div>'
+    + '<div class="lbPen"></div>'
+    + '</div>'
+    + '<div class="lbBot"></div>'
+    + '</div>';	
+    
+    $.colorbox({
+        close: 'x',
+        transition: 'none',
+        scrolling: false,
+        html: html,
+        onClosed: function() {
+            opts.callback(result);
+        }
+    });
+    
+    $('#confirm_btn_yes').click(function(e) {
+        result = true;
+        $.colorbox.close();
+        e.preventDefault();
+    });
+    
+    $('#confirm_btn_no').click(function(e) {
+        $.colorbox.close();
+        e.preventDefault();
+    });
+
+};
 
 function URI(uri) {
     if(uri === window) return;

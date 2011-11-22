@@ -11,29 +11,27 @@
 
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
-        <?php echo asset_link_tag('css/admin/style.css'); ?>		
-        <?php echo asset_link_tag('css/admin/invalid.css'); ?>		
-        <?php echo asset_link_tag('css/admin/colorbox/colorbox.css'); ?>	
-
+        <?php echo asset_link_tag('css/admin/style.css'); ?>
+        <?php echo asset_link_tag('css/admin/invalid.css'); ?>
+        <?php echo asset_link_tag('css/colorbox/colorbox.css'); ?>
 
         <!--[if lte IE 7]>
-        <?php echo asset_link_tag('css/admin/ie.css'); ?>					
+        <?php echo asset_link_tag('css/admin/ie.css'); ?>
         <![endif]-->
 
         <!-- jQuery -->
         <?php echo asset_js('js/jquery-1.6.4.js') ?>
-        <?php echo asset_js('js/admin/jquery.colorbox-min.js'); ?>
-        <?php echo asset_js('js/admin/jquery.configuration.js'); ?>		
-
+        <?php echo asset_js('js/jquery.colorbox-min.js'); ?>
+        <?php echo asset_js('js/admin/jquery.configuration.js'); ?>
 
         <!--[if IE]>
-        <?php echo asset_js('js/admin/jquery.bgiframe.js'); ?>		
+        <?php echo asset_js('js/admin/jquery.bgiframe.js'); ?>
         <![endif]-->
 
         <!-- Internet Explorer .png-fix -->
 
         <!--[if IE 6]>
-        <?php echo asset_js('js/admin/DD_belatedPNG_0.0.7a.js'); ?>					
+        <?php echo asset_js('js/admin/DD_belatedPNG_0.0.7a.js'); ?>
             <script type="text/javascript">
                 DD_belatedPNG.fix('.png_bg, img, li');
             </script>

@@ -18,8 +18,11 @@
         <?php
         // css
         echo asset_link_tag('css/default.css');
+        echo asset_link_tag('css/colorbox/colorbox.css');
+
         // js
-        echo asset_js('js/jquery.js');
+        echo asset_js('js/jquery-1.6.4.js');
+        echo asset_js('js/jquery.colorbox-min.js');
         echo asset_js('js/core.js');
         ?>
     </head>

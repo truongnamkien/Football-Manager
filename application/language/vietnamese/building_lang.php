@@ -15,6 +15,7 @@ $lang['building_type_fee_rate'] = '% tăng phí';
 $lang['building_type_effect'] = 'Hiệu quả';
 $lang['building_type_effect_rate'] = '% tăng hiệu quả';
 $lang['building_type_street_cell'] = 'Vị trí';
+$lang['building_type_type'] = 'Loại công trình';
 
 $lang['building_type_create_submit'] = 'Tạo';
 
@@ -23,7 +24,10 @@ $lang['building_upgrade'] = 'Nâng cấp';
 
 // Upgrade
 $lang['building_upgrade_success'] = 'Nâng cấp thành công';
-$lang['building_upgrade_failed'] = 'Thời gian chờ vẫn còn, bạn không thể nâng cấp công trình';
+$lang['building_upgrade_non_cooldown'] = 'Thời gian chờ vẫn còn, bạn không thể nâng cấp công trình';
+$lang['building_upgrade_error'] = 'Có lỗi xảy ra. Không thể nâng cấp!';
+$lang['building_upgrade_max_level_1'] = 'Công trình này đã đạt cấp độ tối đa. Không thể nâng cấp thêm.';
+$lang['building_upgrade_max_level_2'] = 'Công trình này đã đạt cấp độ tối đa vào thời điểm hiện tại. Vui lòng nâng cấp %name.';
 $lang['building_upgrade_non_permission'] = 'Bạn không có quyền nâng cấp công trình này!';
 $lang['building_not_enough_money'] = 'Bạn không có đủ tiền';
 

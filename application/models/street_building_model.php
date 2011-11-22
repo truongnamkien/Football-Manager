@@ -37,19 +37,15 @@ class Street_Building_Model extends CI_Model {
         $this->db->delete('street_building', array('street_building_id' => $street_building_id));
     }
 
-    public function update_street_building($building, $update_data) {
-        $this->db->trans_start();
-        if (isset($update_data['level'])) {
-            if ($update_data['level'] > self::MAX_LEVEL) {
-                return $this->_ret(API_FAILED);
-            } else if ($update_data['level'] < 1 && $building['building_type_id'] == 1) {
-                return $this->_ret(API_FAILED);
-            } else if ($update_data['level'] < 0 ) {
-                return $this->_ret(API_FAILED);
-            }
+    public function update_street_building($street_building_id, $update_data) {
+        $building = $this->get_street_building($street_building_id);
+        if ($building['return_code'] != API_SUCCESS || empty($building['data'])) {
+            return $this->_ret(API_FAILED);
         }
+        $building = $building['data'];
 
-        $this->db->where('street_building_id', $building['street_building_id'])->update('street_building', $update_data);
+        $this->db->trans_start();
+        $this->db->where('street_building_id', $street_building_id)->update('street_building', $update_data);
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
