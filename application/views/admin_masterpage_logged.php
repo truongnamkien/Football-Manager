@@ -57,7 +57,7 @@
 
                 <div id="sidebar"><div id="sidebar-wrapper"> <!-- Sidebar with logo and menu -->
 
-                        <h1 id="sidebar-title"><?php echo lang('admin_manager_title'); ?></h1>
+                        <h1 id="sidebar-title"><?php echo lang('manager_title'); ?></h1>
 
                         <!-- Sidebar Profile links -->
                         <div id="profile-links">
@@ -81,7 +81,7 @@
                                     'building_type' => lang('admin_manager_building_type'),
                                         )
                                 ?>
-                                <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('admin_manager_submenu'); ?></a>
+                                <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('manager_submenu'); ?></a>
                                 <ul>
                                     <?php admin_menu_render($managers); ?>
                                 </ul>

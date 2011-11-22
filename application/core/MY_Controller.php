@@ -125,8 +125,96 @@ class MY_Admin_Controller extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->_masterview_enabled = TRUE;
-        $this->_masterview = 'admin_masterpage';
+        if($this->my_auth->logged_in()) {
+            $this->_masterview = 'admin_masterpage_logged';
+        } else {
+            $this->_masterview = 'admin_masterpage_not_logged';
+        }
         $this->load->language('admin');
+    }
+
+}
+
+class MY_Inner_Admin_Controller extends MY_Admin_Controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this->my_auth->login_required(TRUE);
+        $this->load->library(array('table', 'pagination'));
+        $this->load->helper(array('form', 'url'));
+        $this->data = array();
+        $this->data['per_page'] = 10;
+    }
+
+    public function index() {
+        $this->read();
+    }
+
+    public function read($offset = 0) {
+        $config['base_url'] = base_url() . 'admin/' . $this->data['type'] . '/read';
+        $config['total_rows'] = $this->count_all_objects();
+        $config['per_page'] = $this->data['per_page'];
+        $config['uri_segment'] = '4';
+
+        if (isset($_POST['search'])) {
+            if ($_POST['search'] != $this->session->userdata('admin_search')) {
+                $this->session->set_userdata('admin_search', $_POST['search']);
+            }
+        }
+
+        $search = $this->session->userdata('admin_search');
+
+        $this->pagination->initialize($config);
+
+        $data['objects'] = $this->get_objects($this->data['per_page'], $offset, $search);
+        $data['type'] = $this->data['type'];
+        $data['total_rows'] = $config['total_rows'];
+
+        $data['mass_action_options'] = $this->set_mass_action_options();
+
+        $this->load->view('list_view', $data);
+    }
+
+    protected function set_mass_action_options() {
+        return array(
+            'select' => 'Choose an action...',
+            'delete' => 'Delete',
+        );
+    }
+
+    protected function set_actions($id) {
+        $type = $this->data['type'];
+        $path = 'admin/' . $type . '/';
+        $actions = anchor($path . 'edit/' . $id, lang($type . '_edit'));
+        $actions .= ' | ' . anchor($path . 'show/' . $id, lang($type . '_show'));
+        $actions .= ' | ' . anchor($path . 'remove/' . $id, lang($type . '_remove'), 'class="remove"');
+        return $actions;
+    }
+
+    protected function get_objects($how_many, $offset) {
+        $model_name = get_model_name();
+        $method_name = 'get_all_' . $this->data['type'];
+
+        $result = array();
+        $objects = $this->$model_name->$method_name($offset, $how_many);
+        if ($objects['return_code'] == API_SUCCESS && !empty($objects['data'])) {
+            $objects = $objects['data'];
+            foreach ($objects as $obj) {
+                $id = $obj[key($obj)];
+                $result[] = array_merge($obj, array('actions' => $this->set_actions($id)));
+            }
+        }
+        return $result;
+    }
+
+    protected function count_all_objects() {
+        $model_name = get_model_name();
+        $method_name = 'count_all_' . $this->data['type'];
+        return $this->$model_name->$method_name();
+    }
+    
+    protected function get_model_name() {
+        return $this->data['type'] . '_model';
     }
 
 }
