@@ -27,8 +27,8 @@ class MY_Auth {
             }
         } else if ($is_admin) {
             $admin_id = $this->get_user_id();
-            $admin_info = $this->CI->admin_model->get_admin($email);
-            if ($user_info['return_code'] != API_SUCCESS || empty($user_info['data'])) {
+            $admin_info = $this->CI->admin_model->get_admin($admin_id);
+            if ($admin_info['return_code'] != API_SUCCESS || empty($admin_info['data'])) {
                 $this->logout();
                 redirect('admin_login');
             }

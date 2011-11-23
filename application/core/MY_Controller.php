@@ -131,6 +131,7 @@ class MY_Admin_Controller extends MY_Controller {
             $this->_masterview = 'admin_masterpage_not_logged';
         }
         $this->load->language('admin');
+        $this->set_title(lang('manager_title'));
     }
 
 }

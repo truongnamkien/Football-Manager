@@ -16,7 +16,7 @@ class Admin_Authen extends MY_Admin_Controller {
         if ($this->form_validation->run()) {
             $inputs = $this->_collect(array('username', 'password'));
             if ($this->my_auth->login($inputs['username'], $inputs['password'], TRUE)) {
-                redirect(site_url('admin'));
+                redirect(site_url('admin/admin'));
             } else {
                 $data['login_failed'] = array(
                     'title' => $this->lang->line('authen_login_fail'),
