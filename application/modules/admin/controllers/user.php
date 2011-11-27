@@ -2,20 +2,21 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin extends MY_Inner_Admin_Controller {
+class User extends MY_Inner_Admin_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->data['type'] = 'admin';
-        $this->load->model(array('admin_model'));
+        $this->data['type'] = 'user';
+        $this->load->model(array('user_model'));
         $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
-        $this->load->language('admin');
+        $this->load->language('user');
     }
 
-    private function _get_roles() {
+    private function _get_status() {
         return array(
-            Admin_Model::ADMIN_ROLE_ADMIN => Admin_Model::ADMIN_ROLE_ADMIN,
-            Admin_Model::ADMIN_ROLE_MODERATOR => Admin_Model::ADMIN_ROLE_MODERATOR
+            User_Model::USER_STATUS_INACTIVE => User_Model::USER_STATUS_INACTIVE,
+            User_Model::USER_STATUS_ACTIVE => User_Model::USER_STATUS_ACTIVE,
+            User_Model::USER_STATUS_RECOVERY_PASSWORD => User_Model::USER_STATUS_RECOVERY_PASSWORD
         );
     }
 
@@ -29,17 +30,17 @@ class Admin extends MY_Inner_Admin_Controller {
     protected function set_validation_rules($action) {
         if ($action == 'create') {
             $rules = array(
-                array('field' => 'display_name', 'label' => lang('admin_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
-                array('field' => 'username', 'label' => 'lang:admin_username', 'rules' => 'trim|strip_tags|required|max_length[80]|unique[admin.username]'),
-                array('field' => 'password', 'label' => lang('admin_password'), 'rules' => 'required|min_length[6]|max_length[32]'),
-                array('field' => 'password_confirm', 'label' => lang('admin_password_confirm'), 'rules' => 'required|matches[password]'),
-                array('field' => 'role', 'label' => lang('admin_role'), 'rules' => 'required'),
+                array('field' => 'display_name', 'label' => lang('user_display_name'), 'rules' => 'trim|strip_tags|max_length[255]|required'),
+                array('field' => 'email', 'label' => 'lang:user_email', 'rules' => 'trim|strip_tags|required|max_length[255]|unique[user.email]'),
+                array('field' => 'password', 'label' => lang('user_password'), 'rules' => 'required|min_length[6]|max_length[32]'),
+                array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'required|matches[password]'),
+                array('field' => 'user_status', 'label' => lang('user_status'), 'rules' => 'required'),
             );
         } else {
             $rules = array(
-                array('field' => 'display_name', 'label' => lang('admin_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
-                array('field' => 'password_confirm', 'label' => lang('admin_password_confirm'), 'rules' => 'matches[password]'),
-                array('field' => 'role', 'label' => lang('admin_role'), 'rules' => 'required'),
+                array('field' => 'display_name', 'label' => lang('user_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
+                array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'matches[password]'),
+                array('field' => 'user_status', 'label' => lang('user_status'), 'rules' => 'required'),
             );
         }
         return $rules;
@@ -47,9 +48,11 @@ class Admin extends MY_Inner_Admin_Controller {
 
     protected function prepare_object($id = FALSE) {
         $object = array(
-            'username' => '',
+            'email' => '',
             'display_name' => '',
-            'role' => ''
+            'user_status' => '',
+            'street_id' => '',
+            'balance' => ''
         );
         if ($id != FALSE) {
             $object = $this->get_object($id);
@@ -61,14 +64,14 @@ class Admin extends MY_Inner_Admin_Controller {
             $label = form_label(lang($this->data['type'] . '_' . $key), $key);
             $value = array('name' => $key, 'value' => $val);
 
-            if ($key == 'admin_id' || ($key == 'username' && !empty($val))) {
+            if ($key == 'user_id' || ($key == 'email' && !empty($val))) {
                 $value = array_merge($value, array('disabled' => 'disabled'));
             }
 
             if ($key == 'password' || $key == 'password_confirm') {
                 $value = form_password($value);
-            } else if ($key == 'role') {
-                $roles = $this->_get_roles();
+            } else if ($key == 'user_status') {
+                $roles = $this->_get_status();
                 $value = form_dropdown($key, $roles, $val);
             } else {
                 $value = form_input($value);

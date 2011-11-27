@@ -150,7 +150,6 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $data['total_rows'] = $this->count_all_objects();
 
         $data['mass_action_options'] = $this->set_mass_action_options();
-
         $this->load->view('list_view', $data);
     }
 
@@ -160,7 +159,12 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $data['type'] = $this->data['type'];
         $this->load->view('show_view', $data);
     }
-
+    
+    public function logout() {
+        $this->my_auth->logout();
+        redirect('admin');
+    }
+    
     public function create() {
         $this->create_update();
     }
@@ -272,7 +276,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
             redirect(site_url('admin/' . $this->data['type']));
         }
     }
-
+    
     abstract protected function set_validation_rules($action);
 
     abstract protected function prepare_object($id = FALSE);
