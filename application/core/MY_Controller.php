@@ -236,7 +236,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
 
         $result = array();
         foreach ($objects as $obj) {
-            $id = $obj[key($obj)];
+            $id = $obj[get_object_key($obj, $this->data['type'])];
             $result[] = array_merge($obj, array('actions' => $this->set_actions($id)));
         }
         return $result;

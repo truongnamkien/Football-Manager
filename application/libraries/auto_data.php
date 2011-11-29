@@ -6,7 +6,7 @@ class Auto_Data {
 
     function __construct() {
         $this->CI = & get_instance();
-        $this->CI->load->config('user', TRUE);
+        $this->CI->load->config('npc', TRUE);
         $this->CI->load->library(array('street_library', 'npc_library'));
         $this->CI->load->model(array('street_model'));
     }
@@ -33,7 +33,7 @@ class Auto_Data {
                 }
                 $street = $this->CI->street_library->create($i, Street_Model::STREET_TYPE_NPC);
                 $npc_data = array('level' => $level, 'street_id' => $street['street_id']);
-                $this->CI->npc_library->create($npc_data);
+                $ret = $this->CI->npc_library->create($npc_data);
             }
         }
     }

@@ -48,9 +48,10 @@ abstract class Abstract_Library {
         $model_name = $this->type . '_model';
         $method_name = 'create_' . $this->type;
         $object = self::$CI->$model_name->$method_name($data);
+
         if ($object['return_code'] == API_SUCCESS && !empty($object['data'])) {
             $object = $object['data'];
-            $id = $object[key($object)];
+            $id = $object[get_object_key($object, $this->type)];
             return $this->get($id, TRUE);
         }
         return NULL;
@@ -93,7 +94,7 @@ abstract class Abstract_Library {
         if ($objects['return_code'] == API_SUCCESS && !empty($objects['data'])) {
             $objects = $objects['data'];
             foreach ($objects as $object) {
-                $id = $object[key($object)];
+                $id = $object[get_object_key($object, $this->type)];
                 $key = $this->_get_key('cache.object.info', array('$id' => $id));
                 self::$CI->cache->delete($key);
                 self::$CI->cache->save($key, $object);
@@ -126,8 +127,9 @@ abstract class Abstract_Library {
 
         return $key;
     }
-    
+
     protected function after_get_callback($object) {
         return $object;
     }
+
 }

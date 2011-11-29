@@ -36,7 +36,7 @@
                     <?php
                     if (count($objects) > 0) {
                         foreach ($objects as $obj) {
-                            $obj_id = $obj[key($obj)];
+                            $obj_id = $obj[get_object_key($obj, $type)];
                             echo '<tr class="inlineEdit" rel="' . $obj_id . '">';
                             echo '<td><input type="checkbox" value="' . $obj_id . '" /></td>';
 

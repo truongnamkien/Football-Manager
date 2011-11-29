@@ -10,9 +10,9 @@ class NPC_Model extends CI_Model {
     }
 
     public function create_npc($npc) {
-        $ret = $this->get_npc_with_street($npc);
+        $ret = $this->get_npc_with_street($npc['street_id']);
 
-        if (($ret['return_code'] == API_SUCCESS) && $ret['data'] === FALSE) {
+        if (($ret['return_code'] != API_SUCCESS) || empty($ret['data'])) {
             unset($npc['npc_id']);
             if ($this->db->insert('npc', $npc)) {
                 $npc_id = $this->db->insert_id();
@@ -69,8 +69,8 @@ class NPC_Model extends CI_Model {
         }
     }
 
-    public function get_npc_with_street($steet_id) {
-        $npc_info = $this->db->from('npc')->where(array('steet_id' => $steet_id))->limit(1)->get();
+    public function get_npc_with_street($street_id) {
+        $npc_info = $this->db->from('npc')->where(array('street_id' => $street_id))->limit(1)->get();
         $npc_info = $npc_info->row_array();
 
         if (!empty($npc_info)) {
