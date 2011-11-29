@@ -16,7 +16,7 @@ class Street_Library extends Abstract_Library {
     }
 
     public function get($street_id, $is_force = FALSE) {
-        return parent::get($id, array('after_get' => 'get_my_street_info'), $is_force);
+        return parent::get($id, $is_force, array('after_get' => 'get_my_street_info'));
     }
 
     public function create($area, $street_type) {

@@ -34,13 +34,13 @@ class User extends MY_Inner_Admin_Controller {
                 array('field' => 'email', 'label' => 'lang:user_email', 'rules' => 'trim|strip_tags|required|max_length[255]|unique[user.email]'),
                 array('field' => 'password', 'label' => lang('user_password'), 'rules' => 'required|min_length[6]|max_length[32]'),
                 array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'required|matches[password]'),
-                array('field' => 'user_status', 'label' => lang('user_status'), 'rules' => 'required'),
+                array('field' => 'user_status', 'label' => lang('user_user_status'), 'rules' => 'required'),
             );
         } else {
             $rules = array(
                 array('field' => 'display_name', 'label' => lang('user_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
                 array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'matches[password]'),
-                array('field' => 'user_status', 'label' => lang('user_status'), 'rules' => 'required'),
+                array('field' => 'user_status', 'label' => lang('user_user_status'), 'rules' => 'required'),
             );
         }
         return $rules;

@@ -15,7 +15,7 @@ abstract class Abstract_Library {
         self::$CI->load->driver('cache');
     }
 
-    public function get($id, $callback = array(), $is_force = FALSE) {
+    public function get($id, $is_force = FALSE, $callback = array()) {
         $key = $this->_get_key('cache.object.info', array('$id' => $id));
         if (!$is_force) {
             $cache_data = self::$CI->cache->get($key);
@@ -51,7 +51,7 @@ abstract class Abstract_Library {
         if ($object['return_code'] == API_SUCCESS && !empty($object['data'])) {
             $object = $object['data'];
             $id = $object[key($object)];
-            return $this->get($id, array(), TRUE);
+            return $this->get($id, TRUE);
         }
         return NULL;
     }
@@ -61,7 +61,7 @@ abstract class Abstract_Library {
         $method_name = 'update_' . $this->type;
         $object = self::$CI->$model_name->$method_name($id, $data);
         if ($object['return_code'] == API_SUCCESS) {
-            return $this->get($id, array(), TRUE);
+            return $this->get($id, TRUE);
         }
         return NULL;
     }

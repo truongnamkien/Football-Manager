@@ -45,7 +45,7 @@ class User_Model extends CI_Model {
 
             $user_info['password'] = $this->_hash_password($user_info['password'], $salt);
             if (!isset($user_info['user_status'])) {
-                $user_info['user_status'] = self::USER_STATUS_INACTIVE;
+                $user_info['user_status'] = self::USER_STATUS_ACTIVE;
             }
             unset($user_info['user_id']);
             unset($user_info['password_confirm']);

@@ -14,7 +14,7 @@ class Building_Library extends Abstract_Library {
     }
 
     public function get($street_building_id, $is_force = FALSE) {
-        return parent::get($street_building_id, array('after_get' => 'get_building_extra_info'), $is_force);
+        return parent::get($street_building_id, $is_force, array('after_get' => 'get_building_extra_info'));
     }
 
     public function get_all($street_id = FALSE, $is_force = FALSE) {
@@ -91,7 +91,6 @@ class Building_Library extends Abstract_Library {
     }
 
     public function create_building_for_street($street_id) {
-        parent::$CI->load->model(array('street_building_model', 'building_type_model'));
         $building_types = parent::$CI->building_type_model->get_all_building_type();
         if ($building_types['return_code'] !== API_SUCCESS || empty($building_types['data'])) {
             return FALSE;

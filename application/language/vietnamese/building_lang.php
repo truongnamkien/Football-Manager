@@ -1,33 +1,24 @@
 <?php
 
-$lang['manager_title'] = 'Quản lý';
-$lang['manager_submenu'] = 'Quản lý thông tin';
-
-// Sub menu
-$lang['manager_admin'] = 'Admin';
-$lang['manager_user'] = 'Người chơi';
-$lang['manager_building_type'] = 'Công trình';
-
 $lang['building_type_manager_title'] = 'Danh sách công trình';
-$lang['building_type_back_list'] = 'Quay lại trang danh sách';
-$lang['building_type_create'] = 'Thêm công trình mới';
+$lang['building_type_create'] = 'Thêm công trình';
 $lang['building_type_remove'] = 'Xóa';
 $lang['building_type_show'] = 'Xem';
 $lang['building_type_update'] = 'Chỉnh sửa';
 $lang['building_type_remove_confirm'] = 'Chắc chắn xóa công trình này?';
 
+$lang['building_type_create_submit'] = 'Tạo';
+$lang['building_type_update_submit'] = 'Cập nhật';
+
 $lang['building_type_building_type_id'] = 'ID';
-$lang['building_type_name'] = 'Tên công trình';
+$lang['building_type_name'] = 'Tên';
 $lang['building_type_description'] = 'Mô tả';
 $lang['building_type_beginning_fee'] = 'Chi phí';
 $lang['building_type_fee_rate'] = '% tăng phí';
 $lang['building_type_effect'] = 'Hiệu quả';
 $lang['building_type_effect_rate'] = '% tăng hiệu quả';
 $lang['building_type_street_cell'] = 'Vị trí';
-$lang['building_type_type'] = 'Loại công trình';
-
-$lang['building_type_create_submit'] = 'Tạo';
-$lang['building_type_update_submit'] = 'Cập nhật';
+$lang['building_type_type'] = 'Loại';
 
 $lang['building_level'] = 'Cấp độ';
 $lang['building_upgrade'] = 'Nâng cấp';
@@ -41,6 +32,5 @@ $lang['building_upgrade_max_level_2'] = 'Công trình này đã đạt cấp đ�
 $lang['building_upgrade_non_permission'] = 'Bạn không có quyền nâng cấp công trình này!';
 $lang['building_not_enough_money'] = 'Bạn không có đủ tiền';
 
-$lang['back_list'] = 'Quay lại trang danh sách';
 
 

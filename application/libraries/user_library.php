@@ -15,6 +15,10 @@ class User_Library extends Abstract_Library {
         parent::$CI->load->config('user', TRUE);
     }
 
+    public function get($id, $is_force = FALSE) {
+        return parent::get($id, $is_force, array());
+    }
+
     public function create($data) {
         $street = parent::$CI->street_library->create(FALSE, Street_Model::STREET_TYPE_PLAYER);
         $data['street_id'] = $street['street_id'];

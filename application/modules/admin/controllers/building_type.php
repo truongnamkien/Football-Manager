@@ -8,6 +8,7 @@ class Building_Type extends MY_Inner_Admin_Controller {
         parent::__construct();
         $this->data['type'] = 'building_type';
         $this->load->model(array('building_type_model'));
+        $this->load->library(array('building_type_library'));
         $this->load->language('building');
         $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
 
@@ -29,8 +30,6 @@ class Building_Type extends MY_Inner_Admin_Controller {
     
     protected function set_actions($id) {
         $actions = parent::set_actions($id);
-        $path = 'admin/' . $this->data['type'] . '/';
-
         return $actions;
     }
     
