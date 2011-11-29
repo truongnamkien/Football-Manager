@@ -94,7 +94,7 @@ class Map_Library extends Abstract_Library {
         $max_y = $min_y + Street_Model::AREA_HEIGHT - 1;
         $streets = parent::$CI->street_model->get_street_by_area($min_x, $max_x, $min_y, $max_y);
         if ($streets['return_code'] != API_SUCCESS || empty($streets['data'])) {
-            return FALSE;
+            return array();
         }
         $streets = $streets['data'];
         parent::$CI->cache->save($key, $streets);
