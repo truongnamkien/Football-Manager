@@ -115,7 +115,7 @@ class MY_Auth {
         if ($user_id == FALSE || $user_id == NULL) {
             return FALSE;
         }
-        $user = User_Library::get($user_id);
+        $user = $this->CI->user_library->get($user_id);
         if ($user == FALSE || $user == NULL) {
             return FALSE;
         }

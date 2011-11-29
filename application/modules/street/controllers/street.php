@@ -12,8 +12,8 @@ class Street extends MY_Inner_Controller {
 
     public function index() {
         $user_id = $this->my_auth->get_user_id();
-        $user = User_Library::get($user_id);
-        $street = Street_Library::get($user['street_id']);
+        $user = $this->user_library->get($user_id);
+        $street = $this->street_library->get($user['street_id']);
 
         $data['buildings'] = $street['buildings'];
         $data['street'] = $street;

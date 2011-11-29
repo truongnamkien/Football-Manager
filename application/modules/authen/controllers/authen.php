@@ -31,7 +31,7 @@ class Authen extends MY_Outer_Controller {
                 'email',
                 'password',
                     ));
-            $user_info = User_Library::create($collect);
+            $user_info = $this->user_library->create($collect);
 
             //Dang ky thanh cong, goi email yeu cau verify             
             if (!empty($user_info)) {

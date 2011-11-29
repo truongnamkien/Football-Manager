@@ -14,7 +14,7 @@ class Building_Library extends Abstract_Library {
     }
 
     public function get($street_building_id, $is_force = FALSE) {
-        return parent::get($street_building_id, $is_force, array('after_get' => 'get_building_extra_info'));
+        return parent::get($street_building_id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
     public function get_all($street_id = FALSE, $is_force = FALSE) {
@@ -67,12 +67,14 @@ class Building_Library extends Abstract_Library {
 
     public function upgrade($street_building_id) {
         $building = $this->get($street_building_id);
+        $street_id = parent::$CI->my_auth->get_street_id();
+        
         if ($building == FALSE) {
             return lang('building_upgrade_error');
         }
         $level = $building['level'];
         if ($building['type'] != Building_Type_Model::BUILDING_TYPE_MANAGEMENT) {
-            $manage_building = $this->get_by_type(Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
+            $manage_building = $this->get_by_type($street_id, Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
             $max_level = ($manage_building != FALSE ? $manage_building['level'] : Street_Building_Model::MAX_LEVEL);
         } else {
             $max_level = Street_Building_Model::MAX_LEVEL;
@@ -106,6 +108,10 @@ class Building_Library extends Abstract_Library {
             $building = array_merge($building, $building_type['data']);
         }
         return $building;
+    }
+    
+    protected function after_get_callback($building) {
+        return $this->get_building_extra_info($building);
     }
 
 }

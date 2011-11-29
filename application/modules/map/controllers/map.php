@@ -16,10 +16,10 @@ class Map extends MY_Controller {
 
     public function display($info) {
         if (isset($info['area'])) {
-            $data['streets'] = Map_Library::get_area($info['area']);
+            $data['streets'] = $this->map_library->get($info['area']);
         } else {
             $street = $info['street'];
-            $data['streets'] = Map_Library::get_area_by_coor($street['x_coor'], $street['y_coor']);
+            $data['streets'] = $this->map_library->get_by_coor($street['x_coor'], $street['y_coor']);
         }
         $this->load->view('pagelet_map_view', $data);
     }

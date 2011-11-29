@@ -16,7 +16,7 @@ class Street_Library extends Abstract_Library {
     }
 
     public function get($street_id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array('after_get' => 'get_my_street_info'));
+        return parent::get($street_id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
     public function create($area, $street_type) {
@@ -165,6 +165,10 @@ class Street_Library extends Abstract_Library {
             $street['cooldowns'] = $street_cooldowns;
         }
         return $street;
+    }
+    
+    protected function after_get_callback($street) {
+        return $this->get_my_street_info($street);
     }
 
 }

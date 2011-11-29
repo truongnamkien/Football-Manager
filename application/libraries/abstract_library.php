@@ -126,5 +126,8 @@ abstract class Abstract_Library {
 
         return $key;
     }
-
+    
+    protected function after_get_callback($object) {
+        return $object;
+    }
 }

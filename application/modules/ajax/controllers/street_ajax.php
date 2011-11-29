@@ -22,8 +22,8 @@ class Street_Ajax extends MY_Ajax {
         }
 
         $user_id = $this->my_auth->get_user_id();
-        $user = User_Library::get($user_id);
-        $street = Street_Library::get($user['street_id']);
+        $user = $this->user_library->get($user_id);
+        $street = $this->street_library->get($user['street_id']);
         $permission = FALSE;
         if (isset($street['buildings'][$street_building_id])) {
             $permission = TRUE;
@@ -31,10 +31,10 @@ class Street_Ajax extends MY_Ajax {
 
         $message = '';
         if ($permission) {
-            $fee = Street_Library::get_fee($street_building_id);
-            $enough_balance = User_Library::check_enough_balance($fee);
+            $fee = $this->street_library->get_fee($street_building_id);
+            $enough_balance = $this->user_library->check_enough_balance($fee);
             if ($enough_balance) {
-                $street = Street_Library::upgrade($street_building_id);
+                $street = $this->street_library->upgrade($street_building_id);
                 if ($street !== FALSE && !is_string($street)) {
                     $cooldowns = $street['cooldowns']['buildings'];
                     $current_time = now();
@@ -44,7 +44,7 @@ class Street_Ajax extends MY_Ajax {
                         }
                     }
 
-                    $user = User_Library::update_balance($fee);
+                    $user = $this->user_library->update_balance($fee);
                     $this->response->html("#street_building_" . $street_building_id . " .building_level", $street['buildings'][$street_building_id]['level']);
                     if ($user != FALSE) {
                         $this->response->html("#my_balance", $user['balance']);
