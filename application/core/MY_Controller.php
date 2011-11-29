@@ -150,6 +150,8 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $data['total_rows'] = $this->count_all_objects();
 
         $data['mass_action_options'] = $this->set_mass_action_options();
+        $data['main_nav'] = $this->_main_nav('index');
+
         $this->load->view('list_view', $data);
     }
 
@@ -157,14 +159,10 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $data['object'] = $this->get_object($id);
         $data['id'] = $id;
         $data['type'] = $this->data['type'];
+        $data['main_nav'] = $this->_main_nav('show', $id);
         $this->load->view('show_view', $data);
     }
-    
-    public function logout() {
-        $this->my_auth->logout();
-        redirect('admin');
-    }
-    
+
     public function create() {
         $this->create_update();
     }
@@ -174,9 +172,22 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     public function remove($id) {
-        $model_name = $this->get_model_name();
-        $method_name = 'delete_' . $this->data['type'];
-        $this->$model_name->$method_name($id);
+        $library_name = $this->get_library_name();
+        $this->$library_name->remove($id);
+        redirect(site_url('admin/' . $this->data['type']));
+    }
+
+    public function mass() {
+        $params = $this->handle_post_inputs();
+        $ids = explode(',', $params['ids']);
+        $action = $params['mass_action_dropdown'];
+        if ($action == 'remove') {
+            $library_name = $this->get_library_name();
+            foreach ($ids as $id) {
+                $this->$library_name->remove($id);
+            }
+        }
+
         redirect(site_url('admin/' . $this->data['type']));
     }
 
@@ -190,6 +201,10 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $this->form_validation->set_rules($validation_rules);
 
         if ($this->form_validation->run() == FALSE) {
+            if($id == FALSE) {
+                $id = '';
+            }
+            $this->data['main_nav'] = $this->_main_nav($this->data['action'], $id);
             $this->load->view('create_update_view', $this->data);
         } else {
             $params = $this->handle_post_inputs();
@@ -198,33 +213,31 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     protected function set_mass_action_options() {
-        return array(
-            'select' => 'Choose an action...',
-            'delete' => 'Delete',
-        );
+        $actions = array('select', 'remove');
+        $options = array();
+        foreach ($actions as $action) {
+            $options[$action] = lang('admin_mass_' . $action);
+        }
+        return $options;
     }
 
     protected function set_actions($id) {
         $type = $this->data['type'];
         $path = 'admin/' . $type . '/';
-        $actions = anchor($path . 'update/' . $id, lang($type . '_update'));
-        $actions .= ' | ' . anchor($path . 'show/' . $id, lang($type . '_show'));
-        $actions .= ' | ' . anchor($path . 'remove/' . $id, lang($type . '_remove'), 'class="remove"');
+        $actions['update'] = anchor($path . 'update/' . $id, lang($type . '_update'));
+        $actions['show'] = anchor($path . 'show/' . $id, lang($type . '_show'));
+        $actions['remove'] = anchor($path . 'remove/' . $id, lang($type . '_remove'), array('class' => 'remove', 'onclick' => 'return confirm(\'' . lang($this->data['type'] . '_remove_confirm') . '\');'));
         return $actions;
     }
 
     protected function get_all_objects() {
-        $model_name = $this->get_model_name();
-        $method_name = 'get_all_' . $this->data['type'];
+        $library_name = $this->get_library_name();
+        $objects = $this->$library_name->get_all();
 
         $result = array();
-        $objects = $this->$model_name->$method_name();
-        if ($objects['return_code'] == API_SUCCESS && !empty($objects['data'])) {
-            $objects = $objects['data'];
-            foreach ($objects as $obj) {
-                $id = $obj[key($obj)];
-                $result[] = array_merge($obj, array('actions' => $this->set_actions($id)));
-            }
+        foreach ($objects as $obj) {
+            $id = $obj[key($obj)];
+            $result[] = array_merge($obj, array('actions' => $this->set_actions($id)));
         }
         return $result;
     }
@@ -233,25 +246,22 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         if ($id == FALSE || !is_numeric($id)) {
             show_404();
         } else {
-            $model_name = $this->get_model_name();
-            $method_name = 'get_' . $this->data['type'];
-            $object = $this->$model_name->$method_name($id);
-            if ($object['return_code'] != API_SUCCESS || empty($object['data'])) {
+            $library_name = $this->get_library_name();
+            $object = $this->$library_name->get($id);
+            if ($object == NULL) {
                 show_404();
             }
-            $object = $object['data'];
         }
         return $object;
     }
 
     protected function count_all_objects() {
-        $model_name = $this->get_model_name();
-        $method_name = 'count_all_' . $this->data['type'];
-        return $this->$model_name->$method_name();
+        $library_name = $this->get_library_name();
+        return $this->$library_name->count_all();
     }
 
-    protected function get_model_name() {
-        return $this->data['type'] . '_model';
+    protected function get_library_name() {
+        return $this->data['type'] . '_library';
     }
 
     protected function handle_post_inputs() {
@@ -266,17 +276,36 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
 
     protected function handle_create_update_object($params, $action, $id = FALSE) {
         unset($params['submit']);
-        $model_name = $this->get_model_name();
-        $method_name = $action . '_' . $this->data['type'];
+        $library_name = $this->get_library_name();
+
         if ($id !== FALSE) {
-            $this->$model_name->$method_name($id, $params);
+            $this->$library_name->$action($id, $params);
             redirect(site_url('admin/' . $this->data['type'] . '/show/' . $id));
         } else {
-            $this->$model_name->$method_name($params);
+            $this->$library_name->$action($params);
             redirect(site_url('admin/' . $this->data['type']));
         }
     }
-    
+
+    protected function _main_nav($page = 'index', $id = '') {
+        $nav_list = array();
+        $type = $this->data['type'];
+        if ($page == 'index') {
+            $nav_list[$type . '_create'] = site_url('admin/' . $type . '/create');
+        } else {
+            $nav_list['back_list'] = site_url('admin/' . $type);
+        }
+        if ($page == 'show') {
+            $nav_list[$type . '_update'] = site_url('admin/' . $type . '/update/' . $id);
+            $nav_list[$type . '_remove'] = site_url('admin/' . $type . '/remove/' . $id);
+        }
+        if ($page == 'update') {
+            $nav_list[$type . '_show'] = site_url('admin/' . $type . '/show/' . $id);
+        }
+
+        return $nav_list;
+    }
+
     abstract protected function set_validation_rules($action);
 
     abstract protected function prepare_object($id = FALSE);

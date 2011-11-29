@@ -74,7 +74,7 @@
                             </li>
 
                             <li> 
-                                <?php $managers = array('admin', 'user', 'building_type'); ?>
+                                <?php $managers = array('admin', 'user', 'building_type', 'npc'); ?>
                                 <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('manager_submenu'); ?></a>
                                 <ul>
                                     <?php admin_menu_render($managers); ?>

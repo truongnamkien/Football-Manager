@@ -2,9 +2,10 @@
     <div class="content-box-header">
         <h3><?php echo lang($type . '_create') ?></h3>
         <ul class="content-box-tabs">
-            <li><a class="current" href="<?php echo site_url('admin/' . $type) ?>"><?php echo lang('back_list') ?></a></li>
-            <?php if ($action != 'create'): ?>
-                <li><a class="current" href="<?php echo site_url('admin/' . $type . '/show/' .$id) ?>"><?php echo lang($type . '_show') ?></a></li>
+            <?php if (isset($main_nav) && !empty($main_nav)): ?>
+                <?php foreach ($main_nav as $key => $link): ?>
+                    <li><a class="current" href="<?php echo $link; ?>"><?php echo lang($key); ?></a></li>
+                <?php endforeach; ?>
             <?php endif; ?>
         </ul>
         <div class="clear"></div>

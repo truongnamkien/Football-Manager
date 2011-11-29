@@ -62,17 +62,8 @@ class User_Model extends CI_Model {
         return $this->_ret(API_FAILED);
     }
 
-    public function delete_user($user) {
-        if (is_array($user)) {
-            $user_id = $user['user_id'];
-        } else if (is_numeric($user)) {
-            $user_id = $user;
-        }
-        if (isset($user_id)) {
-            $this->db->delete('user', array('user_id' => $user_id));
-        } else {
-            $this->db->delete('user', array('email' => $user));
-        }
+    public function delete_user($user_id) {
+        $this->db->delete('users', array('user_id' => $user_id));
     }
 
     /**
@@ -81,12 +72,8 @@ class User_Model extends CI_Model {
      * @param int $userid
      * @return array
      */
-    public function get_user($user) {
-        if (is_numeric($user)) {
-            $query = $this->db->from('users')->where('user_id', $user)->get();
-        } else {
-            $query = $this->db->from('users')->where('email', $user)->get();
-        }
+    public function get_user($user_id) {
+        $query = $this->db->from('users')->where('user_id', $user_id)->get();
 
         if (!empty($query) && $query->num_rows() > 0) {
             $user_info = $query->row_array();
@@ -167,7 +154,7 @@ class User_Model extends CI_Model {
         $user_info = $this->get_user($user_id);
 
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {
-            unset($update_data['username']);
+            unset($update_data['email']);
             unset($update_data['user_id']);
             unset($update_data['password_confirm']);
 
@@ -258,8 +245,7 @@ class User_Model extends CI_Model {
     public function get_all_user() {
         $query = $this->db->order_by('user_id', 'asc')->get('users');
         if (!empty($query) && $query->num_rows() > 0) {
-            $users = $query->result_array();
-            return $this->_ret(API_SUCCESS, $users);
+            return $this->_ret(API_SUCCESS, $query->result_array());
         }
 
         return $this->_ret(API_FAILED);

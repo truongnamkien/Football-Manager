@@ -8,10 +8,10 @@ class Admin extends MY_Inner_Admin_Controller {
         parent::__construct();
         $this->data['type'] = 'admin';
         $this->load->model(array('admin_model'));
+        $this->load->library(array('admin_library'));
         $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
-        $this->load->language('admin');
     }
-
+    
     private function _get_roles() {
         return array(
             Admin_Model::ADMIN_ROLE_ADMIN => Admin_Model::ADMIN_ROLE_ADMIN,
@@ -21,8 +21,6 @@ class Admin extends MY_Inner_Admin_Controller {
 
     protected function set_actions($id) {
         $actions = parent::set_actions($id);
-        $path = 'admin/' . $this->data['type'] . '/';
-
         return $actions;
     }
 
@@ -91,5 +89,4 @@ class Admin extends MY_Inner_Admin_Controller {
         }
         return $objects;
     }
-
 }

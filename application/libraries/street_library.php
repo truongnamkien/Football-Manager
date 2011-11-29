@@ -2,31 +2,124 @@
 
 class Street_Library extends Abstract_Library {
 
-    private static $street_info = FALSE;
-    private static $cache_key = 'street.info:';
-
     function __construct() {
         parent::__construct();
+
+        $this->type = 'street';
+        $this->cache_key = 'street.info.';
+        $this->key_map = array(
+            'cache.object.info' => $this->cache_key . '$id',
+            'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
+        );
         parent::$CI->load->model(array('street_model', 'cooldown_model'));
         parent::$CI->load->library(array('building_library', 'map_library'));
     }
 
-    public static function get($street_id) {
-        if (self::$street_info != FALSE && isset(self::$street_info[$street_id]) && !empty(self::$street_info[$street_id])) {
-            return self::$street_info[$street_id];
+    public function get($street_id, $is_force = FALSE) {
+        return parent::get($id, array('after_get' => 'get_my_street_info'), $is_force);
+    }
+
+    public function create($area, $street_type) {
+        $street = parent::$CI->map_library->create_street($area, array('street_type' => $street_type));
+        if ($street_type == Street_Model::STREET_TYPE_PLAYER) {
+            $buildings = parent::$CI->building_library->create_building_for_street($street['street_id']);
+            $street['buildings'] = $buildings;
         }
-        $cache_data = parent::$CI->cache->get(self::$cache_key . $street_id);
-        if ($cache_data) {
-            self::$street_info[$street_id] = $cache_data;
-            return self::$street_info[$street_id];
-        }
-        $street = parent::$CI->street_model->get_street($street_id);
-        if ($street['return_code'] == API_SUCCESS && !empty($street['data'])) {
-            $street = $street['data'];
-            if ($street_id == parent::$CI->my_auth->get_street_id()) {
-                $buildings = Building_Library::get_all_buildings($street_id);
-                $street['buildings'] = $buildings;
+        return $this->get($street['street_id'], TRUE);
+    }
+
+    public function get_all() {
+        return FALSE;
+    }
+
+    public function count_all() {
+        return FALSE;
+    }
+
+    public function remove($street_id) {
+        $street = $this->get($street_id, TRUE);
+
+        // Remove buildings
+        if (isset($street['buildings'])) {
+            foreach ($street['buildings'] as $building) {
+                parent::$CI->building_library->remove($building['street_building_id']);
             }
+        }
+
+        // Remove cooldowns
+        if (isset($street['cooldowns'])) {
+            parent::$CI->cooldown_model->delete_cooldown($street['cooldowns']['research']['cooldown_id']);
+            foreach ($street['cooldowns']['buildings'] as $cd) {
+                parent::$CI->cooldown_model->delete_cooldown($cd['cooldown_id']);
+            }
+        }
+        parent::remove($street_id);
+    }
+
+    public function upgrade($street_building_id) {
+        $current_time = now();
+        $available_cd = $this->get_available_building_cooldown();
+        $street = $this->get(parent::$CI->my_auth->get_street_id());
+
+        if ($available_cd == FALSE) {
+            return lang('building_upgrade_non_cooldown');
+        } else {
+            $cooldown_time = $this->get_cooldown_time($street_building_id);
+            $building = parent::$CI->building_library->upgrade($street_building_id);
+            if ($building == FALSE || is_string($building)) {
+                return $building;
+            }
+
+            $cooldown = $this->update_cooldown($available_cd, $current_time + $cooldown_time);
+            $street['cooldowns']['buildings'][$available_cd] = $cooldown;
+            $street['buildings'][$street_building_id] = $building;
+            return $this->get($street['street_id'], TRUE);
+        }
+    }
+
+    private function get_available_building_cooldown() {
+        $current_time = now();
+        $street = $this->get(parent::$CI->my_auth->get_street_id());
+        foreach ($street['cooldowns']['buildings'] as $cd) {
+            if ($cd['end_time'] == NULL || $cd['end_time'] <= $current_time) {
+                return $cd['cooldown_id'];
+            }
+        }
+        return FALSE;
+    }
+
+    private function update_cooldown($cooldown_id, $time) {
+        $cooldown = parent::$CI->cooldown_model->update_cooldown($cooldown_id, array('end_time' => $time));
+        if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
+            return $cooldown['data'];
+        }
+        return FALSE;
+    }
+
+    public function get_fee($street_building_id) {
+        $building = parent::$CI->building_library->get($street_building_id);
+        $fee = $building['beginning_fee'];
+        $rate = $building['fee_rate'];
+        $level = $building['level'];
+        for ($i = 1; $i < $level; $i++) {
+            $fee = $fee * $rate;
+        }
+        return $fee;
+    }
+
+    public function get_cooldown_time($street_building_id) {
+        $building = parent::$CI->building_library->get($street_building_id);
+        $level = $building['level'];
+        $fee = $this->get_fee($street_building_id);
+        $rate = intval($level / Street_Building_Model::LEVEL_PER_SECTION) + 1;
+        return intval($fee / $rate);
+    }
+
+    private function get_my_street_info($street) {
+        $street_id = $street['street_id'];
+        if ($street_id == parent::$CI->my_auth->get_street_id()) {
+            $buildings = parent::$CI->building_library->get_all($street_id);
+            $street['buildings'] = $buildings;
 
             // Lấy Cooldown list của Street
             $cooldowns = parent::$CI->cooldown_model->get_cooldown_by_street($street_id);
@@ -70,83 +163,7 @@ class Street_Library extends Abstract_Library {
                 }
             }
             $street['cooldowns'] = $street_cooldowns;
-
-            parent::$CI->cache->save(self::$cache_key . $street_id, $street);
-            self::$street_info[$street_id] = $street;
-            return self::$street_info[$street_id];
         }
-        return FALSE;
-    }
-
-    public static function upgrade($street_building_id) {
-        $current_time = now();
-        $available_cd = self::get_available_building_cooldown();
-        $street = self::get(parent::$CI->my_auth->get_street_id());
-
-        if ($available_cd == FALSE) {
-            return lang('building_upgrade_non_cooldown');
-        } else {
-            $cooldown_time = self::get_cooldown_time($street_building_id);
-            $building = Building_Library::upgrade($street_building_id);
-            if ($building == FALSE || is_string($building)) {
-                return $building;
-            }
-
-            $cooldown = self::update_cooldown($available_cd, $current_time + $cooldown_time);
-            $street['cooldowns']['buildings'][$available_cd] = $cooldown;
-            $street['buildings'][$street_building_id] = $building;
-            $street_id = $street['street_id'];
-            parent::$CI->cache->delete(self::$cache_key . $street_id);
-            parent::$CI->cache->save(self::$cache_key . $street_id, $street);
-            self::$street_info[$street_id] = $street;
-            return self::$street_info[$street_id];
-        }
-    }
-
-    private static function get_available_building_cooldown() {
-        $current_time = now();
-        $street = self::get(parent::$CI->my_auth->get_street_id());
-        foreach ($street['cooldowns']['buildings'] as $cd) {
-            if ($cd['end_time'] == NULL || $cd['end_time'] <= $current_time) {
-                return $cd['cooldown_id'];
-            }
-        }
-        return FALSE;
-    }
-
-    private static function update_cooldown($cooldown_id, $time) {
-        $cooldown = parent::$CI->cooldown_model->update_cooldown($cooldown_id, array('end_time' => $time));
-        if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
-            return $cooldown['data'];
-        }
-        return FALSE;
-    }
-
-    public static function get_fee($street_building_id) {
-        $building = Building_Library::get($street_building_id);
-        $fee = $building['beginning_fee'];
-        $rate = $building['fee_rate'];
-        $level = $building['level'];
-        for ($i = 1; $i < $level; $i++) {
-            $fee = $fee * $rate;
-        }
-        return $fee;
-    }
-
-    public static function get_cooldown_time($street_building_id) {
-        $building = Building_Library::get($street_building_id);
-        $level = $building['level'];
-        $fee = self::get_fee($street_building_id);
-        $rate = intval($level / Street_Building_Model::LEVEL_PER_SECTION) + 1;
-        return intval($fee / $rate);
-    }
-
-    public static function create($area, $street_type) {
-        $street = Map_Library::create_street($area, array('street_type' => $street_type));
-        $buildings = Building_Library::create_building_for_street($street['street_id']);
-        $street['buildings'] = $buildings;
-        parent::$CI->cache->save(self::$cache_key . $street['street_id'], $street);
-        self::$street_info[$street['street_id']] = $street;
         return $street;
     }
 

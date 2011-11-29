@@ -1,17 +1,18 @@
+
 <div class="content-box"><!-- Start Content Box -->
     <div class="content-box-header">
         <h3><?php echo lang($type . '_manager_title') ?></h3>
         <ul class="content-box-tabs">
-            <li><a class="current" href="<?php echo site_url('admin/' . $type . '/create') ?>"><?php echo lang($type . '_create') ?></a></li>
+            <?php if (isset($main_nav) && !empty($main_nav)): ?>
+                <?php foreach ($main_nav as $key => $link): ?>
+                    <li><a class="current" href="<?php echo $link; ?>"><?php echo lang($key); ?></a></li>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
         <div class="clear"></div>
     </div>
 
     <div class="content-box-content">
-        <?php echo form_open('admin/' . $type . '/remove', array('id' => 'frm_remove_admin')) ?>
-        <input type="hidden" name="<?php echo ($type . '_id') ?>" value="" />
-        <?php echo form_close(); ?>
-
         <div id="list" class="tab-content default-tab" style="display: block;">
             <div>
                 <input name="search" id="search" value="" class="text-input small-input" />
@@ -37,19 +38,29 @@
                         foreach ($objects as $obj) {
                             $obj_id = $obj[key($obj)];
                             echo '<tr class="inlineEdit" rel="' . $obj_id . '">';
-                            echo '<td><input type="checkbox" name="checkboxes[' . $obj_id . ']" /></td>';
+                            echo '<td><input type="checkbox" value="' . $obj_id . '" /></td>';
 
                             foreach ($obj as $key => $val) {
                                 if (preg_match('/id$/', $key)) {
                                     echo '<td class="inlineDisable inline_id">';
                                 } else {
-                                    if (ctype_lower($key[0]))
+                                    if (ctype_lower($key[0])) {
                                         echo '<td field="' . $key . '" class="inlineDisable">';
-                                    else
+                                    } else {
                                         echo '<td class="inlineDisable">';
+                                    }
                                 }
 
-                                if (preg_match('/([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/i', $val)) {
+                                if ($key == 'actions' && is_array($val)) {
+                                    $index = 0;
+                                    foreach ($val as $action) {
+                                        echo $action;
+                                        if ($index < count($val) - 1) {
+                                            echo ' | ';
+                                        }
+                                        $index++;
+                                    }
+                                } else if (preg_match('/([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/i', $val)) {
                                     $base_url = '';
 
                                     if (strpos($val, 'http://') === FALSE) {
@@ -73,9 +84,11 @@
             <div>
                 <div class="bulk-actions align-left"><!-- Start Group Actions -->
                     <?php
-                    echo form_open_multipart('admin/' . $type . '/mass');
+                    echo form_open_multipart('admin/' . $type . '/mass', array('id' => 'frm_mass_action', 'onsubmit' => 'return mass_submit();'));
+                    echo form_hidden('ids');
                     echo form_dropdown('mass_action_dropdown', $mass_action_options, 'select');
-                    echo form_submit(array('name' => 'submit', 'class' => 'button delete', 'disabled' => 'disabled'), "Apply to selected");
+                    echo form_submit(array('name' => 'submit', 'class' => 'button remove', 'disabled' => 'true'), lang('admin_mass_submit'));
+                    echo form_close();
                     ?>
                 </div><!-- End Group Actions -->
 
@@ -89,30 +102,36 @@
 
 <script type="text/javascript">
     $(function() {
-        $('.delete').click(function() {
-            if ((this.className == 'button delete' && $('select[name="mass_action_dropdown"]').val() != '<?php echo key($mass_action_options) ?>')
-                || this.className != 'button delete') {
-                return confirm("Are you sure?");
-            }
-        });
-        $('input[name="submit"].delete').disabled = true;
-
         $('select[name="mass_action_dropdown"]').change(function() {
             if ($('select[name="mass_action_dropdown"]').val() == '<?php echo key($mass_action_options) ?>') {
-                $('input[name="submit"].delete').attr('disabled', 'disabled');
+                $('input[name="submit"].remove').attr('disabled', 'true');
             } else {
-                $('input[name="submit"].delete').removeAttr('disabled');
+                $('input[name="submit"].remove').removeAttr('disabled');
             }
         });
-
-        
-        $.fn.textWidth = function(){
-            var html_org = $(this).html();
-            var html_calc = '<span>' + html_org + '</span>'
-            $(this).html(html_calc);
-            var width = $(this).find('span:first').width();
-            $(this).html(html_org);
-            return width;
-        };
     });
+    
+    function mass_submit() {
+        var _checkboxs = $('#list tbody').find('input[type="checkbox"]');
+        var _ids = "";
+        for (var i = 0; i < _checkboxs.length; i++) {
+            if(_checkboxs[i].checked) {
+                if (_ids == "") {
+                    _ids = _checkboxs[i].value;
+                } else {
+                    _ids += "," + _checkboxs[i].value;
+                }
+            }
+        }
+        if (_ids == "") {
+            alert('<?php echo lang('admin_mass_select_empty') ?>');
+        } else {
+            var _result = confirm('<?php echo lang('admin_confirm_content'); ?>');
+            if(_result) {
+                $('input[name="ids"]').val(_ids);
+                return true;
+            }
+        }
+        return false;
+    }
 </script>

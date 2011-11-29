@@ -11,7 +11,10 @@ class Street_Building_Model extends CI_Model {
         $this->load->database();
     }
 
-    public function create_street_building($street_id, $building_types) {
+    public function create_street_building($building_data) {
+        $street_id = $building_data['street_id'];
+        unset($building_data['street_id']);
+        $building_types = $building_data;
         $buildings = array();
         foreach ($building_types as $type) {
             $data = array(

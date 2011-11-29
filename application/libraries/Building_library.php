@@ -2,61 +2,35 @@
 
 class Building_Library extends Abstract_Library {
 
-    private static $building_info = FALSE;
-    private static $cache_key = 'building.info:';
-
     function __construct() {
         parent::__construct();
+        $this->type = 'street_building';
+        $this->cache_key = 'street_building.info.';
+        $this->key_map = array(
+            'cache.object.info' => $this->cache_key . '$id',
+            'cache.object.info.all' => $this->cache_key . 'all.' . $this->type . '.$street_id',
+        );
         parent::$CI->load->model(array('street_building_model', 'building_type_model'));
     }
 
-    public static function get($street_building_id) {
-        if (self::$building_info != FALSE && isset(self::$building_info[$street_building_id]) && !empty(self::$building_info[$street_building_id])) {
-            return self::$building_info[$street_building_id];
-        }
-        $cache_data = parent::$CI->cache->get(self::$cache_key . $street_building_id);
-        if ($cache_data) {
-            self::$building_info[$street_building_id] = $cache_data;
-            return self::$building_info[$street_building_id];
-        }
-
-        $building = parent::$CI->street_building_model->get_street_building($street_building_id);
-        if ($building['return_code'] == API_SUCCESS && !empty($building['data'])) {
-            $building = $building['data'];
-            $building_type = parent::$CI->building_type_model->get_building_type($building['building_type_id']);
-            if ($building_type['return_code'] == API_SUCCESS && !empty($building_type['data'])) {
-                $building = array_merge($building, $building_type['data']);
-            }
-            parent::$CI->cache->save(self::$cache_key . $street_building_id, $building);
-            self::$building_info[$street_building_id] = $building;
-            return self::$building_info[$street_building_id];
-        }
-        return FALSE;
+    public function get($street_building_id, $is_force = FALSE) {
+        return parent::get($street_building_id, array('after_get' => 'get_building_extra_info'), $is_force);
     }
 
-    public static function get_all_buildings($street_id = FALSE) {
+    public function get_all($street_id = FALSE, $is_force = FALSE) {
         if ($street_id == FALSE) {
             $street_id = parent::$CI->my_auth->get_street_id();
         }
-
-        $building_types = parent::$CI->building_type_model->get_all_building_type();
-        if ($building_types['return_code'] == API_SUCCESS && !empty($building_types['data'])) {
-            $building_types = $building_types['data'];
-        } else {
-            return FALSE;
-        }
-
-        if (self::$building_info != FALSE && count(self::$building_info) == count($building_types)) {
-            return self::$building_info;
-        }
-
-        $types = parent::$CI->building_type_model->get_all_building_type();
-        $building_types = array();
-        if ($types['return_code'] == API_SUCCESS && !empty($types['data'])) {
-            foreach ($types['data'] as $type) {
-                $building_types[$type['building_type_id']] = $type;
+        $key_all = $this->_get_key('cache.object.info.all', array('$street_id' => $street_id));
+        if (!$is_force) {
+            $cache_data = parent::$CI->cache->get($key_all);
+            if ($cache_data) {
+                return $cache_data;
             }
+        } else {
+            parent::$CI->cache->delete($key_all);
         }
+
         $buildings = parent::$CI->street_building_model->get_all_building($street_id);
         if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
             $buildings = $buildings['data'];
@@ -65,18 +39,24 @@ class Building_Library extends Abstract_Library {
         }
         $result = array();
         foreach ($buildings as $building) {
-            $building = array_merge($building, $building_types[$building['building_type_id']]);
+            $building = $this->get_building_extra_info($building);
             $street_building_id = $building['street_building_id'];
             $result[$street_building_id] = $building;
-            self::$building_info[$street_building_id] = $building;
-            parent::$CI->cache->delete(self::$cache_key . $street_building_id);
-            parent::$CI->cache->save(self::$cache_key . $street_building_id, $building);
+
+            $key = $this->_get_key('cache.object.info', array('$id' => $street_building_id));
+            parent::$CI->cache->delete($key);
+            parent::$CI->cache->save($key, $building);
         }
+        parent::$CI->cache->save($key_all, $result);
         return $result;
     }
 
-    public static function get_by_type($type) {
-        $buildings = self::get_all_buildings();
+    public function count_all() {
+        return FALSE;
+    }
+
+    public function get_by_type($street_id, $type) {
+        $buildings = $this->get_all($street_id);
         foreach ($buildings as $building) {
             if ($building['type'] == $type) {
                 return $building;
@@ -85,32 +65,24 @@ class Building_Library extends Abstract_Library {
         return FALSE;
     }
 
-    public static function upgrade($street_building_id) {
-        $building = self::get($street_building_id);
+    public function upgrade($street_building_id) {
+        $building = $this->get($street_building_id);
         if ($building == FALSE) {
             return lang('building_upgrade_error');
         }
         $level = $building['level'];
         if ($building['type'] != Building_Type_Model::BUILDING_TYPE_MANAGEMENT) {
-            $manage_building = self::get_by_type(Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
+            $manage_building = $this->get_by_type(Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
             $max_level = ($manage_building != FALSE ? $manage_building['level'] : Street_Building_Model::MAX_LEVEL);
         } else {
             $max_level = Street_Building_Model::MAX_LEVEL;
         }
         if ($level < $max_level) {
-            $building = parent::$CI->street_building_model->update_street_building($street_building_id, array('level' => ($level + 1)));
-            if ($building['return_code'] != API_SUCCESS || empty($building['data'])) {
+            $building = $this->update($street_building_id, array('level' => ($level + 1)));
+            if ($building == NULL) {
                 return lang('building_upgrade_error');
             }
-            $building = $building['data'];
-            $building_type = parent::$CI->building_type_model->get_building_type($building['building_type_id']);
-            if ($building_type['return_code'] == API_SUCCESS && !empty($building_type['data'])) {
-                $building = array_merge($building, $building_type['data']);
-            }
-            parent::$CI->cache->delete(self::$cache_key . $street_building_id);
-            parent::$CI->cache->save(self::$cache_key . $street_building_id, $building);
-            self::$building_info[$street_building_id] = $building;
-            return self::$building_info[$street_building_id];
+            return $building;
         } else if (isset($manage_building)) {
             return lang_key('building_upgrade_max_level_2', '', array('name' => $manage_building['name']));
         } else {
@@ -118,20 +90,23 @@ class Building_Library extends Abstract_Library {
         }
     }
 
-    public static function create_building_for_street($street_id) {
+    public function create_building_for_street($street_id) {
         parent::$CI->load->model(array('street_building_model', 'building_type_model'));
         $building_types = parent::$CI->building_type_model->get_all_building_type();
         if ($building_types['return_code'] !== API_SUCCESS || empty($building_types['data'])) {
             return FALSE;
         }
         $building_types = $building_types['data'];
-        $buildings = parent::$CI->street_building_model->create_street_building($street_id, $building_types);
-        if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
-            $buildings = $buildings['data'];
-        } else {
-            $buildings = array();
+        $building_types['street_id'] = $street_id;
+        return $this->create($building_types);
+    }
+
+    private function get_building_extra_info($building) {
+        $building_type = parent::$CI->building_type_model->get_building_type($building['building_type_id']);
+        if ($building_type['return_code'] == API_SUCCESS && !empty($building_type['data'])) {
+            $building = array_merge($building, $building_type['data']);
         }
-        return $buildings;
+        return $building;
     }
 
 }
