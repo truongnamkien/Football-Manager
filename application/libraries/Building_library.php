@@ -98,8 +98,12 @@ class Building_Library extends Abstract_Library {
             return FALSE;
         }
         $building_types = $building_types['data'];
-        $building_types['street_id'] = $street_id;
-        return $this->create($building_types);
+        $buildings = array();
+        foreach($building_types as $type) {
+            $type['street_id'] = $street_id;
+            $buildings[] = $this->create($type);
+        }
+        return $buildings;
     }
 
     private function get_building_extra_info($building) {

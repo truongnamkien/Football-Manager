@@ -12,6 +12,10 @@ class User extends MY_Inner_Admin_Controller {
         $this->load->language('user');
     }
 
+    public function create() {
+        show_404();
+    }
+
     private function _get_status() {
         return array(
             User_Model::USER_STATUS_INACTIVE => User_Model::USER_STATUS_INACTIVE,
@@ -28,15 +32,8 @@ class User extends MY_Inner_Admin_Controller {
     }
 
     protected function set_validation_rules($action) {
-        if ($action == 'create') {
-            $rules = array(
-                array('field' => 'display_name', 'label' => lang('user_display_name'), 'rules' => 'trim|strip_tags|max_length[255]|required'),
-                array('field' => 'email', 'label' => 'lang:user_email', 'rules' => 'trim|strip_tags|required|max_length[255]|unique[user.email]'),
-                array('field' => 'password', 'label' => lang('user_password'), 'rules' => 'required|min_length[6]|max_length[32]'),
-                array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'required|matches[password]'),
-                array('field' => 'user_status', 'label' => lang('user_user_status'), 'rules' => 'required'),
-            );
-        } else {
+        $rules = array();
+        if ($action == 'update') {
             $rules = array(
                 array('field' => 'display_name', 'label' => lang('user_display_name'), 'rules' => 'trim|strip_tags|max_length[40]|required'),
                 array('field' => 'password_confirm', 'label' => lang('user_password_confirm'), 'rules' => 'matches[password]'),
@@ -93,6 +90,16 @@ class User extends MY_Inner_Admin_Controller {
             unset($obj['password']);
         }
         return $objects;
+    }
+
+    protected function _main_nav($page = 'index', $id = '') {
+        $nav_list = parent::_main_nav($page, $id);
+        $type = $this->data['type'];
+        if ($page == 'index') {
+            unset($nav_list[$type . '_create']);
+        }
+
+        return $nav_list;
     }
 
 }

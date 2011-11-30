@@ -15,6 +15,7 @@ $lang['admin_mass_select'] = 'Chọn';
 $lang['admin_mass_remove'] = 'Xóa';
 $lang['admin_mass_submit'] = 'Thực hiện';
 $lang['back_list'] = 'Trang danh sách';
+$lang['empty_list_data'] = 'Không có dữ liệu';
 $lang['admin_confirm_content'] = 'Bạn có chắc chắn?';
 
 

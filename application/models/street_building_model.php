@@ -9,31 +9,23 @@ class Street_Building_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->load->model('building_type_model');
     }
 
     public function create_street_building($building_data) {
-        $street_id = $building_data['street_id'];
-        unset($building_data['street_id']);
-        $building_types = $building_data;
-        $buildings = array();
-        foreach ($building_types as $type) {
-            $data = array(
-                'street_id' => $street_id,
-                'building_type_id' => $type['building_type_id'],
-                'level' => ($type['building_type_id'] == 1 ? 1 : 0)
-            );
-            if ($this->db->insert('street_building', $data)) {
-                $street_building_id = $this->db->insert_id();
-                if ($street_building_id > 0) {
-                    $buildings[] = array_merge($data, array('street_building_id' => $street_building_id));
-                } else {
-                    return $this->_ret(API_FAILED);
-                }
-            } else {
-                return $this->_ret(API_FAILED);
+        $data = array(
+            'street_id' => $building_data['street_id'],
+            'building_type_id' => $building_data['building_type_id'],
+            'level' => ($building_data['type'] == Building_Type_Model::BUILDING_TYPE_MANAGEMENT ? 1 : 0)
+        );
+        if ($this->db->insert('street_building', $data)) {
+            $street_building_id = $this->db->insert_id();
+            if ($street_building_id > 0) {
+                $building = array_merge($data, array('street_building_id' => $street_building_id));
+                return $this->_ret(API_SUCCESS, $building);
             }
         }
-        return $this->_ret(API_SUCCESS, $buildings);
+        return $this->_ret(API_FAILED);
     }
 
     public function delete_street_building($building_type_id) {

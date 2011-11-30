@@ -12,6 +12,7 @@ class User_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
         parent::$CI->load->model(array('user_model', 'street_model'));
+        parent::$CI->load->library(array('street_library'));
         parent::$CI->load->config('user', TRUE);
     }
 
