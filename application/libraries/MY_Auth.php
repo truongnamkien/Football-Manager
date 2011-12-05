@@ -26,8 +26,8 @@ class MY_Auth {
                 redirect('admin_login');
             }
         } else if ($is_admin) {
-            $admin_id = $this->get_user_id();
-            $admin_info = $this->CI->admin_model->get_admin($admin_id);
+            $username = $this->get_user_id(TRUE);
+            $admin_info = $this->CI->admin_model->get_by_username($username);
             if ($admin_info['return_code'] != API_SUCCESS || empty($admin_info['data'])) {
                 $this->logout();
                 redirect('admin_login');
@@ -47,7 +47,7 @@ class MY_Auth {
             $user_info = $this->CI->user_model->get_user_by_email($email);
             $password = $this->CI->user_model->_hash_password($password);
         } else {
-            $user_info = $this->CI->admin_model->get_admin($email);
+            $user_info = $this->CI->admin_model->get_by_username($email);
             $password = $this->CI->admin_model->_hash_password($password);
         }
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {

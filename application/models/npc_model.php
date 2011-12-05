@@ -1,97 +1,27 @@
 <?php
 
 (defined('BASEPATH')) OR exit('No direct script access allowed');
+require_once(APPPATH . 'models/abstract_model.php');
 
-class NPC_Model extends CI_Model {
+class NPC_Model extends Abstract_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->load->database();
-    }
-
-    public function create_npc($npc) {
-        $ret = $this->get_npc_with_street($npc['street_id']);
-
-        if (($ret['return_code'] != API_SUCCESS) || empty($ret['data'])) {
-            unset($npc['npc_id']);
-            if ($this->db->insert('npc', $npc)) {
-                $npc_id = $this->db->insert_id();
-                if ($npc_id > 0) {
-                    $npc['npc_id'] = $npc_id;
-                    return $this->_ret(API_SUCCESS, $npc);
-                }
-            }
-        }
-
-        return $this->_ret(API_FAILED);
-    }
-
-    public function delete_npc($npc_id) {
-        $this->db->delete('npc', array('npc_id' => $npc_id));
-    }
-
-    public function get_npc($npc_id) {
-        $query = $this->db->from('npc')->where('npc_id', $npc_id)->get();
-
-        if (!empty($query) && $query->num_rows() > 0) {
-            $npc_info = $query->row_array();
-
-            if (!empty($npc_info)) {
-                return $this->_ret(API_SUCCESS, $npc_info);
-            }
-        }
-
-        return $this->_ret(API_FAILED);
-    }
-
-    public function update_npc($npc_id, $update_data) {
-        $npc_info = $this->get_npc($npc_id);
-
-        if ($npc_info['return_code'] == API_SUCCESS && !empty($npc_info['data'])) {
-            unset($update_data['npc_id']);
-
-            $this->db->trans_start();
-            $this->db->where('npc_id', $npc_id)->update('npc', $update_data);
-
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-                /* unknown error */
-                return $this->_ret(API_FAILED);
-            } else {
-                $this->db->trans_commit();
-
-                $npc_info = isset($npc_info['data']) ? $npc_info['data'] : array();
-                $npc_info = array_merge($npc_info, $update_data);
-
-                return $this->_ret(API_SUCCESS, $npc_info);
-            }
-            return $this->_ret(API_FAILED);
-        }
+        $this->type = 'npc';
+        $this->database = 'npc';
     }
 
     public function get_npc_with_street($street_id) {
-        $npc_info = $this->db->from('npc')->where(array('street_id' => $street_id))->limit(1)->get();
-        $npc_info = $npc_info->row_array();
+        return $this->get_where(array('street_id' => $street_id));
+    }
 
-        if (!empty($npc_info)) {
-            return $this->_ret(API_SUCCESS, $npc_info);
+    protected function check_existed($data) {
+        $npc = $this->get_npc_with_street($data['street_id']);
+        if ($npc['return_code'] == API_SUCCESS) {
+            return $this->_ret(API_SUCCESS, TRUE);
         }
 
-        return $this->_ret(API_FAILED);
+        return $this->_ret(API_SUCCESS, FALSE);
     }
-
-    public function get_all_npc() {
-        $query = $this->db->order_by('npc_id', 'asc')->get('npc');
-        if (!empty($query) && $query->num_rows() > 0) {
-            return $this->_ret(API_SUCCESS, $query->result_array());
-        }
-
-        return $this->_ret(API_FAILED);
-    }
-
-    public function count_all_npc() {
-        return $this->db->count_all('npc');
-    }
-
 }
 

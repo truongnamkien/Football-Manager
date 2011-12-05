@@ -1,8 +1,9 @@
 <?php
 
 (defined('BASEPATH')) OR exit('No direct script access allowed');
+require_once(APPPATH . 'models/abstract_model.php');
 
-class Cooldown_Model extends CI_Model {
+class Cooldown_Model extends Abstract_Model {
     const COOLDOWN_TYPE_BUILDING = 'building';
     const COOLDOWN_TYPE_RESEARCH = 'research';
     const COOLDOWN_TYPE_MATCHING = 'marching';
@@ -12,76 +13,24 @@ class Cooldown_Model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
-        $this->load->database();
-    }
-
-    public function create_cooldown($cooldown) {
-        if ($this->db->insert('cooldown', $cooldown)) {
-            $cooldown_id = $this->db->insert_id();
-            if ($cooldown_id > 0) {
-                $cooldown['cooldown_id'] = $cooldown_id;
-                return $this->_ret(API_SUCCESS, $cooldown);
-            }
-        }
-
-        return $this->_ret(API_FAILED);
-    }
-
-    public function delete_cooldown($cooldown_id) {
-        $this->db->delete('cooldown', array('cooldown_id' => $cooldown_id));
-    }
-
-    public function get_cooldown($cooldown_id) {
-        $query = $this->db->from('cooldown')->where('cooldown_id', $cooldown_id)->get();
-
-        if (!empty($query) && $query->num_rows() > 0) {
-            $cooldown = $query->row_array();
-
-            if (!empty($cooldown)) {
-                return $this->_ret(API_SUCCESS, $cooldown);
-            }
-        }
-
-        return $this->_ret(API_FAILED);
+        $this->type = 'cooldown';
+        $this->database = 'cooldown';
     }
 
     public function get_cooldown_by_street($street_id) {
-        $query = $this->db->from('cooldown')->where('street_id', $street_id)->get();
+        return $this->get_where(array('street_id' => $street_id));
+    }
 
-        if (!empty($query) && $query->num_rows() > 0) {
-            $cooldowns = $query->result_array();
-
-            if (!empty($cooldowns)) {
-                return $this->_ret(API_SUCCESS, $cooldowns);
+    protected function check_existed($data) {
+        $cooldowns = $this->get_where(array('street_id' => $data['street_id'], 'cooldown_type' => $data['cooldown_type']));
+        if ($cooldowns['return_code'] == API_SUCCESS && !empty($cooldowns['data'])) {
+            if (($data['cooldown_type'] == self::COOLDOWN_TYPE_RESEARCH && count($cooldowns['data']) >= self::MAX_COOLDOWN_SLOT_BUILDING)
+                    || ($data['cooldown_type'] == self::COOLDOWN_TYPE_BUILDING && count($cooldowns['data']) >= self::MAX_COOLDOWN_SLOT_BUILDING)) {
+                return $this->_ret(API_SUCCESS, TRUE);
             }
         }
 
-        return $this->_ret(API_FAILED);
-    }
-
-    public function update_cooldown($cooldown_id, $update_data) {
-        $this->db->trans_start();
-        $cooldown = $this->get_cooldown($cooldown_id);
-        if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
-            $cooldown = $cooldown['data'];
-        } else {
-            return $this->_ret(API_FAILED);
-        }
-
-        $this->db->where('cooldown_id', $cooldown_id)->update('cooldown', $update_data);
-
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            /* unknown error */
-            return $this->_ret(API_FAILED);
-        } else {
-            $this->db->trans_commit();
-
-            $cooldown = array_merge($cooldown, $update_data);
-
-            return $this->_ret(API_SUCCESS, $cooldown);
-        }
-        return $this->_ret(API_FAILED);
+        return $this->_ret(API_SUCCESS, FALSE);
     }
 
 }

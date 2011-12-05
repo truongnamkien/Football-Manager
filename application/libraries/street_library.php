@@ -48,9 +48,9 @@ class Street_Library extends Abstract_Library {
 
         // Remove cooldowns
         if (isset($street['cooldowns'])) {
-            parent::$CI->cooldown_model->delete_cooldown($street['cooldowns']['research']['cooldown_id']);
+            parent::$CI->cooldown_model->delete($street['cooldowns']['research']['cooldown_id']);
             foreach ($street['cooldowns']['buildings'] as $cd) {
-                parent::$CI->cooldown_model->delete_cooldown($cd['cooldown_id']);
+                parent::$CI->cooldown_model->delete($cd['cooldown_id']);
             }
         }
         parent::remove($street_id);
@@ -89,7 +89,7 @@ class Street_Library extends Abstract_Library {
     }
 
     private function update_cooldown($cooldown_id, $time) {
-        $cooldown = parent::$CI->cooldown_model->update_cooldown($cooldown_id, array('end_time' => $time));
+        $cooldown = parent::$CI->cooldown_model->update($cooldown_id, array('end_time' => $time));
         if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
             return $cooldown['data'];
         }
@@ -146,7 +146,7 @@ class Street_Library extends Abstract_Library {
                     'street_id' => $street_id,
                     'end_time' => NULL,
                 );
-                $cooldown = parent::$CI->cooldown_model->create_cooldown($data);
+                $cooldown = parent::$CI->cooldown_model->create($data);
                 $street_cooldowns['research'] = $cooldown['data'];
             }
             if (count($street_cooldowns['buildings']) < Cooldown_Model::MAX_COOLDOWN_SLOT_BUILDING) {
@@ -157,7 +157,7 @@ class Street_Library extends Abstract_Library {
                         'street_id' => $street_id,
                         'end_time' => NULL,
                     );
-                    $cooldown = parent::$CI->cooldown_model->create_cooldown($data);
+                    $cooldown = parent::$CI->cooldown_model->create($data);
                     $cooldown = $cooldown['data'];
                     $street_cooldowns['buildings'][$cooldown['cooldown_id']] = $cooldown;
                 }

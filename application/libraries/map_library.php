@@ -54,7 +54,7 @@ class Map_Library extends Abstract_Library {
         if (isset($street_info['street_id'])) {
             unset($street_info['street_id']);
         }
-        $street = parent::$CI->street_model->create_street($street_info);
+        $street = parent::$CI->street_model->create($street_info);
         if ($street['return_code'] != API_SUCCESS || empty($street['data'])) {
             return FALSE;
         }

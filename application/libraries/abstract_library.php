@@ -27,8 +27,7 @@ abstract class Abstract_Library {
         }
 
         $model_name = $this->type . '_model';
-        $method_name = 'get_' . $this->type;
-        $object = self::$CI->$model_name->$method_name($id);
+        $object = self::$CI->$model_name->get($id);
         if ($object['return_code'] == API_SUCCESS && !empty($object['data'])) {
             $object = $object['data'];
 
@@ -46,8 +45,7 @@ abstract class Abstract_Library {
 
     public function create($data) {
         $model_name = $this->type . '_model';
-        $method_name = 'create_' . $this->type;
-        $object = self::$CI->$model_name->$method_name($data);
+        $object = self::$CI->$model_name->create($data);
 
         if ($object['return_code'] == API_SUCCESS && !empty($object['data'])) {
             $object = $object['data'];
@@ -59,8 +57,7 @@ abstract class Abstract_Library {
 
     public function update($id, $data) {
         $model_name = $this->type . '_model';
-        $method_name = 'update_' . $this->type;
-        $object = self::$CI->$model_name->$method_name($id, $data);
+        $object = self::$CI->$model_name->update($id, $data);
         if ($object['return_code'] == API_SUCCESS) {
             return $this->get($id, TRUE);
         }
@@ -69,8 +66,7 @@ abstract class Abstract_Library {
 
     public function remove($id) {
         $model_name = $this->type . '_model';
-        $method_name = 'delete_' . $this->type;
-        self::$CI->$model_name->$method_name($id);
+        self::$CI->$model_name->delete($id);
         $key = $this->_get_key('cache.object.info', array('$id' => $id));
         $key_all = $this->_get_key('cache.object.info.all');
         self::$CI->cache->delete($key);
@@ -89,8 +85,7 @@ abstract class Abstract_Library {
         }
 
         $model_name = $this->type . '_model';
-        $method_name = 'get_all_' . $this->type;
-        $objects = self::$CI->$model_name->$method_name();
+        $objects = self::$CI->$model_name->get_all();
         if ($objects['return_code'] == API_SUCCESS && !empty($objects['data'])) {
             $objects = $objects['data'];
             foreach ($objects as $object) {
@@ -108,8 +103,7 @@ abstract class Abstract_Library {
 
     public function count_all() {
         $model_name = $this->type . '_model';
-        $method_name = 'count_all_' . $this->type;
-        return self::$CI->$model_name->$method_name();
+        return self::$CI->$model_name->count_all();
     }
 
     protected function _get_key($key_name, array $variables = array()) {

@@ -31,7 +31,7 @@ class Building_Library extends Abstract_Library {
             parent::$CI->cache->delete($key_all);
         }
 
-        $buildings = parent::$CI->street_building_model->get_all_building($street_id);
+        $buildings = parent::$CI->street_building_model->get_all($street_id);
         if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
             $buildings = $buildings['data'];
         } else {
@@ -93,7 +93,7 @@ class Building_Library extends Abstract_Library {
     }
 
     public function create_building_for_street($street_id) {
-        $building_types = parent::$CI->building_type_model->get_all_building_type();
+        $building_types = parent::$CI->building_type_model->get_all();
         if ($building_types['return_code'] !== API_SUCCESS || empty($building_types['data'])) {
             return FALSE;
         }
@@ -107,7 +107,7 @@ class Building_Library extends Abstract_Library {
     }
 
     private function get_building_extra_info($building) {
-        $building_type = parent::$CI->building_type_model->get_building_type($building['building_type_id']);
+        $building_type = parent::$CI->building_type_model->get($building['building_type_id']);
         if ($building_type['return_code'] == API_SUCCESS && !empty($building_type['data'])) {
             $building = array_merge($building, $building_type['data']);
         }
