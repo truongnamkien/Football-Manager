@@ -11,6 +11,7 @@ class Building_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type . '.$street_id',
         );
         parent::$CI->load->model(array('street_building_model', 'building_type_model'));
+        parent::$CI->load->library(array('building_type_library'));
     }
 
     public function get($street_building_id, $is_force = FALSE) {
@@ -68,7 +69,7 @@ class Building_Library extends Abstract_Library {
     public function upgrade($street_building_id) {
         $building = $this->get($street_building_id);
         $street_id = parent::$CI->my_auth->get_street_id();
-        
+
         if ($building == FALSE) {
             return lang('building_upgrade_error');
         }
@@ -93,13 +94,10 @@ class Building_Library extends Abstract_Library {
     }
 
     public function create_building_for_street($street_id) {
-        $building_types = parent::$CI->building_type_model->get_all();
-        if ($building_types['return_code'] !== API_SUCCESS || empty($building_types['data'])) {
-            return FALSE;
-        }
-        $building_types = $building_types['data'];
+        $building_types = parent::$CI->building_type_library->get_all();
+        
         $buildings = array();
-        foreach($building_types as $type) {
+        foreach ($building_types as $type) {
             $type['street_id'] = $street_id;
             $buildings[] = $this->create($type);
         }
@@ -107,13 +105,11 @@ class Building_Library extends Abstract_Library {
     }
 
     private function get_building_extra_info($building) {
-        $building_type = parent::$CI->building_type_model->get($building['building_type_id']);
-        if ($building_type['return_code'] == API_SUCCESS && !empty($building_type['data'])) {
-            $building = array_merge($building, $building_type['data']);
-        }
+        $building_type = parent::$CI->building_type_library->get($building['building_type_id']);
+        $building = array_merge($building, $building_type);
         return $building;
     }
-    
+
     protected function after_get_callback($building) {
         return $this->get_building_extra_info($building);
     }

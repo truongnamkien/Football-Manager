@@ -20,7 +20,7 @@ class Street_Building_Model extends Abstract_Model {
             'building_type_id' => $building_data['building_type_id'],
             'level' => ($building_data['type'] == Building_Type_Model::BUILDING_TYPE_MANAGEMENT ? 1 : 0)
         );
-        return $this->create($data);
+        return parent::create($data);
     }
 
     protected function check_existed($data) {
