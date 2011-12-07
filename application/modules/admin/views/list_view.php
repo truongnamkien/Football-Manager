@@ -21,7 +21,7 @@
                     <input name="search" id="search" value="" class="text-input small-input" />
                 </div>
 
-                <table>
+                <table class="filterable">
                     <thead>
                         <tr>
                             <th><input class="check-all" type="checkbox" /></th>
@@ -74,6 +74,7 @@
                                     }
                                     echo '</td>';
                                 }
+                                
                                 echo '</tr>';
                             }
                         } else {
@@ -135,3 +136,30 @@
         return false;
     }
 </script>
+
+<!-- Start table filter -->
+<script>
+$(document).ready(function(){
+ //add index column with all content.
+ $(".filterable tr:has(td)").each(function(){
+   var t = $(this).text().toLowerCase(); //all row text
+   $("<td class='indexColumn'></td>")
+    .hide().text(t).appendTo(this);
+ });//each tr
+ $("#search").keyup(function(){
+   var s = $(this).val().toLowerCase().split(" ");
+   //show all rows.
+   $(".filterable tr:hidden").show();
+   $.each(s, function(){
+       $(".filterable tr:visible .indexColumn:not(:contains('"
+          + this + "'))").parent().hide();
+   });//each
+ });//key up.
+  
+  $(".clear").click(function(){
+    $("#FilterTextBox").val("").keyup();
+    return false;
+  });
+});//document.ready
+</script>
+<!-- End table filter -->
