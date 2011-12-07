@@ -32,7 +32,7 @@ class Building_Library extends Abstract_Library {
             parent::$CI->cache->delete($key_all);
         }
 
-        $buildings = parent::$CI->street_building_model->get_all($street_id);
+        $buildings = parent::$CI->street_building_model->get_all(array('street_id' => $street_id));
         if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
             $buildings = $buildings['data'];
         } else {

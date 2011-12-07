@@ -26,7 +26,7 @@ class Street_Model extends Abstract_Model {
     }
 
     public function get_street_by_area($min_x, $max_x, $min_y, $max_y) {
-        $streets = $this->get_where('x_coor >= ' . $min_x . ' and x_coor <= ' . $max_x . ' and y_coor >= ' . $min_y . ' and y_coor <= ' . $max_y);
+        $streets = $this->get_all('x_coor >= ' . $min_x . ' and x_coor <= ' . $max_x . ' and y_coor >= ' . $min_y . ' and y_coor <= ' . $max_y);
         if ($streets['return_code'] == API_SUCCESS && !empty($streets['data'])) {
             $streets = $streets['data'];
             $result = array();

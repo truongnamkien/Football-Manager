@@ -23,7 +23,7 @@ class User_Model extends Abstract_Model {
         $this->database = 'users';
     }
 
-    public function create_user($data) {
+    public function create($data) {
         $salt = FALSE;
 
         $data['password'] = $this->_hash_password($data['password'], $salt);

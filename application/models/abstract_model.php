@@ -68,8 +68,13 @@ abstract class Abstract_Model extends CI_Model {
         }
     }
 
-    public function get_all() {
-        $query = $this->db->order_by($this->type . '_id', 'asc')->get($this->database);
+    public function get_all($filter = array()) {
+        if (empty($filter)) {
+            $query = $this->db->order_by($this->type . '_id', 'asc')->get($this->database);
+        } else {
+            $query = $this->db->order_by($this->type . '_id', 'asc')->where($filter)->get($this->database);
+        }
+
         if (!empty($query) && $query->num_rows() > 0) {
             $data = $query->result_array();
             return $this->_ret(API_SUCCESS, $data);
