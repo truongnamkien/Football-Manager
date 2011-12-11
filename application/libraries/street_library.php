@@ -19,9 +19,9 @@ class Street_Library extends Abstract_Library {
         return parent::get($street_id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
-    public function create($area, $street_type) {
-        $street = parent::$CI->map_library->create_street($area, array('street_type' => $street_type));
-        if ($street_type == Street_Model::STREET_TYPE_PLAYER) {
+    public function create($data) {
+        $street = parent::$CI->map_library->create_street($data['area'], array('street_type' => $data['street_type']));
+        if ($data['street_type'] == Street_Model::STREET_TYPE_PLAYER) {
             $buildings = parent::$CI->building_library->create_building_for_street($street['street_id']);
             $street['buildings'] = $buildings;
         }

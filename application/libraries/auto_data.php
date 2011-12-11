@@ -31,7 +31,7 @@ class Auto_Data {
                 } else {
                     $level_count[$level]++;
                 }
-                $street = $this->CI->street_library->create($i, Street_Model::STREET_TYPE_NPC);
+                $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC));
                 $npc_data = array('level' => $level, 'street_id' => $street['street_id']);
                 $ret = $this->CI->npc_library->create($npc_data);
             }

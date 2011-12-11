@@ -12,7 +12,7 @@ class User_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
         parent::$CI->load->model(array('user_model', 'street_model'));
-        parent::$CI->load->library(array('street_library'));
+        parent::$CI->load->library(array('street_library', 'team_library'));
         parent::$CI->load->config('user', TRUE);
     }
 
@@ -21,8 +21,18 @@ class User_Library extends Abstract_Library {
     }
 
     public function create($data) {
-        $street = parent::$CI->street_library->create(FALSE, Street_Model::STREET_TYPE_PLAYER);
+        $team = parent::$CI->team_library->create(array('team_name' => $data['team_name']));
+        if ($team == NULL) {
+            return NULL;
+        }
+        $street = parent::$CI->street_library->create(array('area' => FALSE, 'street_type' => Street_Model::STREET_TYPE_PLAYER));
+        if ($street == NULL) {
+            return NULL;
+        }
+        
         $data['street_id'] = $street['street_id'];
+        $data['team_id'] = $team['team_id'];
+        unset($data['team_name']);
         $data['balance'] = parent::$CI->config->item('user_beginning_balance', 'user');
 
         return parent::create($data);
