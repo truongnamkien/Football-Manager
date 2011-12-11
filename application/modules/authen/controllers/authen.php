@@ -6,7 +6,7 @@ class Authen extends MY_Outer_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model(array('user_model'));
+        $this->load->model(array('user_model', 'team_model'));
         $this->load->library('user_library');
     }
 
@@ -23,24 +23,33 @@ class Authen extends MY_Outer_Controller {
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
                 ->set_rules('email', 'lang:authen_email', 'trim|required|valid_email|max_length[80]|unique[users.email]')
                 ->set_rules('password', 'lang:authen_password', 'required|min_length[6]|max_length[32]')
-                ->set_rules('password_confirm', 'lang:authen_password_confirm', 'required|matches[password]');
+                ->set_rules('password_confirm', 'lang:authen_password_confirm', 'required|matches[password]')
+                ->set_rules('team_name', 'lang:authen_team_name', 'trim|strip_tags|max_length[40]|required|unique[team.team_name]');
 
+        $data = array();
         if ($this->form_validation->run()) {
             $collect = $this->_collect(array(
                 'display_name',
                 'email',
                 'password',
+                'team_name',
                     ));
             $user_info = $this->user_library->create($collect);
 
             //Dang ky thanh cong, goi email yeu cau verify             
-            if (!empty($user_info)) {
-                $this->my_auth->login($user_info['email'], $user_info['password']);
+            if ($user_info != NULL) {
+                $this->my_auth->login($collect['email'], $collect['password']);
+                redirect(site_url('street'));
+            } else {
+                $data['error']['messages'] = array($this->lang->line('authen_register_fail'));
+                $team = $this->team_model->get_team_by_name($collect['team_name']);
+                if ($team['return_code'] == API_SUCCESS && !empty($team['data'])) {
+                    $data['error']['messages'][] = $this->lang->line('authen_register_team_name_existed');
+                }
             }
-            redirect(site_url('street'));
         }
 
-        $this->load->view('frm_authen_register');
+        $this->load->view('frm_authen_register', $data);
     }
 
     public function login() {

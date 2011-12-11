@@ -8,8 +8,13 @@ $lang['authen_email'] = 'Email';
 $lang['authen_username'] = 'Tên đăng nhập';
 $lang['authen_password'] = 'Mật khẩu';
 $lang['authen_password_confirm'] = 'Xác nhận mật khẩu';
+$lang['authen_team_name'] = 'Tên đội bóng';
 $lang['authen_remember_me'] = 'Ghi nhớ?';
 $lang['authen_forgot_password'] = 'Quên mật khẩu';
+
+$lang['authen_register_fail'] = 'Đăng ký thất bại';
+$lang['authen_register_team_name_existed'] = 'Đã có người đăng ký đội bóng với tên tương tự';
+
 $lang['authen_login_fail'] = 'Email hoặc mật khẩu sai';
 $lang['authen_login_fail_helper'] = 'Mật khẩu bạn nhập vào chưa chính xác';
 

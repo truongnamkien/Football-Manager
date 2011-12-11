@@ -55,7 +55,7 @@
                     <span class="require">*</span>
                 </label>
                 <div class="contentField">
-                    <label class="labelPassword"><input name="password" type="password" value="<?php echo set_value('password') ?>"/></label>
+                    <input name="password" type="password" value="<?php echo set_value('password') ?>"/>
                     <?php if (form_error('password')): ?>
                         <?php echo form_error('password', '<label class="error">', '</label>') ?>
                     <?php endif; ?>
@@ -69,9 +69,24 @@
                     <span class="require">*</span>
                 </label>
                 <div class="contentField">
-                    <label class="labelPassword"><input name="password_confirm" type="password" value="<?php echo set_value('password_confirm') ?>"/></label>
+                    <input name="password_confirm" type="password" value="<?php echo set_value('password_confirm') ?>"/>
                     <?php if (form_error('password_confirm')): ?>
                         <?php echo form_error('password_confirm', '<label class="error">', '</label>') ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Team name -->
+            <div class="uiBox2Field grid_6 alpha mb10">
+                <label class="labelField fs18 fwb">
+                    <?php echo lang('authen_team_name'); ?>
+                    <span class="require">*</span>
+                </label>
+
+                <div class="contentField">
+                    <input name="team_name" id="team_name" type="text" value="<?php echo set_value('team_name') ?>" />
+                    <?php if (form_error('team_name')): ?>
+                        <?php echo form_error('team_name', '<label class="error">', '</label>') ?>
                     <?php endif; ?>
                 </div>
             </div>
