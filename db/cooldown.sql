@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2011 at 06:13 PM
+-- Generation Time: Dec 12, 2011 at 07:22 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -29,14 +29,11 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `cooldown` (
   `cooldown_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `cooldown_type` varchar(32) DEFAULT NULL,
-  `street_id` bigint(14) DEFAULT NULL,
+  `street_id` bigint(20) DEFAULT NULL,
   `end_time` int(11) DEFAULT NULL,
-  PRIMARY KEY (`cooldown_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `cooldown`
---
+  PRIMARY KEY (`cooldown_id`),
+  KEY `street_id` (`street_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2011 at 06:16 PM
+-- Generation Time: Dec 12, 2011 at 07:22 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -32,16 +32,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
   `display_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `user_status` varchar(32) DEFAULT NULL,
-  `street_id` bigint(14) DEFAULT NULL,
+  `street_id` bigint(20) DEFAULT NULL,
   `balance` bigint(20) DEFAULT NULL,
+  `team_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
-  KEY `street_id` (`street_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `users`
---
+  KEY `street_id` (`street_id`),
+  KEY `team_id` (`team_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

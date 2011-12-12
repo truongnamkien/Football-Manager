@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2011 at 06:16 PM
+-- Generation Time: Dec 12, 2011 at 07:22 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -27,16 +27,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `streets` (
-  `street_id` bigint(14) NOT NULL AUTO_INCREMENT,
+  `street_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `x_coor` int(8) DEFAULT NULL,
   `y_coor` int(8) DEFAULT NULL,
   `street_type` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`street_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `streets`
---
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

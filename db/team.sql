@@ -23,15 +23,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `npc`
+-- Table structure for table `team`
 --
 
-CREATE TABLE IF NOT EXISTS `npc` (
-  `npc_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `street_id` bigint(20) DEFAULT NULL,
-  `level` tinyint(4) DEFAULT '1',
-  PRIMARY KEY (`npc_id`),
-  UNIQUE KEY `street_id` (`street_id`)
+CREATE TABLE IF NOT EXISTS `team` (
+  `team_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `team_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  PRIMARY KEY (`team_id`),
+  UNIQUE KEY `team_name` (`team_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
