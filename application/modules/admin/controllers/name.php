@@ -99,8 +99,9 @@ class Name extends MY_Inner_Admin_Controller {
             $name = preg_split("/[,. ]/", $name);
         }
         if (!empty($name) && count($name) == 1) {
-            if (!empty(current($name))) {
-                $this->name_library->create(array('category' => $category, 'name' => current($name)));
+            $sub_name = current($name);
+            if (!empty($sub_name)) {
+                $this->name_library->create(array('category' => $category, 'name' => $sub_name));
             }
         } else if (count($name) > 1) {
             foreach ($name as $sub_name) {

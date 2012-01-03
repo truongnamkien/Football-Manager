@@ -5,7 +5,7 @@ $lang['name_create'] = 'Thêm Tên';
 $lang['name_show'] = 'Xem';
 $lang['name_update'] = 'Chỉnh sửa';
 $lang['name_remove'] = 'Xóa';
-$lang['name_import'] = 'Nhập tên';
+$lang['name_import'] = 'Nhập nhiều tên';
 $lang['name_remove_confirm'] = 'Bạn có chắc là sẽ xóa Tên gọi này?';
 
 $lang['name_create_submit'] = 'Tạo';

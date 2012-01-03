@@ -91,8 +91,11 @@ abstract class Abstract_Library {
             foreach ($objects as $object) {
                 $id = $object[get_object_key($object, $this->type)];
                 $key = $this->_get_key('cache.object.info', array('$id' => $id));
-                self::$CI->cache->delete($key);
-                self::$CI->cache->save($key, $object);
+                $cache_info = self::$CI->cache->get($key);
+                if ($cache_info != $object) {
+                    self::$CI->cache->delete($key);
+                    self::$CI->cache->save($key, $object);
+                }
             }
         } else {
             $objects = array();
