@@ -9,6 +9,7 @@ $lang['manager_admin'] = 'Admin';
 $lang['manager_user'] = 'Người chơi';
 $lang['manager_building_type'] = 'Công trình';
 $lang['manager_npc'] = 'NPC';
+$lang['manager_name'] = 'Dữ liệu tên';
 
 $lang['admin_mass_select_empty'] = 'Bạn chưa chọn gì cả!';
 $lang['admin_mass_select'] = 'Chọn';

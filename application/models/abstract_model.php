@@ -36,8 +36,12 @@ abstract class Abstract_Model extends CI_Model {
 
     public function get_where($filter) {
         $query = $this->db->from($this->database)->where($filter)->get();
-        if (!empty($query) && $query->num_rows() > 0) {
-            $data = $query->row_array();
+        if (!empty($query)) {
+            if ($query->num_rows() == 1) {
+                $data = $query->row_array();
+            } else {
+                $data = $query->result_array();
+            }
 
             if (!empty($data)) {
                 return $this->_ret(API_SUCCESS, $data);

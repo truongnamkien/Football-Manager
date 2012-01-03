@@ -15,19 +15,18 @@ class Building_Type extends MY_Inner_Admin_Controller {
     }
 
     private function _get_types() {
-        return array(Building_Type_Model::BUILDING_TYPE_MANAGEMENT,
-            Building_Type_Model::BUILDING_TYPE_STADIUM_CONTAINER,
-            Building_Type_Model::BUILDING_TYPE_TRANSPORT,
-            Building_Type_Model::BUILDING_TYPE_TRAINING,
-            Building_Type_Model::BUILDING_TYPE_SUPPORT,
-            Building_Type_Model::BUILDING_TYPE_RECOVERY,
-            Building_Type_Model::BUILDING_TYPE_SERVICE,
-            Building_Type_Model::BUILDING_TYPE_RESEARCH,
-            Building_Type_Model::BUILDING_TYPE_STORAGE,
-            Building_Type_Model::BUILDING_TYPE_TRANSFER);
+        return array(Building_Type_Model::BUILDING_TYPE_MANAGEMENT => Building_Type_Model::BUILDING_TYPE_MANAGEMENT,
+            Building_Type_Model::BUILDING_TYPE_STADIUM_CONTAINER => Building_Type_Model::BUILDING_TYPE_STADIUM_CONTAINER,
+            Building_Type_Model::BUILDING_TYPE_TRANSPORT => Building_Type_Model::BUILDING_TYPE_TRANSPORT,
+            Building_Type_Model::BUILDING_TYPE_TRAINING => Building_Type_Model::BUILDING_TYPE_TRAINING,
+            Building_Type_Model::BUILDING_TYPE_SUPPORT => Building_Type_Model::BUILDING_TYPE_SUPPORT,
+            Building_Type_Model::BUILDING_TYPE_RECOVERY => Building_Type_Model::BUILDING_TYPE_RECOVERY,
+            Building_Type_Model::BUILDING_TYPE_SERVICE => Building_Type_Model::BUILDING_TYPE_SERVICE,
+            Building_Type_Model::BUILDING_TYPE_RESEARCH => Building_Type_Model::BUILDING_TYPE_RESEARCH,
+            Building_Type_Model::BUILDING_TYPE_TRANSFER => Building_Type_Model::BUILDING_TYPE_TRANSFER,
+            Building_Type_Model::BUILDING_TYPE_TRANSFER => Building_Type_Model::BUILDING_TYPE_TRANSFER);
     }
 
-    
     protected function set_actions($id) {
         $actions = parent::set_actions($id);
         return $actions;
