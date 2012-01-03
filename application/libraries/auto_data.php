@@ -7,8 +7,9 @@ class Auto_Data {
     function __construct() {
         $this->CI = & get_instance();
         $this->CI->load->config('npc', TRUE);
-        $this->CI->load->library(array('street_library', 'npc_library'));
-        $this->CI->load->model(array('street_model'));
+        $this->CI->load->config('player', TRUE);
+        $this->CI->load->library(array('street_library', 'npc_library', 'name_library', 'player_library'));
+        $this->CI->load->model(array('street_model', 'name_model'));
     }
 
     public function auto_create_npc() {
@@ -44,6 +45,50 @@ class Auto_Data {
             $this->CI->street_library->remove($npc['street_id']);
             $this->CI->npc_library->remove($npc['npc_id']);
         }
+    }
+
+    public function auto_create_player($level, $position) {
+        $position_list = $this->CI->config->item('player_position_list', 'player');
+        if (!isset($position_list[$position])) {
+            return NULL;
+        }
+
+        $player_info = array();
+        $player_info['position'] = $position;
+
+        $position_rates = $this->CI->config->item('player_rate_for_postion', 'player');
+        $position_rates = $position_rates[$position];
+        $num_of_indexes = count($position_rates);
+
+        // Chỉ số dành cho 
+        $max_points = $level * $this->CI->config->item('player_max_point_per_level', 'player');
+        $max = $this->CI->config->item('player_max_point_for_position', 'player') / $num_of_indexes;
+        $min = $this->CI->config->item('player_min_point_for_position', 'player') / $num_of_indexes;
+
+        foreach ($position_rates as $index => $rate) {
+            $player_info[$index] = ($max_points * rand($min, $max)) / 100;
+            $max_points -= $player_info[$index];
+        }
+
+        $index_list = $this->CI->config->item('player_index_list', 'player');
+        $num_of_indexes = count($index_list) - $num_of_indexes;
+        $min = 0;
+        $max = 100 / $num_of_indexes;
+        foreach ($index_list as $index) {
+            if (!isset($player_info[$index])) {
+                $player_info[$index] = ($max_points * rand($min, $max)) / 100;
+            }
+        }
+
+        $player_info['last_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_LAST_NAME);
+        do {
+            $player_info['first_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_FIRST_NAME);
+        } while ($player_info['first_name'] == $player_info['last_name']);
+        do {
+            $player_info['middle_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_MIDDLE_NAME);
+        } while ($player_info['middle_name'] == $player_info['first_name'] || $player_info['middle_name'] == $player_info['last_name']);
+        
+        $player = $this->CI->player_library->create($player_info);
     }
 
 }

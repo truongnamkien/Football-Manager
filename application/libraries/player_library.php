@@ -1,13 +1,6 @@
 <?php
 
 class Player_Library extends Abstract_Library {
-    const GOAL_KEEPER = 0;
-    const DEFENDER_CENTER = 1;
-    const DEFENDER_WING = 2;
-    const MIDFIELDER_CENTER = 3;
-    const MIDFIELDER_WING = 4;
-    const FORWARDER_CENTER = 5;
-    const FORWARDER_WING = 6;
 
     function __construct() {
         parent::__construct();
@@ -18,6 +11,7 @@ class Player_Library extends Abstract_Library {
             'cache.object.info' => $this->cache_key . '$id',
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
+        $this->CI->load->config('player', TRUE);
         parent::$CI->load->model(array('player_model'));
     }
 
@@ -30,33 +24,19 @@ class Player_Library extends Abstract_Library {
     }
 
     private function get_player_strength($player) {
-        $indexes = array('physical', 'flexibility', 'goalkeeper', 'defence', 'shooting', 'passing', 'thwart', 'speed');
+        $indexes = $this->CI->config->item('player_index_list', 'player');
         $total = 0;
         foreach ($indexes as $index) {
             $total += $player[$index];
         }
-        switch ($player['position']) {
-            case GOAL_KEEPER:
-                $total += $player['goalkeeper'] * 3;
-                break;
-            case DEFENDER_CENTER:
-                $total += $player['defence'] * 2 + $player['thwart'];
-                break;
-            case DEFENDER_WING:
-                $total += $player['defence'] + $player['speed'] * 2;
-                break;
-            case MIDFIELDER_CENTER:
-                $total += $player['thwart'] + $player['passing'] * 2;
-                break;
-            case MIDFIELDER_WING:
-                $total += $player['passing'] + $player['speed'] * 2;
-                break;
-            case FORWARDER_CENTER:
-                $total += $player['passing'] + $player['shooting'] * 2;
-                break;
-            case FORWARDER_WING:
-                $total += $player['shooting'] + $player['speed'] * 2;
-                break;
+
+        $position_rates = $this->CI->config->item('player_rate_for_postion', 'player');
+
+        if (isset($player['position']) && isset($position_rates[$player['position']])) {
+            $rates = $position_rates[$player['position']];
+            foreach ($rates as $index => $rate) {
+                $total += $player[$index] * $rate;
+            }
         }
         $player['strength'] = $total / 10;
     }
