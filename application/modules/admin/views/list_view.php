@@ -21,7 +21,7 @@
                     <input name="search" id="search" value="" class="text-input small-input" />
                 </div>
 
-                <table class="filterable">
+                <table id="table_list" class="filterable">
                     <thead>
                         <tr>
                             <th><input class="check-all" type="checkbox" /></th>
@@ -160,6 +160,19 @@ $(document).ready(function(){
     $("#FilterTextBox").val("").keyup();
     return false;
   });
+  
+
+  $("#table_list").tablesorter(
+      {
+             headers: { 
+                // assign the secound column (we start counting zero) 
+                0: { 
+                    // disable it by setting the property sorter to false 
+                    sorter: false 
+                }
+            } 
+      }
+    );//tablesorter
 });//document.ready
 </script>
 <!-- End table filter -->

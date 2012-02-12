@@ -419,7 +419,7 @@ $.extend(AsyncRequest.prototype, {
             $(statusElement).addClass('loading-ajax');
         }
 
-        //console.log(_this.data);
+//        console.log(_this.data);
         $.ajax({
             type: _this.method,
             dataType: 'json',
@@ -605,7 +605,7 @@ $.extend(AsyncResponse.prototype, {
     }   
 });
 
-$('a, button').live('click', function(e) {    
+$('a, button, area').live('click', function(e) {    
     var ajaxify = $(this).attr('ajaxify');
     var href = $(this).attr('href');
 
@@ -625,3 +625,5 @@ $('a, button').live('click', function(e) {
     }
     e.preventDefault();
 });
+
+
