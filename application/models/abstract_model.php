@@ -30,15 +30,15 @@ abstract class Abstract_Model extends CI_Model {
         $this->delete_where(array($this->type . '_id' => $id));
     }
     
-    public function delete_where(array $filter) {
-        $this->db->delete($this->database, $filter);
+    public function delete_where($filter) {
+        $this->db->where($filter)->delete($this->database);
     }
 
     public function get($id) {
         return $this->get_where(array($this->type . '_id' => $id));
     }
 
-    public function get_where(array $filter) {
+    public function get_where($filter) {
         $query = $this->db->from($this->database)->where($filter)->get();
         if (!empty($query)) {
             if ($query->num_rows() == 1) {
@@ -54,12 +54,12 @@ abstract class Abstract_Model extends CI_Model {
         return $this->_ret(API_FAILED);
     }
 
-    public function update($id, array $update_data, array $filter = array()) {
+    public function update($id, array $update_data, $filter = array()) {
         $filter = array_merge($filter, array($this->type . '_id' => $id));
         return $this->update_where($update_data, $filter);
     }
 
-    public function update_where(array $update_data, array $filter) {
+    public function update_where(array $update_data, $filter) {
         unset($update_data[$this->type . '_id']);
 
         $this->db->trans_start();
@@ -74,7 +74,7 @@ abstract class Abstract_Model extends CI_Model {
         }
     }
 
-    public function get_all(array $filter = array()) {
+    public function get_all($filter = array()) {
         if (empty($filter)) {
             $query = $this->db->order_by($this->type . '_id', 'asc')->get($this->database);
         } else {

@@ -21,7 +21,11 @@ class Street_Library extends Abstract_Library {
     }
 
     public function create($data) {
-        $street = parent::$CI->map_library->create_street($data['area'], array('street_type' => $data['street_type']));
+        if (!isset($data['street_type']) || !isset($data['area']) || !isset($data['team_id'])) {
+            return FALSE;
+        }
+
+        $street = parent::$CI->map_library->create_street($data['area'], array('street_type' => $data['street_type'], 'team_id' => $data['team_id']));
         if ($data['street_type'] == Street_Model::STREET_TYPE_PLAYER) {
             $buildings = parent::$CI->building_library->create_building_for_street($street['street_id']);
             $street['buildings'] = $buildings;
@@ -55,7 +59,7 @@ class Street_Library extends Abstract_Library {
             }
         }
         parent::remove($street_id);
-        
+
         // Xóa street thì phải xóa luôn team của street
         parent::$CI->team_library->remove($street['team_id']);
     }
@@ -170,7 +174,7 @@ class Street_Library extends Abstract_Library {
         }
         return $street;
     }
-    
+
     protected function after_get_callback($street) {
         return $this->get_my_street_info($street);
     }

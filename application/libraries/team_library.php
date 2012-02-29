@@ -31,7 +31,7 @@ class Team_Library extends Abstract_Library {
         parent::remove($id);
         
         // Xóa team phải xóa hết player
-        parent::$CI->player_model->delete_where(array('team_id' => $team_id));
+        parent::$CI->player_model->delete_where(array('team_id' => $id));
     }
 
 }

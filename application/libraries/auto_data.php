@@ -33,16 +33,15 @@ class Auto_Data {
                 } else {
                     $level_count[$level]++;
                 }
-                
+
                 // Tạo team
                 $team = $this->CI->team_library->create();
-                
                 // Tạo cầu thủ cho team
-                $team = $this->auto_create_team_player($level, $team);
-                
+                $this->auto_create_team_player($level, $team);
+
                 // Tạo street (có trỏ tới team)
                 $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC, 'team_id' => $team['team_id']));
-                
+
                 // Tạo NPC
                 $npc_data = array('level' => $level, 'street_id' => $street['street_id']);
                 $ret = $this->CI->npc_library->create($npc_data);
@@ -52,7 +51,7 @@ class Auto_Data {
 
     public function auto_create_player($level, $position, $team_id) {
         $position_list = $this->CI->config->item('player_position_list', 'player');
-        if (!isset($position_list[$position])) {
+        if (!in_array($position, $position_list)) {
             return NULL;
         }
 
@@ -83,7 +82,6 @@ class Auto_Data {
                 $player_info[$index] = ($max_points * rand($min, $max)) / 100;
             }
         }
-
         $player_info['last_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_LAST_NAME);
         do {
             $player_info['first_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_FIRST_NAME);

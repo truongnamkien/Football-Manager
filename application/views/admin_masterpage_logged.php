@@ -64,7 +64,7 @@
                         <div id="profile-links">
                             Hello, Admin<br />
                             <br />
-                            <a href="<?php echo site_url(); ?>" title="View the Site">View the Site</a> | <a href="<?php echo site_url('admin/admin/logout'); ?>" title="<?php echo lang('authen_logout'); ?>"><?php echo lang('authen_logout'); ?></a>
+                            <a href="<?php echo site_url(); ?>" title="View the Site">View the Site</a> | <a href="<?php echo site_url('admin_logout'); ?>" title="<?php echo lang('authen_logout'); ?>"><?php echo lang('authen_logout'); ?></a>
                         </div>        
 
                         <ul id="main-nav">  <!-- Accordion Menu -->

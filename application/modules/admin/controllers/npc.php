@@ -7,7 +7,7 @@ class NPC extends MY_Inner_Admin_Controller {
     public function __construct() {
         parent::__construct();
         $this->data['type'] = 'npc';
-        $this->load->library(array('npc_library', 'auto_data'));
+        $this->load->library(array('npc_library', 'auto_data', 'street_library', 'team_library'));
         $this->set_title(lang('manager_title') . ' - ' . lang('manager_' . $this->data['type']));
         $this->load->language('npc');
     }
@@ -52,5 +52,20 @@ class NPC extends MY_Inner_Admin_Controller {
         return array();
     }
 
+    protected function get_all_objects() {
+        $npc_list = parent::get_all_objects();
+        foreach ($npc_list as &$npc) {
+            $street = $this->street_library->get($npc['street_id']);
+            $team = $this->team_library->get($street['team_id']);
+            $actions = $npc['actions'];
+            unset($npc['street_id']);
+            unset($npc['actions']);
+            $npc['team_name'] = $team['team_name'];
+            $npc['x_coor'] = $street['x_coor'];
+            $npc['y_coor'] = $street['y_coor'];
+            $npc['actions'] = $actions;
+        }
+        return $npc_list;
+    }
 }
 

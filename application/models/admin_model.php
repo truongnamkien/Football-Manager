@@ -43,7 +43,7 @@ class Admin_Model extends Abstract_Model {
         if (isset($admin_id)) {
             parent::delete($admin_id);
         } else {
-            $this->db->delete('admin', array('username' => $admin));
+            parent::delete_where(array('username' => $admin));
         }
     }
 
