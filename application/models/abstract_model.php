@@ -70,8 +70,7 @@ abstract class Abstract_Model extends CI_Model {
             return $this->_ret(API_FAILED);
         } else {
             $this->db->trans_commit();
-            $data = array_merge($data, $update_data);
-            return $this->_ret(API_SUCCESS, $data);
+            return $this->get_where($filter);
         }
     }
 

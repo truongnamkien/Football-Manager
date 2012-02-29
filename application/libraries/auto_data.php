@@ -19,9 +19,10 @@ class Auto_Data {
         $num_areas = $cols * $rows;
 
         $level_count = array();
-        $streets_per_area = $this->CI->config->item('npc_max_per_area', 'npc');
         $streets_per_level = $this->CI->config->item('npc_max_per_level', 'npc');
         $max_level = $this->CI->config->item('npc_max_level', 'npc');
+
+        $streets_per_area = round(($streets_per_level * $max_level / $num_areas), 0);
         for ($i = 0; $i < $num_areas; $i++) {
             for ($j = 0; $j < $streets_per_area; $j++) {
                 do {
@@ -37,7 +38,7 @@ class Auto_Data {
                 $team = $this->CI->team_library->create();
                 
                 // Tạo cầu thủ cho team
-                $team = $this->auto_create_team($level, $team);
+                $team = $this->auto_create_team_player($level, $team);
                 
                 // Tạo street (có trỏ tới team)
                 $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC, 'team_id' => $team['team_id']));
