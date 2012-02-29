@@ -12,7 +12,8 @@ class Street_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
         parent::$CI->load->model(array('street_model', 'cooldown_model'));
-        parent::$CI->load->library(array('building_library', 'map_library'));
+        parent::$CI->load->library(array('building_library', 'map_library', 'team_library'));
+        parent::$CI->load->language('building');
     }
 
     public function get($street_id, $is_force = FALSE) {
@@ -54,6 +55,9 @@ class Street_Library extends Abstract_Library {
             }
         }
         parent::remove($street_id);
+        
+        // Xóa street thì phải xóa luôn team của street
+        parent::$CI->team_library->remove($street['team_id']);
     }
 
     public function upgrade($street_building_id) {

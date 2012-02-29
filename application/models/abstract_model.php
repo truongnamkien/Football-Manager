@@ -9,7 +9,7 @@ abstract class Abstract_Model extends CI_Model {
         $this->load->database();
     }
 
-    public function create($data) {
+    public function create(array $data) {
         $ret = $this->check_existed($data);
         unset($data[$this->type . '_id']);
 
@@ -27,14 +27,18 @@ abstract class Abstract_Model extends CI_Model {
     }
 
     public function delete($id) {
-        $this->db->delete($this->database, array($this->type . '_id' => $id));
+        $this->delete_where(array($this->type . '_id' => $id));
+    }
+    
+    public function delete_where(array $filter) {
+        $this->db->delete($this->database, $filter);
     }
 
     public function get($id) {
         return $this->get_where(array($this->type . '_id' => $id));
     }
 
-    public function get_where($filter) {
+    public function get_where(array $filter) {
         $query = $this->db->from($this->database)->where($filter)->get();
         if (!empty($query)) {
             if ($query->num_rows() == 1) {
@@ -50,29 +54,28 @@ abstract class Abstract_Model extends CI_Model {
         return $this->_ret(API_FAILED);
     }
 
-    public function update($id, $update_data, $filter = array()) {
+    public function update($id, array $update_data, array $filter = array()) {
         $filter = array_merge($filter, array($this->type . '_id' => $id));
-        $data = $this->get_where($filter);
+        return $this->update_where($update_data, $filter);
+    }
+
+    public function update_where(array $update_data, array $filter) {
         unset($update_data[$this->type . '_id']);
 
-        if ($data['return_code'] == API_SUCCESS && !empty($data['data'])) {
-            $this->db->trans_start();
-            $this->db->where($this->type . '_id', $id)->update($this->database, $update_data);
+        $this->db->trans_start();
+        $this->db->where($filter)->update($this->database, $update_data);
 
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-                /* unknown error */
-                return $this->_ret(API_FAILED);
-            } else {
-                $this->db->trans_commit();
-                $data = array_merge($data, $update_data);
-                return $this->_ret(API_SUCCESS, $data);
-            }
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
             return $this->_ret(API_FAILED);
+        } else {
+            $this->db->trans_commit();
+            $data = array_merge($data, $update_data);
+            return $this->_ret(API_SUCCESS, $data);
         }
     }
 
-    public function get_all($filter = array()) {
+    public function get_all(array $filter = array()) {
         if (empty($filter)) {
             $query = $this->db->order_by($this->type . '_id', 'asc')->get($this->database);
         } else {

@@ -12,6 +12,7 @@ class Building_Library extends Abstract_Library {
         );
         parent::$CI->load->model(array('street_building_model', 'building_type_model'));
         parent::$CI->load->library(array('building_type_library'));
+        parent::$CI->load->language('building');
     }
 
     public function get($street_building_id, $is_force = FALSE) {

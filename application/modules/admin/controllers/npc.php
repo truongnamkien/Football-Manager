@@ -25,7 +25,7 @@ class NPC extends MY_Inner_Admin_Controller {
     }
 
     public function reset() {
-        $this->auto_data->reset_npc_list();
+        $this->npc_library->remove_all();
         $this->auto_data->auto_create_npc();
         redirect(site_url('admin/' . $this->data['type']));
     }

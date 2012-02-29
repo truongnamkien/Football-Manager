@@ -8,7 +8,7 @@ class Auto_Data {
         $this->CI = & get_instance();
         $this->CI->load->config('npc', TRUE);
         $this->CI->load->config('player', TRUE);
-        $this->CI->load->library(array('street_library', 'npc_library', 'name_library', 'player_library'));
+        $this->CI->load->library(array('street_library', 'npc_library', 'name_library', 'player_library', 'team_library'));
         $this->CI->load->model(array('street_model', 'name_model'));
     }
 
@@ -32,22 +32,24 @@ class Auto_Data {
                 } else {
                     $level_count[$level]++;
                 }
-                $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC));
+                
+                // Tạo team
+                $team = $this->CI->team_library->create();
+                
+                // Tạo cầu thủ cho team
+                $team = $this->auto_create_team($level, $team);
+                
+                // Tạo street (có trỏ tới team)
+                $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC, 'team_id' => $team['team_id']));
+                
+                // Tạo NPC
                 $npc_data = array('level' => $level, 'street_id' => $street['street_id']);
                 $ret = $this->CI->npc_library->create($npc_data);
             }
         }
     }
 
-    public function reset_npc_list() {
-        $npc_list = $this->CI->npc_library->get_all();
-        foreach ($npc_list as $npc) {
-            $this->CI->street_library->remove($npc['street_id']);
-            $this->CI->npc_library->remove($npc['npc_id']);
-        }
-    }
-
-    public function auto_create_player($level, $position) {
+    public function auto_create_player($level, $position, $team_id) {
         $position_list = $this->CI->config->item('player_position_list', 'player');
         if (!isset($position_list[$position])) {
             return NULL;
@@ -55,6 +57,7 @@ class Auto_Data {
 
         $player_info = array();
         $player_info['position'] = $position;
+        $player_info['team_id'] = $team_id;
 
         $position_rates = $this->CI->config->item('player_rate_for_postion', 'player');
         $position_rates = $position_rates[$position];
@@ -87,8 +90,17 @@ class Auto_Data {
         do {
             $player_info['middle_name'] = $this->CI->name_library->get_random_by_category(Name_Model::CATEGORY_MIDDLE_NAME);
         } while ($player_info['middle_name'] == $player_info['first_name'] || $player_info['middle_name'] == $player_info['last_name']);
-        
+
         $player = $this->CI->player_library->create($player_info);
+    }
+
+    public function auto_create_team_player($level, $team) {
+        $position_amount = $this->CI->config->item('player_num_of_player', 'player');
+        foreach ($position_amount as $position => $amount) {
+            for ($i = 0; $i < $amount; $i++) {
+                $this->auto_create_player($level, $position, $team['team_id']);
+            }
+        }
     }
 
 }

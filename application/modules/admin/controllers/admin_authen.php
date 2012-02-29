@@ -9,6 +9,10 @@ class Admin_Authen extends MY_Admin_Controller {
     }
 
     public function login() {
+        if ($this->my_auth->logged_in()) {
+            redirect('admin');
+        }
+
         $this->form_validation->set_rules('username', 'lang:authen_username', 'trim|strip_tags|required');
         $this->form_validation->set_rules('password', 'lang:authen_password', 'trim|required|min_length[6]|max_length[32]');
 

@@ -11,7 +11,7 @@ class Player_Library extends Abstract_Library {
             'cache.object.info' => $this->cache_key . '$id',
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
-        $this->CI->load->config('player', TRUE);
+        parent::$CI->load->config('player', TRUE);
         parent::$CI->load->model(array('player_model'));
     }
 
@@ -22,15 +22,15 @@ class Player_Library extends Abstract_Library {
     protected function after_get_callback($player) {
         return $this->get_player_strength($player);
     }
-
+    
     private function get_player_strength($player) {
-        $indexes = $this->CI->config->item('player_index_list', 'player');
+        $indexes = parent::$CI->config->item('player_index_list', 'player');
         $total = 0;
         foreach ($indexes as $index) {
             $total += $player[$index];
         }
 
-        $position_rates = $this->CI->config->item('player_rate_for_postion', 'player');
+        $position_rates = parent::$CI->config->item('player_rate_for_postion', 'player');
 
         if (isset($player['position']) && isset($position_rates[$player['position']])) {
             $rates = $position_rates[$player['position']];
