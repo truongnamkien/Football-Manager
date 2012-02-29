@@ -45,7 +45,7 @@ $route['login'] = "authen/login";
 $route['logout'] = "authen/logout";
 
 $route['admin_login'] = "admin/admin_authen/login";
-$route['admin_logout'] = "authen/admin_authen/logout";
+$route['admin_logout'] = "admin/admin_authen/logout";
 
 
 /* End of file routes.php */

@@ -20,7 +20,7 @@ class MY_Controller extends MX_Controller {
     }
 
     public function set_title($title) {
-        $this->_global_vars['TX_PAGE_TITLE'] = $title;
+        $this->_global_vars['PAGE_TITLE'] = $title;
     }
 
     public function enable_masterview() {

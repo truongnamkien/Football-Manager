@@ -17,3 +17,13 @@ $config['player_rate_for_postion'] = array(
     'for_center' => array('passing' => 1, 'shooting' => 2),
     'for_wing' => array('shooting' => 1, 'speed' => 2)
 );
+
+$config['player_num_of_player'] = array(
+    'goalkeeper' => 2,
+    'def_center' => 3,
+    'def_wing' => 2,
+    'mid_center' => 2,
+    'mid_wing' => 2,
+    'for_center' => 2,
+    'for_wing' => 3
+);
