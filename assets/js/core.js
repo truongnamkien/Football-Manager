@@ -15,7 +15,8 @@ Cooldown.run = function(_time, _elem) {
     if(_time <= 0) {
         $("#" + _elem).html("");
         for (var _index in Cooldown.data) {
-            if (Cooldown.data[_index] == _elem) {
+            var _cooldown = Cooldown.data[_index];
+            if (_cooldown == _elem) {
                 Cooldown.data.splice(_index, 1);
                 break;
             }
@@ -146,6 +147,19 @@ function URI(uri) {
     return this;
 }
 
+function football_go_uri(uri, a) {
+    uri = uri.toString();
+    if(!a && window.PageTransitions && PageTransitions.isInitialized()){
+        PageTransitions.go(uri);
+    }
+    else if(window.location.href == uri){
+        window.location.reload();
+    }
+    else {
+        window.location.href = uri;
+    }
+}
+
 $.extend(URI, {
     expression:/(((\w+):\/\/)([^\/:]*)(:(\d+))?)?([^#?]*)(\?([^#]*))?(#(.*))?/,
     decodeComponent:function(val) {
@@ -261,16 +275,14 @@ $.extend(URI.prototype, {
     setPort:function(port){
         this.port = port;
         return this;
-    }
-    ,
+    },
     getPort:function(){
         return this.port;
     },
     setProtocol:function(protocol){
         this.protocol = protocol;
         return this;
-    }
-    ,
+    },
     getProtocol:function(){
         return this.protocol;
     },
@@ -419,7 +431,6 @@ $.extend(AsyncRequest.prototype, {
             $(statusElement).addClass('loading-ajax');
         }
 
-//        console.log(_this.data);
         $.ajax({
             type: _this.method,
             dataType: 'json',
@@ -440,7 +451,6 @@ $.extend(AsyncRequest.prototype, {
     }, 
     interpretResponse : function(response) {
         if (!response) return;
-        if (response.payload && response.payload._lock_ajax && response.payload._lock_ajax == 1) tx.LOCK_AJAX = 1;
 
         if(typeof response.redirect != 'undefined') return {
             redirect:response.redirect
@@ -463,7 +473,7 @@ $.extend(AsyncRequest.prototype, {
         
         if(typeof(interp.redirect) != 'undefined') {            
             // redirect            
-            tx_go_uri(interp.redirect);
+            football_go_uri(interp.redirect);
             return;
         }
      
@@ -477,7 +487,7 @@ $.extend(AsyncRequest.prototype, {
                 response.js = response.js||[];    
                 this.dispatchResponse(response);
             }
-        }       
+        }
     },
     dispatchResponse : function(asyncResponse) {
         try {           
@@ -499,8 +509,6 @@ $.extend(AsyncRequest.prototype, {
                         try{                                            
                             (new Function(onload[i])).apply(this);
                         } catch(e) {
-                        //console.log(e);
-                        //alert(e);
                         }
                     }
                 }
@@ -525,7 +533,6 @@ $.extend(AsyncRequest.prototype, {
         var statusElement = this.getStatusElement();
         if(statusElement){
             $(statusElement).removeClass('loading-ajax');
-        //$(statusElement).removeClass(this.statusClass);            
         }
         
     },
@@ -566,40 +573,32 @@ $.extend(AsyncResponse.prototype, {
     },
     getRequest:function(){
         return this.request;
-    }
-    ,
+    },
     getPayload:function(){
         return this.payload;
-    }
-    ,
+    },
     getError:function(){
         return this.error;
-    }
-    ,
+    },
     getErrorSummary:function(){
         return this.errorSummary;
-    }
-    ,
+    },
     setErrorSummary:function(errorSummary){
         errorSummary = (errorSummary===undefined ? null : errorSummary);
         this.errorSummary=errorSummary;
         return this;
-    }
-    ,
+    },
     getErrorDescription:function(){
         return this.errorDescription;
-    }
-    ,
+    },
     getErrorIsWarning:function(){
         return this.errorIsWarning;
-    }
-    ,
+    },
     setReplay:function(isReplay){
         isReplay = (isReplay === undefined ? true : isReplay);
         this.replay=isReplay;
         return this;
-    }
-    ,
+    },
     isReplay:function(){
         return this.replay;
     }   

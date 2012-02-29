@@ -261,20 +261,3 @@ function result(r, context){
 		return arr.join('');
 	}
 }
-
-function update_school_photo(school_id, _this){
-	$.colorbox.close();
-	image_url = $(_this).find('img').attr('src');
-	$.post(tx_admin.base_url + 'admin/schools/update_photo', {
-		'school_id': school_id,
-		'image_url': image_url,
-		'csrf': tx_admin.csrf_token_value
-	}, function(result) {
-		if (result.status == 'true') {
-			$('tr[rel="'+school_id+'"]').find('td[field="pic_small"]').html('<img width="50" src="'+image_url+'">');
-			
-		}
-	}, 'json');
-
-	return false;
-}
