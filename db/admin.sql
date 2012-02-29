@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 20, 2011 at 06:13 PM
+-- Generation Time: Feb 29, 2012 at 04:06 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -33,15 +33,17 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `display_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `role` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  UNIQUE KEY `username` (`username`),
+  KEY `display_name` (`display_name`),
+  KEY `role` (`role`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`admin_id`, `username`, `password`, `display_name`, `role`) VALUES
-(1, 'TanSolo', 'a738d2b3d6f668972c9b468801114f4f', 'Trương Nam Kiên', 'admin');
+(3, 'TanSolo', 'a738d2b3d6f668972c9b468801114f4f', 'Trương Nam Kiên', 'admin');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 03, 2012 at 09:49 AM
+-- Generation Time: Feb 29, 2012 at 04:09 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `player` (
   `player_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `team_id` bigint(20) DEFAULT NULL,
   `first_name` varchar(30) CHARACTER SET utf8 NOT NULL,
   `middle_name` varchar(30) CHARACTER SET utf8 NOT NULL,
   `last_name` varchar(30) CHARACTER SET utf8 NOT NULL,
@@ -42,7 +43,9 @@ CREATE TABLE IF NOT EXISTS `player` (
   `passing` int(10) NOT NULL COMMENT 'chuyền bóng',
   `thwart` int(10) NOT NULL COMMENT 'cản phá',
   `speed` int(10) NOT NULL,
-  PRIMARY KEY (`player_id`)
+  PRIMARY KEY (`player_id`),
+  KEY `team_id` (`team_id`),
+  KEY `position` (`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
