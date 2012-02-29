@@ -7,7 +7,7 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <title><?php echo $TX_PAGE_TITLE ?></title>
+        <title><?php echo $PAGE_TITLE ?></title>
 
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
@@ -71,12 +71,12 @@
 
                             <li>
                                 <!-- Add the class "no-submenu" to menu items with no sub menu -->
-                                <a href="<?php echo site_url('admin/dashboard') ?>" class="nav-top-item no-submenu <?php admin_menu_current('dashboard'); ?>">Dashboard</a>
+                                <a href="<?php echo site_url('admin') ?>" class="nav-top-item no-submenu <?php echo admin_menu_current(array('admin', '')); ?>"><?php echo lang('manager_admin'); ?></a>
                             </li>
 
                             <li> 
-                                <?php $managers = array('admin', 'user', 'building_type', 'npc', 'name'); ?>
-                                <a href="#" class="nav-top-item <?php admin_menu_current('manager') ?>"><?php echo lang('manager_submenu'); ?></a>
+                                <?php $managers = array('user', 'building_type', 'npc', 'name'); ?>
+                                <a href="#" class="nav-top-item <?php echo admin_menu_current($managers) ?>"><?php echo lang('manager_submenu'); ?></a>
                                 <ul>
                                     <?php admin_menu_render($managers); ?>
                                 </ul>
@@ -105,16 +105,17 @@
     </body> 
 </html>
 <?php
-$uri_segment = $this->uri->segment(2);
 
 /**
  * check xem menu nào là current.
  */
-function admin_menu_current($menu_name) {
-    global $uri_segment;
-    if ($uri_segment == $menu_name) {
-        echo 'current';
+function admin_menu_current($menu_names) {
+    $ci = &get_instance();
+    $uri_segment = $ci->uri->segment(2);
+    if (in_array($uri_segment, $menu_names) || ($uri_segment === FALSE && in_array('admin', $menu_names))) {
+        return 'current';
     }
+    return '';
 }
 
 /**
@@ -124,7 +125,7 @@ function admin_menu_render($params) {
     $menu = '';
     foreach ($params as $type) {
         $menu .= '<li><a href="' . site_url('admin/' . $type) . '"';
-        $menu .= 'class="' . admin_menu_current($type) . '">';
+        $menu .= 'class="' . admin_menu_current(array($type)) . '">';
         $menu .= lang('manager_' . $type) . '</a></li>';
     }
     echo $menu;

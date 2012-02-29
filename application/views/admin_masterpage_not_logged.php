@@ -7,7 +7,7 @@
 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="robots" content="noindex" />
-        <title><?php echo $TX_PAGE_TITLE ?></title>
+        <title><?php echo $PAGE_TITLE ?></title>
 
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
