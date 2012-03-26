@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 29, 2012 at 04:08 AM
+-- Generation Time: Mar 26, 2012 at 04:03 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -28,11 +28,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `name` (
   `name_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `category` varchar(10) CHARACTER SET utf8 NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `category` varchar(10) NOT NULL,
   PRIMARY KEY (`name_id`),
   KEY `category` (`category`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=142 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=142 ;
 
 --
 -- Dumping data for table `name`

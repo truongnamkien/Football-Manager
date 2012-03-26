@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 29, 2012 at 04:10 AM
+-- Generation Time: Mar 26, 2012 at 04:03 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS `streets` (
   `street_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `x_coor` int(8) DEFAULT NULL,
   `y_coor` int(8) DEFAULT NULL,
-  `street_type` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `street_type` varchar(32) DEFAULT NULL,
   `team_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`street_id`),
   KEY `street_type` (`street_type`),
   KEY `team_id` (`team_id`),
   KEY `coordinate` (`x_coor`,`y_coor`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

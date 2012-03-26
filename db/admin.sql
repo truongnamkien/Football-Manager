@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 29, 2012 at 04:06 AM
+-- Generation Time: Mar 26, 2012 at 04:03 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -28,15 +28,15 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `admin` (
   `admin_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(80) CHARACTER SET utf8 DEFAULT NULL,
-  `password` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
-  `display_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `role` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `username` varchar(80) DEFAULT NULL,
+  `password` varchar(32) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT NULL,
+  `role` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `username` (`username`),
   KEY `display_name` (`display_name`),
   KEY `role` (`role`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `admin`

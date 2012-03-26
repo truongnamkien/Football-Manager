@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 29, 2012 at 03:55 AM
+-- Generation Time: Mar 26, 2012 at 04:03 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -28,17 +28,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `building_type` (
   `building_type_id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `description` varchar(1000) CHARACTER SET utf8 DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
   `beginning_fee` int(12) DEFAULT NULL,
   `fee_rate` int(8) DEFAULT NULL,
   `effect` int(12) DEFAULT NULL,
   `effect_rate` int(8) DEFAULT NULL,
   `street_cell` tinyint(4) DEFAULT NULL,
-  `type` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `type` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`building_type_id`),
   UNIQUE KEY `name` (`name`,`street_cell`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `building_type`
