@@ -9,7 +9,7 @@ class Admin_Authen extends MY_Admin_Controller {
     }
 
     public function login() {
-        if ($this->my_auth->logged_in()) {
+        if ($this->my_auth->logged_in(TRUE)) {
             redirect('admin');
         }
 

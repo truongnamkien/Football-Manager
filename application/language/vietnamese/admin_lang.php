@@ -2,7 +2,8 @@
 
 // Sử dụng chung các trang admin
 $lang['manager_title'] = 'Quản lý';
-$lang['manager_submenu'] = 'Quản lý thông tin';
+$lang['manager_submenu_system'] = 'Quản lý hệ thống';
+$lang['manager_submenu_user'] = 'Quản lý người chơi';
 
 // Sub menu
 $lang['manager_admin'] = 'Admin';

@@ -2,11 +2,8 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-
     <head>
-
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
         <title><?php echo $PAGE_TITLE ?></title>
 
         <!-- Reset Stylesheet -->
@@ -53,81 +50,31 @@
     </head>
 
     <body>
-        <div id="body-wrapper"> <!-- Wrapper for the radial gradient background -->
-            <?php if ($this->my_auth->logged_in(TRUE)): ?>
+        <div id="body-wrapper">
+            <div id="sidebar">
+                <div id="sidebar-wrapper">
+                    <h1 id="sidebar-title"><?php echo lang('manager_title'); ?></h1>
 
-                <div id="sidebar"><div id="sidebar-wrapper"> <!-- Sidebar with logo and menu -->
+                    <div id="profile-links">
+                        Hello, Admin<br />
+                        <br />
+                        <a href="<?php echo site_url(); ?>" title="View the Site">View the Site</a> |
+                        <a href="<?php echo site_url('admin_logout'); ?>" title="<?php echo lang('authen_logout'); ?>"><?php echo lang('authen_logout'); ?></a>
+                    </div>        
 
-                        <h1 id="sidebar-title"><?php echo lang('manager_title'); ?></h1>
-
-                        <!-- Sidebar Profile links -->
-                        <div id="profile-links">
-                            Hello, Admin<br />
-                            <br />
-                            <a href="<?php echo site_url(); ?>" title="View the Site">View the Site</a> | <a href="<?php echo site_url('admin_logout'); ?>" title="<?php echo lang('authen_logout'); ?>"><?php echo lang('authen_logout'); ?></a>
-                        </div>        
-
-                        <ul id="main-nav">  <!-- Accordion Menu -->
-
-                            <li>
-                                <!-- Add the class "no-submenu" to menu items with no sub menu -->
-                                <a href="<?php echo site_url('admin') ?>" class="nav-top-item no-submenu <?php echo admin_menu_current(array('admin', '')); ?>"><?php echo lang('manager_admin'); ?></a>
-                            </li>
-
-                            <li> 
-                                <?php $managers = array('user', 'building_type', 'npc', 'name'); ?>
-                                <a href="#" class="nav-top-item <?php echo admin_menu_current($managers) ?>"><?php echo lang('manager_submenu'); ?></a>
-                                <ul>
-                                    <?php admin_menu_render($managers); ?>
-                                </ul>
-                            </li>
-
-                        </ul> <!-- End #main-nav -->			
-
-
-                    </div></div> <!-- End #sidebar -->
-
-                <div id="main-content"> <!-- Main Content Section with everything -->
-                    <?php echo $PAGE_CONTENT ?>
-
-                    <div id="footer">
-                        <small> <!-- Remove this notice or replace it with whatever you want -->
-                            &#169; Copyright 2011 Trương Nam Kiên | Powered by Trương Nam Kiên | <a href="#">Top</a>
-                        </small>
-                    </div><!-- End #footer -->
-                </div> <!-- End #main-content -->
+                    <?php echo Modules::run('admin/admin_navigator/_main_nav'); ?>
+                </div>
             </div>
-        <?php else: ?>
-            <div id="login">
+
+            <div id="main-content"> <!-- Main Content Section with everything -->
                 <?php echo $PAGE_CONTENT ?>
-            </div>
-        <?php endif; ?>
+
+                <div id="footer">
+                    <small> <!-- Remove this notice or replace it with whatever you want -->
+                        &#169; Copyright 2011 Trương Nam Kiên | Powered by Trương Nam Kiên | <a href="#">Top</a>
+                    </small>
+                </div><!-- End #footer -->
+            </div> <!-- End #main-content -->
+        </div>
     </body> 
 </html>
-<?php
-
-/**
- * check xem menu nào là current.
- */
-function admin_menu_current($menu_names) {
-    $ci = &get_instance();
-    $uri_segment = $ci->uri->segment(2);
-    if (in_array($uri_segment, $menu_names) || ($uri_segment === FALSE && in_array('admin', $menu_names))) {
-        return 'current';
-    }
-    return '';
-}
-
-/**
- * render ra các menu ul > li
- */
-function admin_menu_render($params) {
-    $menu = '';
-    foreach ($params as $type) {
-        $menu .= '<li><a href="' . site_url('admin/' . $type) . '"';
-        $menu .= 'class="' . admin_menu_current(array($type)) . '">';
-        $menu .= lang('manager_' . $type) . '</a></li>';
-    }
-    echo $menu;
-}
-?>
