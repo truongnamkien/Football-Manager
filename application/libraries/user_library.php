@@ -1,4 +1,5 @@
 <?php
+require_once(APPPATH . 'libraries/abstract_library.php');
 
 class User_Library extends Abstract_Library {
 
