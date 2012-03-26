@@ -306,6 +306,49 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         return $nav_list;
     }
 
+    protected function parse_object_field($object, $specific_input = array()) {
+        $result = array();
+        foreach ($object as $key => $val) {
+            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
+            $value = array('name' => $key, 'value' => $val);
+
+            if (!empty($specific_input) && isset($specific_input[$key]) && isset($specific_input[$key]['input'])) {
+                switch ($specific_input[$key]['input']) {
+                    case 'textarea':
+                        $value = form_textarea($value);
+                        break;
+                    case 'dropdown':
+                        $value = form_dropdown($value['name'], $specific_input[$key]['options'], $value['value']);
+                        break;
+                    case 'upload':
+                        $value = form_upload($value['name'], '');
+                        break;
+                    case 'label':
+                        $value = form_label($value['value'], $value['name']);
+                        break;
+                    case 'image':
+                        $value = img($specific_input[$key]['src']);
+                        break;
+                    case 'none':
+                        $value = $value['value'];
+                        break;
+                    case 'radio':
+                        $value = '';
+                        foreach ($specific_input[$key]['options'] as $radio_val => $radio_display) {
+                            $value .= '<div class="fLeft ma5 tac border rounded pa5">';
+                            $value .= form_radio($key, $radio_val, ($val !== FALSE && $val !== '' && $val == $radio_val), 'id="radio_' . $key . '_' . $radio_val . '"');
+                            $value .= '<div class="clear">' . form_label($radio_display, 'radio_' . $key . '_' . $radio_val) . '</div>';
+                            $value .= '</div>';
+                        }
+                        break;
+                }
+            } else {
+                $value = form_input($value);
+            }
+            $result[] = array($label => $value);
+        }
+        return $result;
+    }
     abstract protected function set_validation_rules($action);
 
     abstract protected function prepare_object($id = FALSE);

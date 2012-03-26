@@ -9,7 +9,7 @@ abstract class Abstract_Model extends CI_Model {
         $this->load->database();
     }
 
-    public function create(array $data) {
+    public function create($data) {
         $ret = $this->check_existed($data);
         unset($data[$this->type . '_id']);
 
@@ -38,8 +38,18 @@ abstract class Abstract_Model extends CI_Model {
         return $this->get_where(array($this->type . '_id' => $id));
     }
 
-    public function get_where($filter) {
-        $query = $this->db->from($this->database)->where($filter)->get();
+    public function get_where($filter, $sort_by = FALSE, $order = 'asc') {
+        if ($sort_by == FALSE) {
+            $sort_by = $this->type . '_id';
+        }
+        if ($order != 'asc' && $order != 'desc') {
+            $order = 'asc';
+        }
+
+        $query = $this->db->from($this->database)
+                ->order_by($sort_by, $order)
+                ->where($filter)
+                ->get();
         if (!empty($query)) {
             if ($query->num_rows() == 1) {
                 $data = $query->row_array();
@@ -54,12 +64,12 @@ abstract class Abstract_Model extends CI_Model {
         return $this->_ret(API_FAILED);
     }
 
-    public function update($id, array $update_data, $filter = array()) {
+    public function update($id, $update_data, $filter = array()) {
         $filter = array_merge($filter, array($this->type . '_id' => $id));
         return $this->update_where($update_data, $filter);
     }
 
-    public function update_where(array $update_data, $filter) {
+    public function update_where($update_data, $filter) {
         unset($update_data[$this->type . '_id']);
 
         $this->db->trans_start();
@@ -74,12 +84,17 @@ abstract class Abstract_Model extends CI_Model {
         }
     }
 
-    public function get_all($filter = array()) {
-        if (empty($filter)) {
-            $query = $this->db->order_by($this->type . '_id', 'asc')->get($this->database);
-        } else {
-            $query = $this->db->order_by($this->type . '_id', 'asc')->where($filter)->get($this->database);
+    public function get_all($sort_by = FALSE, $order = 'asc') {
+        if ($sort_by == FALSE) {
+            $sort_by = $this->type . '_id';
         }
+        if ($order != 'asc' && $order != 'desc') {
+            $order = 'asc';
+        }
+
+        $query = $this->db
+                ->order_by($sort_by, $order)
+                ->get($this->database);
 
         if (!empty($query) && $query->num_rows() > 0) {
             $data = $query->result_array();
