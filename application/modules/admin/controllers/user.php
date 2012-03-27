@@ -56,26 +56,16 @@ class User extends MY_Inner_Admin_Controller {
         }
         $object = array_merge($object, array('password' => '', 'password_confirm' => ''));
 
-        $result = array();
-        foreach ($object as $key => $val) {
-            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
-            $value = array('name' => $key, 'value' => $val);
-
-            if ($key == 'user_id' || ($key == 'email' && !empty($val))) {
-                $value = array_merge($value, array('disabled' => 'disabled'));
-            }
-
-            if ($key == 'password' || $key == 'password_confirm') {
-                $value = form_password($value);
-            } else if ($key == 'user_status') {
-                $roles = $this->_get_status();
-                $value = form_dropdown($key, $roles, $val);
-            } else {
-                $value = form_input($value);
-            }
-            $result[] = array($label => $value);
+        $specific_input = array(
+            'password' => array('input' => 'password'),
+            'password_confirm' => array('input' => 'password'),
+            'user_status' => array('input' => 'dropdown', 'options' => $this->_get_status())
+        );
+        if ($id !== FALSE) {
+            $specific_input['email'] = array('input' => 'label');
         }
-        return $result;
+        unset($object[$this->data['type'] . '_id']);
+        return $this->parse_object_field($object, $specific_input);
     }
 
     protected function get_object($id = FALSE) {

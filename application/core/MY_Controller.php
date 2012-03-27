@@ -332,6 +332,9 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
                     case 'none':
                         $value = $value['value'];
                         break;
+                    case 'password':
+                        $value = form_password($value['name']);
+                        break;
                     case 'radio':
                         $value = '';
                         foreach ($specific_input[$key]['options'] as $radio_val => $radio_display) {
@@ -343,7 +346,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
                         break;
                 }
             } else {
-                $value = form_input($value);
+                $value = form_input($value, '', 'autocomplete="off"');
             }
             $result[] = array($label => $value);
         }

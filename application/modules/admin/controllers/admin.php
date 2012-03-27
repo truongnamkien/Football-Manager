@@ -53,27 +53,17 @@ class Admin extends MY_Inner_Admin_Controller {
             $object = $this->get_object($id);
         }
         $object = array_merge($object, array('password' => '', 'password_confirm' => ''));
-
-        $result = array();
-        foreach ($object as $key => $val) {
-            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
-            $value = array('name' => $key, 'value' => $val);
-
-            if ($key == 'admin_id' || ($key == 'username' && !empty($val))) {
-                $value = array_merge($value, array('disabled' => 'disabled'));
-            }
-
-            if ($key == 'password' || $key == 'password_confirm') {
-                $value = form_password($value);
-            } else if ($key == 'role') {
-                $roles = $this->_get_roles();
-                $value = form_dropdown($key, $roles, $val);
-            } else {
-                $value = form_input($value);
-            }
-            $result[] = array($label => $value);
+        
+        $specific_input = array(
+            'password' => array('input' => 'password'),
+            'password_confirm' => array('input' => 'password'),
+            'role' => array('input' => 'dropdown', 'options' => $this->_get_roles())
+        );
+        if ($id !== FALSE) {
+            $specific_input['username'] = array('input' => 'label');
         }
-        return $result;
+        unset($object[$this->data['type'] . '_id']);
+        return $this->parse_object_field($object, $specific_input);
     }
 
     protected function get_object($id = FALSE) {

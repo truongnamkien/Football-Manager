@@ -78,23 +78,10 @@ class Building_Type extends MY_Inner_Admin_Controller {
             $object = $this->get_object($id);
         }
 
-        $result = array();
-        foreach ($object as $key => $val) {
-            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
-            $value = array('name' => $key, 'value' => $val);
-
-            if ($key == 'building_type_id' || ($key == 'name' && !empty($val))) {
-                $value = array_merge($value, array('disabled' => 'disabled'));
-            }
-
-            if ($key == 'type') {
-                $roles = $this->_get_types();
-                $value = form_dropdown($key, $roles, $val);
-            } else {
-                $value = form_input($value);
-            }
-            $result[] = array($label => $value);
-        }
-        return $result;
+        $specific_input = array(
+            'type' => array('input' => 'dropdown', 'options' => $this->_get_types())
+        );
+        unset($object[$this->data['type'] . '_id']);
+        return $this->parse_object_field($object, $specific_input);
     }
 }

@@ -11,7 +11,7 @@ class Admin_Navigator extends MY_Admin_Controller {
 
     public function _main_nav() {
         $data['main_navs'] = array(
-            'system' => array('admin', 'building_type', 'npc', 'name'),
+            'system' => array('admin', 'building_type', 'npc', 'name', 'formation'),
             'user' => array('user'),
         );
 

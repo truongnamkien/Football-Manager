@@ -36,20 +36,11 @@ class Name extends MY_Inner_Admin_Controller {
             $object = $this->get_object($id);
         }
 
-        $result = array();
-        foreach ($object as $key => $val) {
-            $label = form_label(lang($this->data['type'] . '_' . $key), $key);
-            $value = array('name' => $key, 'value' => $val);
-
-            if ($key == 'category') {
-                $roles = $this->_get_types();
-                $value = form_dropdown($key, $roles, $val);
-            } else {
-                $value = form_input($value);
-            }
-            $result[] = array($label => $value);
-        }
-        return $result;
+        $specific_input = array(
+            'category' => array('input' => 'dropdown', 'options' => $this->_get_types())
+        );
+        unset($object[$this->data['type'] . '_id']);
+        return $this->parse_object_field($object, $specific_input);
     }
 
     protected function _main_nav($page = 'index', $id = '') {
