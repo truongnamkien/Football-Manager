@@ -11,12 +11,9 @@ class Team_Formation_Model extends Abstract_Model {
         $this->database = 'team_formation';
     }
 
-    public function get_formation_of_team($team_id) {
-        return $this->get_where(array('team_id' => $team_id));
-    }
-
+    
     protected function check_existed($data) {
-        $npc = $this->get_formation_of_team($data['team_id']);
+        $npc = $this->get_where(array('team_id' => $data['team_id']));
         if ($npc['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }

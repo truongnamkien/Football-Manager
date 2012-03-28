@@ -17,4 +17,18 @@ class Formation_Library extends Abstract_Library {
         parent::$CI->load->language(array('formation'));
     }
 
+    /**
+     * Get the formation with name
+     * @param type $name
+     * @return type 
+     * 
+     */
+    public function get_formation_by_name($name) {
+        $formation = $this->user_model->get_where(array('name' => $name));
+        if ($formation['return_code'] == API_SUCCESS && !empty($formation['data'])) {
+            return $formation['data'];
+        }
+        return FALSE;
+    }
+
 }

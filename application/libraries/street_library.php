@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Street_Library extends Abstract_Library {
@@ -178,6 +179,46 @@ class Street_Library extends Abstract_Library {
 
     protected function after_get_callback($street) {
         return $this->get_my_street_info($street);
+    }
+
+    /**
+     * Get the street with the coordinate
+     * @param type $x_coor
+     * @param type $y_coor
+     * @return type 
+     */
+    public function get_street_by_coordinate($x_coor, $y_coor) {
+        $street = parent::$CI->street_model->get_where(array('x_coor' => $x_coor, 'y_coor' => $y_coor));
+        if ($street['return_code'] == API_SUCCESS && !empty($street['data'])) {
+            return $street['data'];
+        }
+        return FALSE;
+    }
+
+    /**
+     * Get the street in the area
+     * @param type $min_x
+     * @param type $max_x
+     * @param type $min_y
+     * @param type $max_y
+     * @return type 
+     */
+    public function get_street_by_area($min_x, $max_x, $min_y, $max_y) {
+        $streets = parent::$CI->street_model->get_where('x_coor >= ' . $min_x . ' and x_coor <= ' . $max_x . ' and y_coor >= ' . $min_y . ' and y_coor <= ' . $max_y);
+        if ($streets['return_code'] == API_SUCCESS && !empty($streets['data'])) {
+            $streets = $streets['data'];
+            if (isset($streets['street_id'])) {
+                $streets = array($streets);
+            }
+            $result = array();
+            foreach ($streets as $street) {
+                $x_coor = $street['x_coor'] % self::AREA_WIDTH;
+                $y_coor = $street['y_coor'] % self::AREA_HEIGHT;
+                $result[$x_coor][$y_coor] = $street;
+            }
+            return $result;
+        }
+        return FALSE;
     }
 
 }

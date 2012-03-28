@@ -11,17 +11,14 @@ class NPC_Model extends Abstract_Model {
         $this->database = 'npc';
     }
 
-    public function get_npc_with_street($street_id) {
-        return $this->get_where(array('street_id' => $street_id));
-    }
-
     protected function check_existed($data) {
-        $npc = $this->get_npc_with_street($data['street_id']);
+        $npc = $this->get_where(array('street_id' => $data['street_id']));
         if ($npc['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }
 
         return $this->_ret(API_SUCCESS, FALSE);
     }
+
 }
 

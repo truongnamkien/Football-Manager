@@ -17,6 +17,11 @@ class Cooldown_Model extends Abstract_Model {
         $this->database = 'cooldown';
     }
 
+    /**
+     * Get cooldown objects of the street
+     * @param type $street_id
+     * @return type 
+     */
     public function get_cooldown_by_street($street_id) {
         return $this->get_where(array('street_id' => $street_id));
     }

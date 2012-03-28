@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class NPC_Library extends Abstract_Library {
@@ -29,6 +30,19 @@ class NPC_Library extends Abstract_Library {
         foreach ($npc_list as $npc) {
             $this->remove($npc['npc_id']);
         }
+    }
+
+    /**
+     * Get NPC of the street
+     * @param type $street_id
+     * @return type 
+     */
+    public function get_npc_with_street($street_id) {
+        $street = $this->user_model->get_where(array('street_id' => $street_id));
+        if ($street_id['return_code'] == API_SUCCESS && !empty($street_id['data'])) {
+            return $street_id['data'];
+        }
+        return FALSE;
     }
 
 }

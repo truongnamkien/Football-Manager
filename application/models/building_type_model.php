@@ -21,10 +21,6 @@ class Building_Type_Model extends Abstract_Model {
         $this->database = 'building_type';
     }
 
-    public function delete($id) {
-        return;
-    }
-
     protected function check_existed($data) {
         return $this->_ret(API_SUCCESS, FALSE);
     }

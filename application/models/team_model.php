@@ -11,12 +11,9 @@ class Team_Model extends Abstract_Model {
         $this->database = 'team';
     }
     
-    public function get_team_by_name($team_name) {
-        return $this->get_where(array('team_name' => $team_name));
-    }
-
     protected function check_existed($data) {
-        $street = $this->get_team_by_name($data['team_name']);
+        $street = $this->get_where(array('team_name' => $data['team_name']));
+        
         if ($street['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }

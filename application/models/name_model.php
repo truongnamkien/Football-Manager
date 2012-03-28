@@ -14,6 +14,12 @@ class Name_Model extends Abstract_Model {
         $this->database = 'name';
     }
     
+    /**
+     * Get the list of name objects of a category
+     * @param type $category
+     * @param type $name
+     * @return type 
+     */
     public function get_name($category, $name = '') {
         $filter = array('category' => $category);
         if (!empty($name)) {

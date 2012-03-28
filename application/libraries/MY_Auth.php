@@ -44,10 +44,10 @@ class MY_Auth {
      */
     public function login($email, $password, $is_admin = FALSE) {
         if (!$is_admin) {
-            $user_info = $this->CI->user_model->get_user_by_email($email);
+            $user_info = $this->CI->user_model->get_where(array('email' => $email));
             $password = $this->CI->user_model->_hash_password($password);
         } else {
-            $user_info = $this->CI->admin_model->get_by_username($email);
+            $user_info = $this->CI->admin_model->get_where(array('username' => $email));
             $password = $this->CI->admin_model->_hash_password($password);
         }
         if ($user_info['return_code'] == API_SUCCESS && !empty($user_info['data'])) {

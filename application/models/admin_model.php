@@ -22,6 +22,11 @@ class Admin_Model extends Abstract_Model {
         $this->database = 'admin';
     }
 
+    /**
+     * Create admin with encoded password
+     * @param type $data
+     * @return type 
+     */
     public function create($data) {
         $salt = FALSE;
 
@@ -34,6 +39,10 @@ class Admin_Model extends Abstract_Model {
         return parent::create($data);
     }
 
+    /**
+     * Delete admin with id or object
+     * @param type $admin 
+     */
     public function delete($admin) {
         if (is_array($admin)) {
             $admin_id = $admin['admin_id'];
@@ -47,10 +56,13 @@ class Admin_Model extends Abstract_Model {
         }
     }
 
-    public function get_by_username($username) {
-        return $this->get_where(array('username' => $username));
-    }
-
+    /**
+     * Encode and change new password
+     * @param type $id
+     * @param type $old_pass
+     * @param type $new_pass
+     * @return type 
+     */
     public function change_password($id, $old_pass, $new_pass) {
         $old_salt = FALSE;
         $old = $this->_hash_password($old_pass, $old_salt);
@@ -61,6 +73,13 @@ class Admin_Model extends Abstract_Model {
         return $this->update($id, array('password' => $new_pass), array('password' => $old));
     }
 
+    /**
+     * Update admin with encoded password
+     * @param type $id
+     * @param type $update_data
+     * @param type $filter
+     * @return type 
+     */
     public function update($id, $update_data, $filter = array()) {
         unset($update_data['username']);
         unset($update_data['admin_id']);
@@ -73,6 +92,12 @@ class Admin_Model extends Abstract_Model {
         return parent::update($id, $update_data, $filter);
     }
 
+    /**
+     * Encode password
+     * @param type $password
+     * @param type $salt
+     * @return type 
+     */
     public function _hash_password($password, $salt = FALSE) {
         if (empty($password)) {
             return FALSE;
@@ -85,8 +110,13 @@ class Admin_Model extends Abstract_Model {
         }
     }
 
+    /**
+     * Check as if username existed
+     * @param type $data
+     * @return type 
+     */
     protected function check_existed($data) {
-        $admin_info = $this->get_by_username($data['username']);
+        $admin_info = $this->get_where(array('username' => $data['username']));
         if ($admin_info['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }

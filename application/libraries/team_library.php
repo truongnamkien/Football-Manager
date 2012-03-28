@@ -39,10 +39,23 @@ class Team_Library extends Abstract_Library {
         }
 
         // Xóa formation của team
-        $formations = parent::$CI->team_formation_library->get_by_team($id);
+        $formations = parent::$CI->team_formation_library->get_formation_of_team($id);
         foreach ($formations as $formation) {
             parent::$CI->team_formation_library->remove($formation['team_formation_id']);
         }
+    }
+
+    /**
+     * Get the team with the name
+     * @param type $team_name
+     * @return type 
+     */
+    public function get_team_by_name($team_name) {
+        $team = $this->team_model->get_where(array('team_name' => $team_name));
+        if ($team['return_code'] == API_SUCCESS && !empty($team['data'])) {
+            return $team['data'];
+        }
+        return FALSE;
     }
 
 }

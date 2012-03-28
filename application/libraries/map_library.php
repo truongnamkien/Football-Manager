@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Map_Library extends Abstract_Library {
@@ -12,6 +13,7 @@ class Map_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
         parent::$CI->load->model(array('street_model'));
+        parent::$CI->load->library(array('street_library'));
     }
 
     public function create($data) {
@@ -67,7 +69,7 @@ class Map_Library extends Abstract_Library {
         $x_coor = $street['x_coor'] % Street_Model::AREA_WIDTH;
         $y_coor = $street['y_coor'] % Street_Model::AREA_HEIGHT;
         $streets[$x_coor][$y_coor] = $street;
-        
+
         $key = $this->_get_key('cache.object.info', array('$id' => $area));
         parent::$CI->cache->delete($key);
         parent::$CI->cache->save($key, $streets);
@@ -93,11 +95,7 @@ class Map_Library extends Abstract_Library {
         $min_y = $row * Street_Model::AREA_HEIGHT;
         $max_x = $min_x + Street_Model::AREA_WIDTH - 1;
         $max_y = $min_y + Street_Model::AREA_HEIGHT - 1;
-        $streets = parent::$CI->street_model->get_street_by_area($min_x, $max_x, $min_y, $max_y);
-        if ($streets['return_code'] != API_SUCCESS || empty($streets['data'])) {
-            return array();
-        }
-        $streets = $streets['data'];
+        $streets = parent::$CI->street_library->get_street_by_area($min_x, $max_x, $min_y, $max_y);
         parent::$CI->cache->save($key, $streets);
         return $streets;
     }
@@ -140,11 +138,8 @@ class Map_Library extends Abstract_Library {
             return FALSE;
         }
 
-        $street = parent::$CI->street_model->get_street_by_coordinate($x_coor, $y_coor);
-        if ($street['return_code'] == API_SUCCESS && !empty($street['data'])) {
-            return FALSE;
-        }
-        return TRUE;
+        $street = parent::$CI->street_library->get_street_by_coordinate($x_coor, $y_coor);
+        return $street === FALSE;
     }
 
 }

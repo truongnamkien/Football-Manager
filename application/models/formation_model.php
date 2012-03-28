@@ -11,12 +11,8 @@ class Formation_Model extends Abstract_Model {
         $this->database = 'formation';
     }
 
-    public function get_formation_by_name($name) {
-        return $this->get_where(array('name' => $name));
-    }
-
     protected function check_existed($data) {
-        $npc = $this->get_formation_by_name($data['name']);
+        $npc = $this->get_where(array('name' => $data['name']));
         if ($npc['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }

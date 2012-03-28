@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Team_Formation_Library extends Abstract_Library {
@@ -13,8 +14,13 @@ class Team_Formation_Library extends Abstract_Library {
         );
         parent::$CI->load->model(array('team_formation_model'));
     }
- 
-    public function get_by_team($tream_id) {
+
+    /**
+     * Get the formation of the team
+     * @param type $team_id
+     * @return type 
+     */
+    public function get_formation_of_team($tream_id) {
         $formations = self::$CI->team_formation_model->get_where(array('team_id' => $team_id));
         if ($formations['return_code'] == API_SUCCESS && !empty($players['data'])) {
             $formations = $object['data'];
@@ -24,6 +30,6 @@ class Team_Formation_Library extends Abstract_Library {
             return $formations;
         }
         return FALSE;
-        
     }
+
 }

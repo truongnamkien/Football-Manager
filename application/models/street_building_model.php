@@ -14,6 +14,11 @@ class Street_Building_Model extends Abstract_Model {
         $this->load->model('building_type_model');
     }
 
+    /**
+     * Create building object of a street
+     * @param type $building_data
+     * @return type 
+     */
     public function create($building_data) {
         $data = array(
             'street_id' => $building_data['street_id'],

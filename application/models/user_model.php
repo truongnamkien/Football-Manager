@@ -23,6 +23,11 @@ class User_Model extends Abstract_Model {
         $this->database = 'users';
     }
 
+    /**
+     * Create user with encoded password
+     * @param type $data
+     * @return type 
+     */
     public function create($data) {
         $salt = FALSE;
 
@@ -34,6 +39,13 @@ class User_Model extends Abstract_Model {
         return parent::create($data);
     }
 
+    /**
+     * Encode and change password
+     * @param type $user_id
+     * @param type $old_pass
+     * @param type $new_pass
+     * @return type
+     */
     public function change_password($user_id, $old_pass, $new_pass) {
         $old_salt = FALSE;
         $old = $this->_hash_password($old_pass, $old_salt);
@@ -44,6 +56,13 @@ class User_Model extends Abstract_Model {
         return $this->update($id, array('password' => $new_pass), array('password' => $old));
     }
 
+    /**
+     * Update user profile with encoded password
+     * @param type $id
+     * @param type $update_data
+     * @param type $filter
+     * @return type 
+     */
     public function update($id, $update_data, $filter = array()) {
         unset($update_data['email']);
         unset($update_data['password_confirm']);
@@ -54,10 +73,12 @@ class User_Model extends Abstract_Model {
         return parent::update($id, $update_data, $filter);
     }
 
-    public function get_user_by_email($email) {
-        return $this->get_where(array('email' => $email));
-    }
-
+    /**
+     *  Encode password of user
+     * @param type $password
+     * @param type $salt
+     * @return type 
+     */
     public function _hash_password($password, $salt = FALSE) {
         if (empty($password)) {
             return FALSE;
@@ -71,7 +92,7 @@ class User_Model extends Abstract_Model {
     }
 
     protected function check_existed($data) {
-        $user_info = $this->get_user_by_email($data['email']);
+        $user_info = $this->get_where(array('email' => $data['email']));
         if ($user_info['return_code'] == API_SUCCESS) {
             return $this->_ret(API_SUCCESS, TRUE);
         }
