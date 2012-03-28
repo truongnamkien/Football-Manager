@@ -8,17 +8,20 @@ class Authen extends MY_Outer_Controller {
         parent::__construct();
         $this->load->model(array('user_model', 'team_model'));
         $this->load->library('user_library');
+        if ($this->my_auth->logged_in()) {
+            redirect(site_url('street'));
+        }
     }
 
     public function index() {
         $this->login();
     }
 
+    /**
+     * Trang đăng ký
+     */
     public function register() {
-
-        if ($this->my_auth->logged_in()) {
-            redirect(site_url('street'));
-        }
+        $this->set_title(lang('authen_register'));
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
                 ->set_rules('email', 'lang:authen_email', 'trim|required|valid_email|max_length[80]|unique[users.email]')
@@ -52,10 +55,11 @@ class Authen extends MY_Outer_Controller {
         $this->load->view('frm_authen_register', $data);
     }
 
+    /**
+     * Trang đăng nhập
+     */
     public function login() {
-        if ($this->my_auth->logged_in()) {
-            redirect(site_url('street'));
-        }
+        $this->set_title(lang('authen_login'));
 
         // set rule.
         $this->form_validation->set_rules('email', 'lang:authen_email', 'trim|required|valid_email');
@@ -78,7 +82,7 @@ class Authen extends MY_Outer_Controller {
                 }
                 redirect(site_url('street'));
             } else {
-                $data['login_failed'] = array(
+                $data['error'] = array(
                     'title' => $this->lang->line('authen_login_fail'),
                     'messages' => array(
                         $this->lang->line('authen_login_fail_helper'),

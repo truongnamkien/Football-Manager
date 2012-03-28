@@ -52,7 +52,7 @@
         <div id="body-wrapper">
             <div id="sidebar">
                 <div id="sidebar-wrapper">
-                    <h1 id="sidebar-title"><?php echo lang('manager_title'); ?></h1>
+                    <h1 id="sidebar-title"><?php echo $PAGE_TITLE ?></h1>
 
                     <div id="profile-links">
                     </div>        

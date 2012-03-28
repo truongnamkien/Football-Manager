@@ -4,6 +4,9 @@
 
 class Welcome extends MY_Outer_Controller {
 
+    /**
+     * Trang giới thiệu game
+     */
     public function index() {
         if ($this->my_auth->logged_in()) {
             redirect('street');
