@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2012 at 04:02 AM
+-- Generation Time: Mar 28, 2012 at 09:03 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -55,10 +55,10 @@ CREATE TABLE IF NOT EXISTS `building_type` (
   `building_type_id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `description` varchar(1000) DEFAULT NULL,
-  `beginning_fee` int(12) DEFAULT NULL,
-  `fee_rate` int(8) DEFAULT NULL,
-  `effect` int(12) DEFAULT NULL,
-  `effect_rate` int(8) DEFAULT NULL,
+  `beginning_fee` int(11) DEFAULT NULL,
+  `fee_rate` tinyint(4) DEFAULT NULL,
+  `effect` int(11) DEFAULT NULL,
+  `effect_rate` tinyint(4) DEFAULT NULL,
   `street_cell` tinyint(4) DEFAULT NULL,
   `type` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`building_type_id`),
@@ -88,6 +88,32 @@ CREATE TABLE IF NOT EXISTS `cooldown` (
   PRIMARY KEY (`cooldown_id`),
   KEY `street_id` (`street_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `formation`
+--
+
+CREATE TABLE IF NOT EXISTS `formation` (
+  `formation_id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `for_swing` tinyint(4) DEFAULT NULL,
+  `for_center` tinyint(4) DEFAULT NULL,
+  `mid_swing` tinyint(4) DEFAULT NULL,
+  `mid_center` tinyint(4) DEFAULT NULL,
+  `def_swing` tinyint(4) DEFAULT NULL,
+  `def_center` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`formation_id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `formation`
+--
+
+INSERT INTO `formation` (`formation_id`, `name`, `for_swing`, `for_center`, `mid_swing`, `mid_center`, `def_swing`, `def_center`) VALUES
+(1, '4 - 3 - 3 A', 0, 10, 0, 12, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -276,17 +302,17 @@ CREATE TABLE IF NOT EXISTS `player` (
   `first_name` varchar(30) NOT NULL,
   `middle_name` varchar(30) NOT NULL,
   `last_name` varchar(30) NOT NULL,
-  `position` varchar(10) CHARACTER SET latin1 NOT NULL COMMENT 'vị trí',
-  `condition` int(10) NOT NULL COMMENT 'thể trạng',
-  `manner` int(10) NOT NULL COMMENT 'phong độ',
-  `physical` int(10) NOT NULL COMMENT 'thể lực',
-  `flexibility` int(10) NOT NULL COMMENT 'dẻo dai',
-  `goalkeeper` int(10) NOT NULL COMMENT 'bắt bóng',
-  `defence` int(10) NOT NULL COMMENT 'phòng thủ',
-  `shooting` int(10) NOT NULL COMMENT 'dứt điểm',
-  `passing` int(10) NOT NULL COMMENT 'chuyền bóng',
-  `thwart` int(10) NOT NULL COMMENT 'cản phá',
-  `speed` int(10) NOT NULL,
+  `position` varchar(10) NOT NULL COMMENT 'vị trí',
+  `condition` int(11) NOT NULL COMMENT 'thể trạng',
+  `manner` int(11) NOT NULL COMMENT 'phong độ',
+  `physical` int(11) NOT NULL COMMENT 'thể lực',
+  `flexibility` int(11) NOT NULL COMMENT 'dẻo dai',
+  `goalkeeper` int(11) NOT NULL COMMENT 'bắt bóng',
+  `defence` int(11) NOT NULL COMMENT 'phòng thủ',
+  `shooting` int(11) NOT NULL COMMENT 'dứt điểm',
+  `passing` int(11) NOT NULL COMMENT 'chuyền bóng',
+  `thwart` int(11) NOT NULL COMMENT 'cản phá',
+  `speed` int(11) NOT NULL,
   PRIMARY KEY (`player_id`),
   KEY `team_id` (`team_id`),
   KEY `position` (`position`)
@@ -300,8 +326,8 @@ CREATE TABLE IF NOT EXISTS `player` (
 
 CREATE TABLE IF NOT EXISTS `streets` (
   `street_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `x_coor` int(8) DEFAULT NULL,
-  `y_coor` int(8) DEFAULT NULL,
+  `x_coor` int(11) DEFAULT NULL,
+  `y_coor` int(11) DEFAULT NULL,
   `street_type` varchar(32) DEFAULT NULL,
   `team_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`street_id`),
@@ -337,6 +363,31 @@ CREATE TABLE IF NOT EXISTS `team` (
   `team_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`team_id`),
   UNIQUE KEY `team_name` (`team_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `team_formation`
+--
+
+CREATE TABLE IF NOT EXISTS `team_formation` (
+  `team_formation_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `team_id` bigint(20) NOT NULL,
+  `formation_id` int(11) NOT NULL,
+  `goal_keeper` bigint(20) DEFAULT NULL,
+  `player_1` bigint(20) DEFAULT NULL,
+  `player_2` bigint(20) DEFAULT NULL,
+  `player_3` bigint(20) DEFAULT NULL,
+  `player_4` bigint(20) DEFAULT NULL,
+  `player_5` bigint(20) DEFAULT NULL,
+  `player_6` bigint(20) DEFAULT NULL,
+  `player_7` bigint(20) DEFAULT NULL,
+  `player_8` bigint(20) DEFAULT NULL,
+  `player_9` bigint(20) DEFAULT NULL,
+  `player_10` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`team_formation_id`),
+  UNIQUE KEY `team_id` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
