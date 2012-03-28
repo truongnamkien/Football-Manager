@@ -377,6 +377,7 @@ ul.content-box-tabs li a.current
 {
     line-height: 1.3em;
     padding: 10px;
+    vertical-align: middle;
 }
 #main-content table tfoot td .bulk-actions
 {
@@ -994,3 +995,31 @@ textarea {  resize: none; color: #7B7B7B; overflow: auto}
 .lsDisc{list-style:disc;}
 .fLeft { float: left; }
 .fRight { float: right; }
+
+.wordWrap {
+    /*white-space: pre;           /* CSS 2.0 */
+    /*white-space: pre-wrap;      /* CSS 2.1 */
+    /*white-space: pre-line;      /* CSS 3.0 */
+    white-space: normal;
+    /*white-space: -pre-wrap;     /* Opera 4-6 */
+    /*white-space: -o-pre-wrap;   /* Opera 7 */
+    /* white-space: -moz-pre-wrap; /* Mozilla */
+    /*white-space: -hp-pre-wrap;  /* HP Printers */
+    word-wrap: break-word;      /* IE 5+ */
+}
+
+.w70{width:70px;} .w80{width:80px;} .w90{width:90px;} .w95{width:95px;} .w130{width:130px;} .w140{width:140px;} .w155{width:155px;} .w165{width:165px;} .w175{width:175px;} .w215{width:215px;} .w220{width: 220px;} .w225{width:225px} .w228{width: 228px;} .w230{width: 230px;} .w235{width:235px;} .w240{width:240px;} .w245{width: 245px;} .w250{width:250px;} .w288{width:288px;} .w290{width:290px;} .w291{width:291px} .w300{width:300px;} .w310{width:310px;} .w319{width: 319px;} .w320{width:320px;} .w355{width:355px;} .w370 { width: 373px;} .w340{width: 340px;} .w345{width: 345px;}  .w360{width:360px;} .w375{width:375px;} .w390 { width: 393px; } .w400{width:400px;} .w411 { width: 411px; } .w425{width:425px;} .w429 { width: 429px; }.w433{width:433px;} .w520{width:520px;} .w540{width:540px;} .w565{width:565px;} .w438{width: 438px;} .w449 { width: 449px; }.w450{width:450px;} .w455{width:455px} .w465{width:465px;} .w470{width:470px;} .w325{width:325px;} .w495{width:495px;} .w500{width:500px;} .w570{width: 570px;} .w595{width:595px;} .w625{width:625px;} .w635{width: 635px;} .w640{width: 640px;} .w695{width:695px;} .w718{width: 718px;} .w790{width: 790px;}
+
+.rounded { -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px }
+.rounded5 { -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px }
+.rounded8 { -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px }
+.rounded10 { -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px }
+
+.formation_demo {
+    width: 210px;
+}
+
+.formation_demo_area {
+    height: 48px;
+    width: 70px;
+}

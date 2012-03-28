@@ -44,8 +44,24 @@ if (!function_exists('lang')) {
         $CI = & get_instance();
         $line = $CI->lang->line($line);
 
-        if ($id != '') {
-            $line = '<label for="' . $id . '">' . $line . "</label>";
+        if ($line) {
+            $args = func_get_args();
+
+            if (count($args) > 1) {
+                if (is_array($args[2]) && count($args[2])) {
+                    foreach ($args[2] as $key => $value)
+                        $line = str_replace('%' . $key, $value, $line);
+                } else {
+                    // remove $line & $id
+                    array_shift($args);
+                    $args[0] = $line;
+                    $line = call_user_func_array('sprintf', $args);
+                }
+            }
+
+            if ($id != '') {
+                $line = '<label for="' . $id . '">' . $line . "</label>";
+            }
         }
 
         return $line;

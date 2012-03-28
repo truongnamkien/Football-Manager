@@ -13,11 +13,11 @@
 
     <div class="content-box-content">
         <div class="tab-content default-tab" style="display: block;">
-            <?php if (validation_errors()): ?>
+            <?php if (isset($error_msg) || validation_errors()): ?>
                 <div class="notification attention png_bg">
                     <a href="#" class="close"><img src="<?php echo asset_url('images/admin/icons/cross_grey_small.png'); ?>" title="Close this notification" alt="close" /></a>
                     <div>
-                        <?php echo validation_errors(); ?>
+                        <?php echo (isset($error_msg) ? $error_msg : validation_errors()); ?>
                     </div>
                 </div>
             <?php endif ?>

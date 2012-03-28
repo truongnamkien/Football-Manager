@@ -11,6 +11,7 @@ $lang['manager_user'] = 'Người chơi';
 $lang['manager_building_type'] = 'Công trình';
 $lang['manager_npc'] = 'NPC';
 $lang['manager_name'] = 'Dữ liệu tên';
+$lang['manager_formation'] = 'Đội hình mẫu';
 
 $lang['admin_mass_select_empty'] = 'Bạn chưa chọn gì cả!';
 $lang['admin_mass_select'] = 'Chọn';
