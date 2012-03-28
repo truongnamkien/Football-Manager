@@ -593,7 +593,7 @@ body#login
 {
     margin: 0 auto;
     text-align: left;
-    width: 300px;
+    width: 400px;
 }
 #login-wrapper #login-content label
 {
@@ -603,7 +603,8 @@ body#login
     font-size: 14px;
     font-weight: normal;
     padding: 0;
-    width: 70px;
+    width: 150px;
+    margin-right: 20px;
 }
 #login-wrapper #login-content input
 {
@@ -1022,4 +1023,8 @@ textarea {  resize: none; color: #7B7B7B; overflow: auto}
 .formation_demo_area {
     height: 48px;
     width: 70px;
+}
+
+span.required {
+    color: #C53727;
 }

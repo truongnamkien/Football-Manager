@@ -1,4 +1,5 @@
 <?php
+
 $lang['authen_register'] = 'Đăng ký';
 $lang['authen_login'] = 'Đăng nhập';
 $lang['authen_logout'] = 'Thoát';

@@ -96,7 +96,7 @@ $autoload['config'] = array('asset');
 |
 */
 
-$autoload['language'] = array('authen');
+$autoload['language'] = array('authen', 'general');
 
 
 /*

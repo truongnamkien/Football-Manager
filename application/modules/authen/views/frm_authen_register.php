@@ -1,106 +1,86 @@
-<div>
+<div class="pv15 mt80">
     <h2><?php echo lang('authen_register'); ?></h2>
 
-    <!-- rightbox: register form -->
-    <div class="uiBox2 grid_12 prefix_1 suffix_2 pv15">
-        <!-- begin validation error -->
-        <?php if (isset($error)): ?>
-            <div class="uiBox2Message pv20 mb15">            
-                <?php foreach ($error['messages'] as $e) : ?>
-                    <?php echo '<p>' . $e . '</p>'; ?>
-                <?php endforeach ?>
-            </div>                            
+    <div class="pv15">
+        <?php if (isset($error) || validation_errors()): ?>
+            <div class="notification attention png_bg mb20">
+                <div>
+                    <?php if (isset($error)): ?>
+                        <?php foreach ($error['messages'] as $e) : ?>
+                            <?php echo '<p>' . $e . '</p>'; ?>
+                        <?php endforeach ?>
+                    <?php else: ?>
+                        <?php echo validation_errors(); ?>
+                    <?php endif ?>        
+                </div>
+            </div>
         <?php endif; ?>  
-        <!-- end validation error -->
 
-        <?php
-        echo form_open(site_url('authen/register'), array(
-            'id' => 'registerForm',
-        ));
-        ?>
-        <div class="uiBox2Form">
-            <!-- LAST NAME -->
-            <div id="display_name">
-                <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_display_name'); ?>
-                    <span class="require">*</span>                    
-                </label>
-                <div class="contentField">
-                    <input name="display_name" type="text" value="<?php echo set_value('display_name') ?>" />
-                    <?php if (form_error('display_name')): ?>
-                        <?php echo form_error('display_name', '<label class="error">', '</label>') ?>
-                    <?php endif; ?>   
-                </div>
+        <?php echo form_open(site_url('authen/register'), array('id' => 'registerForm')); ?>
+        <div class="ma10">
+            <label class="fs18 fwb fLeft">
+                <?php echo lang('authen_display_name'); ?>
+                <span class="required">*</span>                    
+            </label>
+            <div class="fLeft">
+                <input autocomplete="off" id="display_name" name="display_name" type="text" value="<?php echo set_value('display_name') ?>" />
             </div>
-            <!-- end field -->
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
 
-            <!-- EMAIL -->
-            <div id="email">
-                <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_email') ?>
-                    <span class="require">*</span>
-                </label>
-                <div class="contentField">
-                    <input name="email" id="email" type="text" value="<?php echo set_value('email') ?>" />
-                    <?php if (form_error('email')): ?>
-                        <?php echo form_error('email', '<label class="error">', '</label>') ?>
-                    <?php endif; ?>
-                </div>
+        <div class="ma10">
+            <label class="fs18 fwb fLeft">
+                <?php echo lang('authen_email') ?>
+                <span class="required">*</span>
+            </label>
+            <div class="fLeft">
+                <input autocomplete="off" name="email" id="email" type="text" value="<?php echo set_value('email') ?>" />
             </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
 
-            <!-- PASSWORD -->
-            <div class="uiBox2Field grid_6 alpha mb10">
-                <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_register_password'); ?>
-                    <span class="require">*</span>
-                </label>
-                <div class="contentField">
-                    <input name="password" type="password" value="<?php echo set_value('password') ?>"/>
-                    <?php if (form_error('password')): ?>
-                        <?php echo form_error('password', '<label class="error">', '</label>') ?>
-                    <?php endif; ?>
-                </div>
+        <div class="ma10">
+            <label class="fs18 fwb fLeft">
+                <?php echo lang('authen_password'); ?>
+                <span class="required">*</span>
+            </label>
+            <div class="fLeft">
+                <input autocomplete="off" id="password" name="password" type="password" value="<?php echo set_value('password') ?>"/>
             </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
 
-            <!-- PASSWORD CONFIRM -->
-            <div class="uiBox2Field grid_6 alpha mb10">
-                <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_password_confirm'); ?>
-                    <span class="require">*</span>
-                </label>
-                <div class="contentField">
-                    <input name="password_confirm" type="password" value="<?php echo set_value('password_confirm') ?>"/>
-                    <?php if (form_error('password_confirm')): ?>
-                        <?php echo form_error('password_confirm', '<label class="error">', '</label>') ?>
-                    <?php endif; ?>
-                </div>
+        <div class="ma10">
+            <label class="fs18 fwb fLeft">
+                <?php echo lang('authen_password_confirm'); ?>
+                <span class="required">*</span>
+            </label>
+            <div class="fLeft">
+                <input autocomplete="off" id="password_confirm" name="password_confirm" type="password" value="<?php echo set_value('password_confirm') ?>"/>
             </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
 
-            <!-- Team name -->
-            <div class="uiBox2Field grid_6 alpha mb10">
-                <label class="labelField fs18 fwb">
-                    <?php echo lang('authen_team_name'); ?>
-                    <span class="require">*</span>
-                </label>
+        <div class="ma10">
+            <label class="fs18 fwb fLeft">
+                <?php echo lang('authen_team_name'); ?>
+                <span class="required">*</span>
+            </label>
 
-                <div class="contentField">
-                    <input name="team_name" id="team_name" type="text" value="<?php echo set_value('team_name') ?>" />
-                    <?php if (form_error('team_name')): ?>
-                        <?php echo form_error('team_name', '<label class="error">', '</label>') ?>
-                    <?php endif; ?>
-                </div>
+            <div class="fLeft">
+                <input autocomplete="off" name="team_name" id="team_name" type="text" value="<?php echo set_value('team_name') ?>" />
             </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
 
-            <!-- uiBox2Field -->
-            <div class="uiBox2Field mb10">
-                <label class="labelField fs18 fwb fLeft"></label>
-                <div class="contentField">
-                    <button name="btnRegister" class="uiBtn" type="submit"><?php echo lang('authen_register'); ?></button>
-                </div>                    
-            </div><!-- end uiBox2Field -->
-
+        <div class="ma10 tac">
+            <button name="btnRegister" class="button" type="submit"><?php echo lang('authen_register'); ?></button>
         </div>
         <?php echo form_close(); ?>
     </div>
-    <!-- end rightbox-->
 </div>

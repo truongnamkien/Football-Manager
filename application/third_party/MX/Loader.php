@@ -135,7 +135,9 @@ class MX_Loader extends CI_Loader
 		$class = strtolower(end(explode('/', $library)));
 		
 		if (isset($this->_ci_classes[$class]) AND $_alias = $this->_ci_classes[$class])
-			return CI::$APP->$_alias;
+        {
+			return $_alias;
+        }
 			
 		($_alias = strtolower($object_name)) OR $_alias = $class;
 		

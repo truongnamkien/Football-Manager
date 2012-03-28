@@ -32,7 +32,7 @@ class MY_Auth {
             }
         } else if ($is_admin) {
             $username = $this->get_user_id(TRUE);
-            $admin_info = $this->CI->admin_model->get_by_username($username);
+            $admin_info = $this->CI->admin_model->get_where(array('username' => $username));
             if ($admin_info['return_code'] != API_SUCCESS || empty($admin_info['data'])) {
                 $this->logout();
                 redirect('admin_login');

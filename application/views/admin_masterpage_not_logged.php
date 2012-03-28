@@ -38,7 +38,7 @@
     <body id="login">
         <div id="login-wrapper" class="png_bg">
             <div id="login-top">
-                <h1><?php echo lang('manager_title') ?></h1>
+                <h1><?php echo $PAGE_TITLE ?></h1>
             </div>
 
             <div id="login-content">

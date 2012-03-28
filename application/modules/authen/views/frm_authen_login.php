@@ -30,7 +30,7 @@
 
     <!-- uiBox2Field -->
     <div class="uiBox2Field mb15">
-        <button type="submit" class="uiBtn fLeft"><?php echo lang('authen_login'); ?></button>
+        <button type="submit" class="button fLeft"><?php echo lang('authen_login'); ?></button>
         <ul class="loginFeatures fLeft ml15">
             <li>
                 <input value="1" type="checkbox" name="remember_me" class="fLeft mr5" />

@@ -5,8 +5,11 @@
 class Welcome extends MY_Outer_Controller {
 
     public function index() {
-        $user_id = $this->my_auth->get_user_id();
-        
+        if ($this->my_auth->logged_in()) {
+            redirect('street');
+        }
+
+        $this->set_title(lang('general_football'));
         $this->load->view('welcome_home_page');
     }
 

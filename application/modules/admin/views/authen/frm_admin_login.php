@@ -26,7 +26,7 @@
     <div class="clear"></div>
 
     <div class="uiBox2Field mb15">
-        <button type="submit" class="uiBtn fLeft"><?php echo lang('authen_login'); ?></button>
+        <button type="submit" class="button fRight"><?php echo lang('authen_login'); ?></button>
     </div>
     <?php echo form_close(); ?>
     <div class="clear"></div>

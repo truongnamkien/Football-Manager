@@ -19,20 +19,30 @@ class MY_Controller extends MX_Controller {
         $this->load->helper(array('html', 'MY_Date'));
     }
 
+    /**
+     * Set title of the page
+     * @param type $title 
+     */
     public function set_title($title) {
         $this->_global_vars['PAGE_TITLE'] = $title;
     }
 
+    /**
+     * Enable the masterview of the page
+     */
     public function enable_masterview() {
         $this->_masterview_enabled = TRUE;
     }
 
+    /**
+     * Disable the masterview of the page
+     */
     public function disable_masterview() {
         $this->_masterview_enabled = FALSE;
     }
 
     /**
-     *
+     * Collect the input data
      * @param type $params
      * @return type 
      */
@@ -106,6 +116,7 @@ class MY_Outer_Controller extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->_masterview_enabled = TRUE;
+        $this->_masterview = 'admin_masterpage_not_logged';
     }
 
 }
@@ -144,6 +155,9 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $this->data = array();
     }
 
+    /**
+     * Trang list
+     */
     public function index() {
         $data['objects'] = $this->get_all_objects();
         $data['type'] = $this->data['type'];
@@ -155,6 +169,10 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $this->load->view('list_view', $data);
     }
 
+    /**
+     * Trang show
+     * @param type $id 
+     */
     public function show($id = FALSE) {
         $data['object'] = $this->get_object($id);
         $data['id'] = $id;
@@ -177,6 +195,9 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         redirect(site_url('admin/' . $this->data['type']));
     }
 
+    /**
+     * Thực hiện action với số lượng lớn object
+     */
     public function mass() {
         $params = $this->handle_post_inputs();
         $ids = explode(',', $params['ids']);
@@ -191,6 +212,10 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         redirect(site_url('admin/' . $this->data['type']));
     }
 
+    /**
+     * Xử lý trang create/edit object
+     * @param string $id
+     */
     protected function create_update($id = FALSE) {
         $this->data['action'] = (empty($id) ? 'create' : 'update');
         if (!empty($id)) {
