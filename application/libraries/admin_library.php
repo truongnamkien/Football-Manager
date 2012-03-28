@@ -15,8 +15,4 @@ class Admin_Library extends Abstract_Library {
         parent::$CI->load->model(array('admin_model'));
     }
 
-    public function get($id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array());
-    }
-
 }

@@ -40,7 +40,7 @@ abstract class Abstract_Library {
             self::$CI->cache->save($key, $object);
             return $object;
         }
-        return NULL;
+        return FALSE;
     }
 
     public function create($data) {
@@ -52,7 +52,7 @@ abstract class Abstract_Library {
             $id = $object[get_object_key($object, $this->type)];
             return $this->get($id, TRUE);
         }
-        return NULL;
+        return FALSE;
     }
 
     public function update($id, $data) {
@@ -61,7 +61,7 @@ abstract class Abstract_Library {
         if ($object['return_code'] == API_SUCCESS) {
             return $this->get($id, TRUE);
         }
-        return NULL;
+        return FALSE;
     }
 
     public function remove($id) {

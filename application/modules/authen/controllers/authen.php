@@ -37,7 +37,7 @@ class Authen extends MY_Outer_Controller {
             $user_info = $this->user_library->create($collect);
 
             //Dang ky thanh cong, goi email yeu cau verify             
-            if ($user_info != NULL) {
+            if (!empty($user_info)) {
                 $this->my_auth->login($collect['email'], $collect['password']);
                 redirect(site_url('street'));
             } else {

@@ -74,7 +74,7 @@ class Building_Type extends MY_Inner_Admin_Controller {
             'fee_rate' => '',
             'type' => '',
         );
-        if ($id != FALSE) {
+        if (!empty($id)) {
             $object = $this->get_object($id);
         }
 

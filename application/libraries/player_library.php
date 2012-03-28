@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Player_Library extends Abstract_Library {
@@ -20,10 +21,26 @@ class Player_Library extends Abstract_Library {
         return parent::get($id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
+    public function get_by_team($team_id) {
+        $players = self::$CI->player_model->get_where(array('team_id' => $team_id));
+        if ($players['return_code'] == API_SUCCESS && !empty($players['data'])) {
+            $players = $object['data'];
+            if (isset($players['player_id'])) {
+                $players = array($players);
+            }
+
+            foreach ($players as &$player) {
+                $player = $this->get_player_strength($player);
+            }
+            return $players;
+        }
+        return FALSE;
+    }
+
     protected function after_get_callback($player) {
         return $this->get_player_strength($player);
     }
-    
+
     private function get_player_strength($player) {
         $indexes = parent::$CI->config->item('player_index_list', 'player');
         $total = 0;

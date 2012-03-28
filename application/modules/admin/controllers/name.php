@@ -32,7 +32,7 @@ class Name extends MY_Inner_Admin_Controller {
             'name' => '',
             'category' => '',
         );
-        if ($id != FALSE) {
+        if (!empty($id)) {
             $object = $this->get_object($id);
         }
 

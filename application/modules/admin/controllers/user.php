@@ -51,7 +51,7 @@ class User extends MY_Inner_Admin_Controller {
             'street_id' => '',
             'balance' => ''
         );
-        if ($id != FALSE) {
+        if (!empty($id)) {
             $object = $this->get_object($id);
         }
         $object = array_merge($object, array('password' => '', 'password_confirm' => ''));
@@ -61,7 +61,7 @@ class User extends MY_Inner_Admin_Controller {
             'password_confirm' => array('input' => 'password'),
             'user_status' => array('input' => 'dropdown', 'options' => $this->_get_status())
         );
-        if ($id !== FALSE) {
+        if (!empty($id)) {
             $specific_input['email'] = array('input' => 'label');
         }
         unset($object[$this->data['type'] . '_id']);

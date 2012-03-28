@@ -16,10 +16,6 @@ class NPC_Library extends Abstract_Library {
         parent::$CI->load->library(array('street_library'));
     }
 
-    public function get($id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array());
-    }
-
     public function remove($id) {
         $npc = $this->get($id);
         parent::remove($id);

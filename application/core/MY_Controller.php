@@ -192,8 +192,8 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     protected function create_update($id = FALSE) {
-        $this->data['action'] = ($id == FALSE ? 'create' : 'update');
-        if ($id != FALSE) {
+        $this->data['action'] = (empty($id) ? 'create' : 'update');
+        if (!empty($id)) {
             $this->data['id'] = $id;
         }
         $this->data['form_data'] = $this->prepare_object($id);
@@ -201,7 +201,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         $this->form_validation->set_rules($validation_rules);
 
         if ($this->form_validation->run() == FALSE) {
-            if($id == FALSE) {
+            if (empty($id)) {
                 $id = '';
             }
             $this->data['main_nav'] = $this->_main_nav($this->data['action'], $id);
@@ -243,12 +243,12 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     }
 
     protected function get_object($id = FALSE) {
-        if ($id == FALSE || !is_numeric($id)) {
+        if ($id === FALSE || !is_numeric($id)) {
             show_404();
         } else {
             $library_name = $this->get_library_name();
             $object = $this->$library_name->get($id);
-            if ($object == NULL) {
+            if (empty($object)) {
                 show_404();
             }
         }
@@ -278,7 +278,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         unset($params['submit']);
         $library_name = $this->get_library_name();
 
-        if ($id !== FALSE) {
+        if (!empty($id)) {
             $this->$library_name->$action($id, $params);
             redirect(site_url('admin/' . $this->data['type'] . '/show/' . $id));
         } else {

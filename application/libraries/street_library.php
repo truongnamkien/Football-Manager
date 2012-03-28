@@ -70,12 +70,12 @@ class Street_Library extends Abstract_Library {
         $available_cd = $this->get_available_building_cooldown();
         $street = $this->get(parent::$CI->my_auth->get_street_id());
 
-        if ($available_cd == FALSE) {
+        if (empty($available_cd)) {
             return lang('building_upgrade_non_cooldown');
         } else {
             $cooldown_time = $this->get_cooldown_time($street_building_id);
             $building = parent::$CI->building_library->upgrade($street_building_id);
-            if ($building == FALSE || is_string($building)) {
+            if (empty($building) || is_string($building)) {
                 return $building;
             }
 
@@ -90,7 +90,7 @@ class Street_Library extends Abstract_Library {
         $current_time = now();
         $street = $this->get(parent::$CI->my_auth->get_street_id());
         foreach ($street['cooldowns']['buildings'] as $cd) {
-            if ($cd['end_time'] == NULL || $cd['end_time'] <= $current_time) {
+            if (empty($cd['end_time']) || $cd['end_time'] <= $current_time) {
                 return $cd['cooldown_id'];
             }
         }
@@ -149,7 +149,7 @@ class Street_Library extends Abstract_Library {
             }
 
             // Nếu Cooldown list không đủ theo quy ước thì bổ sung record
-            if ($street_cooldowns['research'] == FALSE) {
+            if (empty($street_cooldowns['research'])) {
                 $data = array(
                     'cooldown_type' => Cooldown_Model::COOLDOWN_TYPE_RESEARCH,
                     'street_id' => $street_id,

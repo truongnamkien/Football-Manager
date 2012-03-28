@@ -28,7 +28,7 @@ class Formation extends MY_Inner_Admin_Controller {
             $object[$area] = '';
             $specific_input[$area] = array('input' => 'dropdown', 'options' => $this->_get_format_for_area($area));
         }
-        if ($id != FALSE) {
+        if (!empty($id)) {
             $object = array_merge($object, $this->get_object($id));
         }
         $specific_input['all_format'] = array('input' => 'label');
@@ -37,8 +37,8 @@ class Formation extends MY_Inner_Admin_Controller {
     }
 
     protected function create_update($id = FALSE) {
-        $this->data['action'] = ($id == FALSE ? 'create' : 'update');
-        if ($id != FALSE) {
+        $this->data['action'] = (empty($id) ? 'create' : 'update');
+        if (!empty($id)) {
             $this->data['id'] = $id;
         }
         $this->data['form_data'] = $this->prepare_object($id);
@@ -56,7 +56,7 @@ class Formation extends MY_Inner_Admin_Controller {
                 $this->handle_create_update_object($params, $this->data['action'], $id);
             }
         }
-        if ($id == FALSE) {
+        if (empty($id)) {
             $id = '';
         }
         $this->data['main_nav'] = $this->_main_nav($this->data['action'], $id);
@@ -73,7 +73,6 @@ class Formation extends MY_Inner_Admin_Controller {
 
     public function show($id = FALSE) {
         $data['object'] = $this->_display_formation($this->get_object($id));
-        ;
 
         $data['id'] = $id;
         $data['type'] = $this->data['type'];

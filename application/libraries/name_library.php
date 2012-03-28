@@ -15,10 +15,6 @@ class Name_Library extends Abstract_Library {
         parent::$CI->load->model(array('name_model'));
     }
 
-    public function get($id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array());
-    }
-
     public function get_all_by_category($category, $is_force = FALSE) {
         $key_all = $this->_get_key('cache.object.info.by.category', array('$category' => $category));
         if (!$is_force) {

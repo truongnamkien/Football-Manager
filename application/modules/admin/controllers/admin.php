@@ -49,7 +49,7 @@ class Admin extends MY_Inner_Admin_Controller {
             'display_name' => '',
             'role' => ''
         );
-        if ($id != FALSE) {
+        if (!empty($id)) {
             $object = $this->get_object($id);
         }
         $object = array_merge($object, array('password' => '', 'password_confirm' => ''));
@@ -59,7 +59,7 @@ class Admin extends MY_Inner_Admin_Controller {
             'password_confirm' => array('input' => 'password'),
             'role' => array('input' => 'dropdown', 'options' => $this->_get_roles())
         );
-        if ($id !== FALSE) {
+        if (!empty($id)) {
             $specific_input['username'] = array('input' => 'label');
         }
         unset($object[$this->data['type'] . '_id']);

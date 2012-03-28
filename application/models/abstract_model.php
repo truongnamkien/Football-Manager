@@ -13,7 +13,7 @@ abstract class Abstract_Model extends CI_Model {
         $ret = $this->check_existed($data);
         unset($data[$this->type . '_id']);
 
-        if ($ret['return_code'] == API_SUCCESS && $ret['data'] == FALSE) {
+        if ($ret['return_code'] == API_SUCCESS && empty($ret['data'])) {
             if ($this->db->insert($this->database, $data)) {
                 $id = $this->db->insert_id();
                 if ($id > 0) {
@@ -29,7 +29,7 @@ abstract class Abstract_Model extends CI_Model {
     public function delete($id) {
         $this->delete_where(array($this->type . '_id' => $id));
     }
-    
+
     public function delete_where($filter) {
         $this->db->where($filter)->delete($this->database);
     }
@@ -39,7 +39,7 @@ abstract class Abstract_Model extends CI_Model {
     }
 
     public function get_where($filter, $sort_by = FALSE, $order = 'asc') {
-        if ($sort_by == FALSE) {
+        if (empty($sort_by)) {
             $sort_by = $this->type . '_id';
         }
         if ($order != 'asc' && $order != 'desc') {
@@ -85,7 +85,7 @@ abstract class Abstract_Model extends CI_Model {
     }
 
     public function get_all($sort_by = FALSE, $order = 'asc') {
-        if ($sort_by == FALSE) {
+        if (empty($sort_by)) {
             $sort_by = $this->type . '_id';
         }
         if ($order != 'asc' && $order != 'desc') {

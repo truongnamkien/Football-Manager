@@ -112,11 +112,11 @@ class MY_Auth {
 
     public function get_street_id() {
         $user_id = $this->get_user_id();
-        if ($user_id == FALSE || $user_id == NULL) {
+        if (empty($user_id)) {
             return FALSE;
         }
         $user = $this->CI->user_library->get($user_id);
-        if ($user == FALSE || $user == NULL) {
+        if (empty($user)) {
             return FALSE;
         }
         return $user['street_id'];

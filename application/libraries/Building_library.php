@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Building_Library extends Abstract_Library {
@@ -21,7 +22,7 @@ class Building_Library extends Abstract_Library {
     }
 
     public function get_all($street_id = FALSE, $is_force = FALSE) {
-        if ($street_id == FALSE) {
+        if (empty($street_id)) {
             $street_id = parent::$CI->my_auth->get_street_id();
         }
         $key_all = $this->_get_key('cache.object.info.all', array('$street_id' => $street_id));
@@ -34,9 +35,12 @@ class Building_Library extends Abstract_Library {
             parent::$CI->cache->delete($key_all);
         }
 
-        $buildings = parent::$CI->street_building_model->get_all(array('street_id' => $street_id));
+        $buildings = parent::$CI->street_building_model->get_where(array('street_id' => $street_id));
         if ($buildings['return_code'] == API_SUCCESS && !empty($buildings['data'])) {
             $buildings = $buildings['data'];
+            if (isset($buildings['street_building_id'])) {
+                $buildings = array($buildings);
+            }
         } else {
             $buildings = array();
         }
@@ -72,19 +76,19 @@ class Building_Library extends Abstract_Library {
         $building = $this->get($street_building_id);
         $street_id = parent::$CI->my_auth->get_street_id();
 
-        if ($building == FALSE) {
+        if (empty($building)) {
             return lang('building_upgrade_error');
         }
         $level = $building['level'];
         if ($building['type'] != Building_Type_Model::BUILDING_TYPE_MANAGEMENT) {
             $manage_building = $this->get_by_type($street_id, Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
-            $max_level = ($manage_building != FALSE ? $manage_building['level'] : Street_Building_Model::MAX_LEVEL);
+            $max_level = (!empty($manage_building) ? $manage_building['level'] : Street_Building_Model::MAX_LEVEL);
         } else {
             $max_level = Street_Building_Model::MAX_LEVEL;
         }
         if ($level < $max_level) {
             $building = $this->update($street_building_id, array('level' => ($level + 1)));
-            if ($building == NULL) {
+            if (empty($building)) {
                 return lang('building_upgrade_error');
             }
             return $building;
@@ -97,7 +101,7 @@ class Building_Library extends Abstract_Library {
 
     public function create_building_for_street($street_id) {
         $building_types = parent::$CI->building_type_library->get_all();
-        
+
         $buildings = array();
         foreach ($building_types as $type) {
             $type['street_id'] = $street_id;

@@ -37,7 +37,7 @@ class Map_Ajax extends MY_Ajax {
         $streets = $data['streets'];
         $x_coor = $data['x_coor'];
         $y_coor = $data['y_coor'];
-        if ($streets == FALSE) {
+        if (empty($streets)) {
             echo 'street is FALSE';
         } else {
             for ($i = 0; $i < Street_model::AREA_HEIGHT; $i++)

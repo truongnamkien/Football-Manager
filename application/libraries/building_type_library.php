@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Building_Type_Library extends Abstract_Library {
@@ -14,7 +15,4 @@ class Building_Type_Library extends Abstract_Library {
         parent::$CI->load->model(array('building_type_model'));
     }
 
-    public function get($id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array());
-    }
 }

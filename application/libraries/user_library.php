@@ -18,23 +18,19 @@ class User_Library extends Abstract_Library {
         parent::$CI->load->config('npc', TRUE);
     }
 
-    public function get($id, $is_force = FALSE) {
-        return parent::get($id, $is_force, array());
-    }
-
     public function create($data) {
         $team = parent::$CI->team_library->create(array('team_name' => $data['team_name']));
         
-        if ($team == NULL) {
-            return NULL;
+        if (empty($team)) {
+            return FALSE;
         }
         // Tạo cầu thủ cho team
         $level = round(parent::$CI->config->item('npc_max_per_area', 'npc') / 2, 0);
         parent::$CI->auto_data->auto_create_team_player($level, $team);
         
         $street = parent::$CI->street_library->create(array('area' => FALSE, 'street_type' => Street_Model::STREET_TYPE_PLAYER, 'team_id' => $team['team_id']));
-        if ($street == NULL) {
-            return NULL;
+        if (empty($street)) {
+            return FALSE;
         }
         
         $data['street_id'] = $street['street_id'];

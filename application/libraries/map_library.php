@@ -36,7 +36,7 @@ class Map_Library extends Abstract_Library {
 
     public function create_street($area, $street_info) {
         $coor = $this->generate_coordinate($area);
-        if ($area == FALSE) {
+        if ($area === FALSE) {
             $total_row = intval(Street_Model::MAP_HEIGHT / Street_Model::AREA_HEIGHT);
 
             if ($area !== FALSE) {

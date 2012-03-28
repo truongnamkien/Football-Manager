@@ -52,7 +52,7 @@ class Auto_Data {
     public function auto_create_player($level, $position, $team_id) {
         $position_list = $this->CI->config->item('player_position_list', 'player');
         if (!in_array($position, $position_list)) {
-            return NULL;
+            return FALSE;
         }
 
         $player_info = array();

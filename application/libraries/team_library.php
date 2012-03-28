@@ -1,4 +1,5 @@
 <?php
+
 require_once(APPPATH . 'libraries/abstract_library.php');
 
 class Team_Library extends Abstract_Library {
@@ -12,12 +13,9 @@ class Team_Library extends Abstract_Library {
             'cache.object.info' => $this->cache_key . '$id',
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
-        parent::$CI->load->model(array('team_model', 'player_model'));
+        parent::$CI->load->model(array('team_model'));
+        parent::$CI->load->library(array('player_library', 'team_formation_library'));
         parent::$CI->load->language('team');
-    }
-
-    public function get($team_id, $is_force = FALSE) {
-        return parent::get($team_id, $is_force, array());
     }
 
     public function create($data = array()) {
@@ -25,14 +23,26 @@ class Team_Library extends Abstract_Library {
             $data['team_name'] = lang('team_team');
         }
         $team = parent::create($data);
-        return parent::update($team['team_id'], array('team_name' => $team['team_name'] . ' ' . $team['team_id']));
+        if (empty($data)) {
+            return parent::update($team['team_id'], array('team_name' => $team['team_name'] . ' ' . $team['team_id']));
+        }
+        return $team;
     }
-    
+
     public function remove($id) {
         parent::remove($id);
-        
-        // Xóa team phải xóa hết player
-        parent::$CI->player_model->delete_where(array('team_id' => $id));
+
+        // Xóa player
+        $players = parent::$CI->player_library->get_by_team($id);
+        foreach ($players as $player) {
+            parent::$CI->player_library->remove($player['player_id']);
+        }
+
+        // Xóa formation của team
+        $formations = parent::$CI->team_formation_library->get_by_team($id);
+        foreach ($formations as $formation) {
+            parent::$CI->team_formation_library->remove($formation['team_formation_id']);
+        }
     }
 
 }
