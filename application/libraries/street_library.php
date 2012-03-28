@@ -257,8 +257,8 @@ class Street_Library extends Abstract_Library {
             }
             $result = array();
             foreach ($streets as $street) {
-                $x_coor = $street['x_coor'] % self::AREA_WIDTH;
-                $y_coor = $street['y_coor'] % self::AREA_HEIGHT;
+                $x_coor = $street['x_coor'] % Street_Model::AREA_WIDTH;
+                $y_coor = $street['y_coor'] % street_model::AREA_HEIGHT;
                 $result[$x_coor][$y_coor] = $street;
             }
             return $result;

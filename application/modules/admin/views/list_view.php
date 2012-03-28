@@ -74,7 +74,7 @@
                                     }
                                     echo '</td>';
                                 }
-                                
+
                                 echo '</tr>';
                             }
                         } else {
@@ -102,7 +102,37 @@
 </div> <!-- End .content-box -->
 
 <script type="text/javascript">
-    $(function() {
+    $(document).ready(function() {
+        //add index column with all content.
+        $(".filterable tr:has(td)").each(function() {
+            var t = $(this).text().toLowerCase(); //all row text
+            $('<td class="indexColumn"></td>').hide().text(t).appendTo(this);
+        });
+        $("#search").keyup(function() {
+            var s = $(this).val().toLowerCase().split(" ");
+            //show all rows.
+            $(".filterable tr:hidden").show();
+            $.each(s, function(){
+                $(".filterable tr:visible .indexColumn:not(:contains('"
+                    + this + "'))").parent().hide();
+            });//each
+        });
+  
+        $(".clear").click(function() {
+            $("#FilterTextBox").val("").keyup();
+            return false;
+        });
+
+        $("#table_list").tablesorter({
+            headers: { 
+                // assign the secound column (we start counting zero) 
+                0: { 
+                    // disable it by setting the property sorter to false 
+                    sorter: false 
+                }
+            }
+        });
+
         $('select[name="mass_action_dropdown"]').change(function() {
             if ($('select[name="mass_action_dropdown"]').val() == '<?php echo key($mass_action_options) ?>') {
                 $('input[name="submit"].remove').attr('disabled', 'true');
@@ -136,43 +166,3 @@
         return false;
     }
 </script>
-
-<!-- Start table filter -->
-<script>
-$(document).ready(function(){
- //add index column with all content.
- $(".filterable tr:has(td)").each(function(){
-   var t = $(this).text().toLowerCase(); //all row text
-   $("<td class='indexColumn'></td>")
-    .hide().text(t).appendTo(this);
- });//each tr
- $("#search").keyup(function(){
-   var s = $(this).val().toLowerCase().split(" ");
-   //show all rows.
-   $(".filterable tr:hidden").show();
-   $.each(s, function(){
-       $(".filterable tr:visible .indexColumn:not(:contains('"
-          + this + "'))").parent().hide();
-   });//each
- });//key up.
-  
-  $(".clear").click(function(){
-    $("#FilterTextBox").val("").keyup();
-    return false;
-  });
-  
-
-  $("#table_list").tablesorter(
-      {
-             headers: { 
-                // assign the secound column (we start counting zero) 
-                0: { 
-                    // disable it by setting the property sorter to false 
-                    sorter: false 
-                }
-            } 
-      }
-    );//tablesorter
-});//document.ready
-</script>
-<!-- End table filter -->

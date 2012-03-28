@@ -35,7 +35,7 @@ class Player_Library extends Abstract_Library {
     public function get_by_team($team_id) {
         $players = self::$CI->player_model->get_where(array('team_id' => $team_id));
         if ($players['return_code'] == API_SUCCESS && !empty($players['data'])) {
-            $players = $object['data'];
+            $players = $players['data'];
             if (isset($players['player_id'])) {
                 $players = array($players);
             }
@@ -77,6 +77,7 @@ class Player_Library extends Abstract_Library {
             }
         }
         $player['strength'] = $total / 10;
+        return $player;
     }
 
 }
