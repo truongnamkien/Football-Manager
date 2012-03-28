@@ -18,6 +18,11 @@ class MY_Auth {
         $this->CI->load->model(array('user_model', 'admin_model'));
     }
 
+    /**
+     * Require to login
+     * @param type $is_admin
+     * @return type 
+     */
     public function login_required($is_admin = FALSE) {
         if (!$this->logged_in($is_admin)) {
             if (!$is_admin) {
@@ -110,6 +115,10 @@ class MY_Auth {
         return $user_id;
     }
 
+    /**
+     * Get the street id of current user
+     * @return type 
+     */
     public function get_street_id() {
         $user_id = $this->get_user_id();
         if (empty($user_id)) {

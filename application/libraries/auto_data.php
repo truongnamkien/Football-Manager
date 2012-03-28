@@ -12,6 +12,9 @@ class Auto_Data {
         $this->CI->load->model(array('street_model', 'name_model'));
     }
 
+    /**
+     * Auto generate data of NPC
+     */
     public function auto_create_npc() {
         // Tính số area tối đa
         $cols = Street_Model::MAP_WIDTH / Street_Model::AREA_WIDTH;
@@ -49,6 +52,13 @@ class Auto_Data {
         }
     }
 
+    /**
+     * Auto generate data of a player
+     * @param type $level
+     * @param type $position
+     * @param type $team_id
+     * @return type 
+     */
     public function auto_create_player($level, $position, $team_id) {
         $position_list = $this->CI->config->item('player_position_list', 'player');
         if (!in_array($position, $position_list)) {
@@ -93,6 +103,11 @@ class Auto_Data {
         $player = $this->CI->player_library->create($player_info);
     }
 
+    /**
+     * Auto generate data of players of a team
+     * @param type $level
+     * @param type $team 
+     */
     public function auto_create_team_player($level, $team) {
         $position_amount = $this->CI->config->item('player_num_of_player', 'player');
         foreach ($position_amount as $position => $amount) {

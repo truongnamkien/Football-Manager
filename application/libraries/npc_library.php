@@ -17,6 +17,10 @@ class NPC_Library extends Abstract_Library {
         parent::$CI->load->library(array('street_library'));
     }
 
+    /**
+     * Remove a NPC with its data
+     * @param type $id 
+     */
     public function remove($id) {
         $npc = $this->get($id);
         parent::remove($id);
@@ -25,6 +29,9 @@ class NPC_Library extends Abstract_Library {
         parent::$CI->street_library->remove($npc['street_id']);
     }
 
+    /**
+     * Remove all of NPC
+     */
     public function remove_all() {
         $npc_list = $this->get_all();
         foreach ($npc_list as $npc) {

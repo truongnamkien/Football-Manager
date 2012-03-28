@@ -18,10 +18,21 @@ class Street_Library extends Abstract_Library {
         parent::$CI->load->language('building');
     }
 
+    /**
+     * Get a street object
+     * @param type $street_id
+     * @param type $is_force
+     * @return type 
+     */
     public function get($street_id, $is_force = FALSE) {
         return parent::get($street_id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
+    /**
+     * Create a street object and its data
+     * @param type $data
+     * @return type
+     */
     public function create($data) {
         if (!isset($data['street_type']) || !isset($data['area']) || !isset($data['team_id'])) {
             return FALSE;
@@ -43,6 +54,10 @@ class Street_Library extends Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Remove a street object and its data
+     * @param type $street_id 
+     */
     public function remove($street_id) {
         $street = $this->get($street_id, TRUE);
 
@@ -66,6 +81,11 @@ class Street_Library extends Abstract_Library {
         parent::$CI->team_library->remove($street['team_id']);
     }
 
+    /**
+     * Upgrade a building of street
+     * @param type $street_building_id
+     * @return type 
+     */
     public function upgrade($street_building_id) {
         $current_time = now();
         $available_cd = $this->get_available_building_cooldown();
@@ -87,6 +107,10 @@ class Street_Library extends Abstract_Library {
         }
     }
 
+    /**
+     * Get if the the street has a free cooldown slot
+     * @return type 
+     */
     private function get_available_building_cooldown() {
         $current_time = now();
         $street = $this->get(parent::$CI->my_auth->get_street_id());
@@ -98,6 +122,12 @@ class Street_Library extends Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Update a cooldown slot
+     * @param type $cooldown_id
+     * @param type $time
+     * @return type 
+     */
     private function update_cooldown($cooldown_id, $time) {
         $cooldown = parent::$CI->cooldown_model->update($cooldown_id, array('end_time' => $time));
         if ($cooldown['return_code'] == API_SUCCESS && !empty($cooldown['data'])) {
@@ -106,6 +136,11 @@ class Street_Library extends Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Calculate the fee to upgrade a building
+     * @param type $street_building_id
+     * @return type 
+     */
     public function get_fee($street_building_id) {
         $building = parent::$CI->building_library->get($street_building_id);
         $fee = $building['beginning_fee'];
@@ -117,6 +152,11 @@ class Street_Library extends Abstract_Library {
         return $fee;
     }
 
+    /**
+     * Get the cooldown time of a building
+     * @param type $street_building_id
+     * @return type 
+     */
     public function get_cooldown_time($street_building_id) {
         $building = parent::$CI->building_library->get($street_building_id);
         $level = $building['level'];
@@ -125,6 +165,11 @@ class Street_Library extends Abstract_Library {
         return intval($fee / $rate);
     }
 
+    /**
+     * Get the full information of a street
+     * @param type $street
+     * @return type 
+     */
     private function get_my_street_info($street) {
         $street_id = $street['street_id'];
         if ($street_id == parent::$CI->my_auth->get_street_id()) {

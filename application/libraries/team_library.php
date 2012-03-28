@@ -18,6 +18,11 @@ class Team_Library extends Abstract_Library {
         parent::$CI->load->language('team');
     }
 
+    /**
+     * Create a team
+     * @param type $data
+     * @return type 
+     */
     public function create($data = array()) {
         if (empty($data)) {
             $data['team_name'] = lang('team_team');
@@ -29,6 +34,10 @@ class Team_Library extends Abstract_Library {
         return $team;
     }
 
+    /**
+     * Remove a team and its data
+     * @param type $id 
+     */
     public function remove($id) {
         parent::remove($id);
 

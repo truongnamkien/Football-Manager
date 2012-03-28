@@ -36,6 +36,12 @@ class Map_Library extends Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Create a street object with area
+     * @param type $area
+     * @param type $street_info
+     * @return type 
+     */
     public function create_street($area, $street_info) {
         $coor = $this->generate_coordinate($area);
         if ($area === FALSE) {
@@ -76,6 +82,12 @@ class Map_Library extends Abstract_Library {
         return $street;
     }
 
+    /**
+     * Get an area and list of streets in thatarea
+     * @param type $area
+     * @param type $is_force
+     * @return type 
+     */
     public function get($area, $is_force = FALSE) {
         $key = $this->_get_key('cache.object.info', array('$id' => $area));
         if (!$is_force) {
@@ -100,11 +112,23 @@ class Map_Library extends Abstract_Library {
         return $streets;
     }
 
+    /**
+     * Get an area with a coordinator
+     * @param type $x_coor
+     * @param type $y_coor
+     * @return type 
+     */
     public function get_by_coor($x_coor, $y_coor) {
         $area = intval($x_coor / Street_Model::AREA_WIDTH) + intval($y_coor / Street_Model::AREA_HEIGHT) * (Street_Model::MAP_HEIGHT / Street_Model::AREA_HEIGHT);
         return $this->get($area);
     }
 
+    /**
+     * Generate a random coordinator in an area
+     * @param type $area
+     * @return type 
+     * 
+     */
     private function generate_coordinate($area = FALSE) {
         $min_x = 0;
         $min_y = 0;
@@ -133,6 +157,12 @@ class Map_Library extends Abstract_Library {
         return array('x_coor' => $x_coor, 'y_coor' => $y_coor);
     }
 
+    /**
+     * Check as if the coordinate is belong to a street
+     * @param type $x_coor
+     * @param type $y_coor
+     * @return type 
+     */
     private function check_valid_coordinate($x_coor, $y_coor) {
         if ($x_coor == FALSE || $y_coor == FALSE) {
             return FALSE;

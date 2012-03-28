@@ -15,6 +15,13 @@ abstract class Abstract_Library {
         self::$CI->load->driver('cache');
     }
 
+    /**
+     * Get an object
+     * @param type $id
+     * @param type $is_force
+     * @param type $callback
+     * @return type 
+     */
     public function get($id, $is_force = FALSE, $callback = array()) {
         $key = $this->_get_key('cache.object.info', array('$id' => $id));
         if (!$is_force) {
@@ -43,6 +50,12 @@ abstract class Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Create an object
+     * @param type $data
+     * @return type 
+     * 
+     */
     public function create($data) {
         $model_name = $this->type . '_model';
         $object = self::$CI->$model_name->create($data);
@@ -55,6 +68,12 @@ abstract class Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Update an object
+     * @param type $id
+     * @param type $data
+     * @return type 
+     */
     public function update($id, $data) {
         $model_name = $this->type . '_model';
         $object = self::$CI->$model_name->update($id, $data);
@@ -64,6 +83,10 @@ abstract class Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Remove an object
+     * @param type $id 
+     */
     public function remove($id) {
         $model_name = $this->type . '_model';
         self::$CI->$model_name->delete($id);
@@ -73,6 +96,11 @@ abstract class Abstract_Library {
         self::$CI->cache->delete($key_all);
     }
 
+    /**
+     * Get all objects
+     * @param type $is_force
+     * @return array 
+     */
     public function get_all($is_force = FALSE) {
         $key_all = $this->_get_key('cache.object.info.all');
         if (!$is_force) {
@@ -104,6 +132,10 @@ abstract class Abstract_Library {
         return $objects;
     }
 
+    /**
+     * Count number of existed objects
+     * @return type 
+     */
     public function count_all() {
         $model_name = $this->type . '_model';
         return self::$CI->$model_name->count_all();

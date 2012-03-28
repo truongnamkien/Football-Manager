@@ -21,6 +21,12 @@ class Building_Library extends Abstract_Library {
         return parent::get($street_building_id, $is_force, array('after_get' => 'after_get_callback'));
     }
 
+    /**
+     * Get all buildings of a street
+     * @param type $street_id
+     * @param type $is_force
+     * @return type 
+     */
     public function get_all($street_id = FALSE, $is_force = FALSE) {
         if (empty($street_id)) {
             $street_id = parent::$CI->my_auth->get_street_id();
@@ -62,6 +68,12 @@ class Building_Library extends Abstract_Library {
         return FALSE;
     }
 
+    /**
+     * Get building of a street by type
+     * @param type $street_id
+     * @param type $type
+     * @return type 
+     */
     public function get_by_type($street_id, $type) {
         $buildings = $this->get_all($street_id);
         foreach ($buildings as $building) {
@@ -71,7 +83,12 @@ class Building_Library extends Abstract_Library {
         }
         return FALSE;
     }
-
+    
+    /**
+     * Upgrade a building
+     * @param type $street_building_id
+     * @return type 
+     */
     public function upgrade($street_building_id) {
         $building = $this->get($street_building_id);
         $street_id = parent::$CI->my_auth->get_street_id();
@@ -99,6 +116,11 @@ class Building_Library extends Abstract_Library {
         }
     }
 
+    /**
+     * Create building for street
+     * @param type $street_id
+     * @return type 
+     */
     public function create_building_for_street($street_id) {
         $building_types = parent::$CI->building_type_library->get_all();
 
@@ -110,6 +132,11 @@ class Building_Library extends Abstract_Library {
         return $buildings;
     }
 
+    /**
+     * Get full info of a building
+     * @param type $building
+     * @return type 
+     */
     private function get_building_extra_info($building) {
         $building_type = parent::$CI->building_type_library->get($building['building_type_id']);
         $building = array_merge($building, $building_type);

@@ -15,6 +15,12 @@ class Name_Library extends Abstract_Library {
         parent::$CI->load->model(array('name_model'));
     }
 
+    /**
+     * Get all of the name by category
+     * @param type $category
+     * @param type $is_force
+     * @return array 
+     */
     public function get_all_by_category($category, $is_force = FALSE) {
         $key_all = $this->_get_key('cache.object.info.by.category', array('$category' => $category));
         if (!$is_force) {
@@ -45,6 +51,11 @@ class Name_Library extends Abstract_Library {
         return $objects;
     }
     
+    /**
+     * Get random name by category
+     * @param type $category
+     * @return type 
+     */
     public function get_random_by_category($category) {
         $names = $this->get_all_by_category($category);
         $index = array_rand($names);
