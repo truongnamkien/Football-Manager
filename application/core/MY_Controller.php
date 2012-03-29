@@ -17,6 +17,8 @@ class MY_Controller extends MX_Controller {
         $this->output->set_header("Cache-Control: no-cache, must-revalidate");
         $this->output->set_header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
         $this->load->helper(array('html', 'MY_Date'));
+        $this->_masterview_enabled = TRUE;
+
     }
 
     /**
@@ -73,6 +75,7 @@ class MY_Ajax extends MY_Controller {
 
         $this->load->library('MY_Asyncresponse');
         $this->response = $this->my_asyncresponse;
+        $this->_masterview_enabled = FALSE;
 
         header("Content-type: text/html; charset=utf-8");
     }
@@ -115,7 +118,6 @@ class MY_Outer_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->_masterview_enabled = TRUE;
         $this->_masterview = 'admin_masterpage_not_logged';
     }
 
@@ -125,7 +127,6 @@ class MY_Inner_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->_masterview_enabled = TRUE;
         $this->my_auth->login_required();
     }
 
@@ -135,7 +136,6 @@ class MY_Admin_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->_masterview_enabled = TRUE;
         if ($this->my_auth->logged_in(TRUE)) {
             $this->_masterview = 'admin_masterpage_logged';
         } else {

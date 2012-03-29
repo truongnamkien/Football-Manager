@@ -20,6 +20,7 @@
         <?php echo asset_js('js/jquery-1.6.4.js') ?>
         <?php echo asset_js('js/jquery.colorbox-min.js'); ?>
         <?php echo asset_js('js/admin/jquery.configuration.js'); ?>
+        <?php echo asset_js('js/core.js'); ?>
 
         <!--[if IE]>
         <?php echo asset_js('js/admin/jquery.bgiframe.js'); ?>

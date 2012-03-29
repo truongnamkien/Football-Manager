@@ -20,7 +20,7 @@ class Team_Formation_Library extends Abstract_Library {
      * @param type $team_id
      * @return type 
      */
-    public function get_formation_of_team($tream_id) {
+    public function get_formation_of_team($team_id) {
         $formations = self::$CI->team_formation_model->get_where(array('team_id' => $team_id));
         if ($formations['return_code'] == API_SUCCESS && !empty($players['data'])) {
             $formations = $object['data'];

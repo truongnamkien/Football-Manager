@@ -80,6 +80,11 @@ class Formation extends MY_Inner_Admin_Controller {
         $this->load->view('show_view', $data);
     }
 
+    /**
+     * Get available format for area
+     * @param type $area
+     * @return type 
+     */
     private function _get_format_for_area($area) {
         $area_format = $this->config->item('formation_format_for_area', 'formation');
         foreach ($area_format as $key => $value) {
@@ -90,6 +95,10 @@ class Formation extends MY_Inner_Admin_Controller {
         return FALSE;
     }
 
+    /**
+     * Get the all of display photos of the formats
+     * @return type 
+     */
     private function _get_all_format_display() {
         $formats = $this->config->item('formation_all_format', 'formation');
         $data['format_photos'] = array();
@@ -99,6 +108,11 @@ class Formation extends MY_Inner_Admin_Controller {
         return $this->load->view('formation/pagelet_all_formats', $data, TRUE);
     }
 
+    /**
+     * Validate as if the formation has enough player and correct format
+     * @param type $data
+     * @return int 
+     */
     private function _formation_validate($data) {
         $all_area = $this->config->item('formation_all_area', 'formation');
         $formation = array();
