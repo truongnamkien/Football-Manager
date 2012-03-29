@@ -30,8 +30,9 @@ class User_Library extends Abstract_Library {
         if (empty($team)) {
             return FALSE;
         }
+
         // Tạo cầu thủ cho team
-        $level = round(parent::$CI->config->item('npc_max_per_area', 'npc') / 2, 0);
+        $level = round(parent::$CI->config->item('npc_max_level', 'npc') / 2, 0);
         parent::$CI->auto_data->auto_create_team_player($level, $team);
 
         $street = parent::$CI->street_library->create(array('area' => FALSE, 'street_type' => Street_Model::STREET_TYPE_PLAYER, 'team_id' => $team['team_id']));

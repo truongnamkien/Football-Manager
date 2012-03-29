@@ -8,9 +8,6 @@ class Authen extends MY_Outer_Controller {
         parent::__construct();
         $this->load->model(array('user_model', 'team_model'));
         $this->load->library('user_library');
-        if ($this->my_auth->logged_in()) {
-            redirect(site_url('street'));
-        }
     }
 
     public function index() {
@@ -21,6 +18,9 @@ class Authen extends MY_Outer_Controller {
      * Trang đăng ký
      */
     public function register() {
+        if ($this->my_auth->logged_in()) {
+            redirect(site_url('street'));
+        }
         $this->set_title(lang('authen_register'));
         $this->form_validation
                 ->set_rules('display_name', 'lang:authen_display_name', 'trim|strip_tags|max_length[40]|required')
@@ -59,6 +59,9 @@ class Authen extends MY_Outer_Controller {
      * Trang đăng nhập
      */
     public function login() {
+        if ($this->my_auth->logged_in()) {
+            redirect(site_url('street'));
+        }
         $this->set_title(lang('authen_login'));
 
         // set rule.
