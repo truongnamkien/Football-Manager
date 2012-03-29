@@ -1030,3 +1030,44 @@ span.required {
 ul.loginFeatures label {
     width: 100px;
 }
+
+#formation_field {
+    width: 540px;
+    float: left;
+    margin-right: 50px;
+}
+
+#formation_field div.formation_area {
+    float: left;
+    width: 180px;
+    height: 180px;
+    text-align: center;
+    background: url('../../images/formation_none_180x180.png');
+}
+
+#formation_field div.formation_goalkeeper {
+    float: left;
+    width: 180px;
+    height: 40px;
+    text-align: center;
+    background: url('../../images/formation_none_180x180.png');
+}
+
+div.formation_area div.area1 {
+    float: left;
+    width: 180px;
+    height: 60px;
+}
+
+div.formation_area div.area2 {
+    float: left;
+    width: 90px;
+    height: 60px;
+}
+
+div.formation_area div.area3 {
+    float: left;
+    width: 60px;
+    height: 60px;
+}
+

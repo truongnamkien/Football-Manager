@@ -343,7 +343,6 @@ $.extend(AsyncRequest, {
         
         var stat_elem = $(relativeTo).parents('.stat_elem').get(0) || relativeTo;
         if ($(stat_elem).hasClass('loading-ajax')) return;
-        //console.log(data);
         new AsyncRequest(uri).setMethod(method).setData(data).setStatusElement(stat_elem).setRelativeTo(relativeTo).send();
         return false;
     }
@@ -604,6 +603,58 @@ $.extend(AsyncResponse.prototype, {
     }   
 });
 
+var Form = {
+    bootstrap : function(form, actor, relative) {       
+        var stat_elem = $(actor || form).parents('.stat_elem').get(0);      
+
+        if ($.browser.msie) {
+            $(':input', form).each(function() {
+                var placeholder = $(this).attr('placeholder'), val = $(this).val();
+                if (placeholder && placeholder === val)
+                    $(this).val('');
+            });
+        }
+        var data = Form.serialize(form, actor);         
+        Form.setDisabled(form, true);
+
+        // disable input
+        relative = relative || form;
+        var url = $(form).attr('ajaxify') || $(form).attr('action');
+        var method = $(form).attr('method') || 'GET';
+        var asyncRequest = new AsyncRequest(new URI(url));     
+          
+        asyncRequest.setData(data).setMethod(method).setRelativeTo(relative).setStatusElement(stat_elem).setHandler(function(asyncResponse) {
+            // khi hang ve
+            }).setFinallyHandler(function(asyncResponse) {
+            // enable lai input
+            Form.setDisabled(form, false);
+        }).send();       
+    },
+    serialize: function(form, actor){
+        var data = $(form).serializeArray();        
+        if (actor && actor.name && actor.value && !actor.disabled) 
+            data.push({
+                name: actor.name, 
+                value: actor.value
+            });
+        return data;                
+    },
+    setDisabled:function(form, state){
+        $(':input', form).each(function() {
+            if (this.disabled != undefined) {
+                var currentState = $(this).data('origDisabledState');
+                if (state) {                    
+                    if (currentState == null) $(this).data('origDisabledState', this.disabled);
+                    this.disabled = state;
+                } else {
+                    if (currentState !== true) this.disabled = false;
+                    $(this).data('origDisabledState', null);
+                }
+            }
+        });       
+    }
+};
+
 $('a, button, area').live('click', function(e) {    
     var ajaxify = $(this).attr('ajaxify');
     var href = $(this).attr('href');
@@ -625,4 +676,25 @@ $('a, button, area').live('click', function(e) {
     e.preventDefault();
 });
 
+var last_submit_button = null;
 
+$(":submit").live('click', function() {
+    last_submit_button = this;
+});
+
+$('form').live('submit', function(e) {              
+    var url = $(this).attr('action');
+    var rel = $(this).attr('rel');      
+    var method = $(this).attr('method');
+
+    switch (rel) {
+        case 'async':
+            Form.bootstrap(this, last_submit_button);
+            break; 
+        default:
+            return;
+    }
+
+    last_submit_button = null;
+    e.preventDefault();
+});
