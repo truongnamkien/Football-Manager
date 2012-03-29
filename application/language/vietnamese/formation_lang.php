@@ -18,17 +18,19 @@ $lang['formation_formation'] = 'Minh họa';
 
 $lang['formation_format_none'] = 'Không có cầu thủ';
 
-$lang['formation_for_swing'] = 'Tiền đạo cánh';
+$lang['formation_goalkeeper'] = 'Thủ môn';
+
+$lang['formation_for_wing'] = 'Tiền đạo cánh';
 $lang['formation_for_left'] = 'Tiền đạo cánh trái';
 $lang['formation_for_center'] = 'Trung phong';
 $lang['formation_for_right'] = 'Tiền đạo cánh phải';
 
-$lang['formation_mid_swing'] = 'Tiền vệ cánh';
+$lang['formation_mid_wing'] = 'Tiền vệ cánh';
 $lang['formation_mid_left'] = 'Tiền vệ cánh trái';
 $lang['formation_mid_center'] = 'Tiền vệ trung tâm';
 $lang['formation_mid_right'] = 'Tiền vệ cánh phải';
 
-$lang['formation_def_swing'] = 'Hậu vệ cánh';
+$lang['formation_def_wing'] = 'Hậu vệ cánh';
 $lang['formation_def_left'] = 'Hậu vệ cánh trái';
 $lang['formation_def_center'] = 'Trung vệ';
 $lang['formation_def_right'] = 'Hậu vệ cánh phải';

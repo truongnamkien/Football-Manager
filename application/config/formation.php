@@ -17,15 +17,15 @@ $config['formation_all_format'] = array(
 );
 
 $config['formation_format_for_area'] = array(
-    'swing' => array('none', '1A', '1B', '1C'),
+    'wing' => array('none', '1A', '1B', '1C'),
     'center' => array_keys($config['formation_all_format']),
 );
 
 $config['formation_all_area'] = array(
-    'for_swing',
+    'for_wing',
     'for_center',
-    'mid_swing',
+    'mid_wing',
     'mid_center',
-    'def_swing',
+    'def_wing',
     'def_center',
 );
