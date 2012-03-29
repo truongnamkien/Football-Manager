@@ -1,11 +1,11 @@
 <div class="pv15 mt80">
-    <?php if (validation_errors() || isset($login_failed)): ?> 
+    <?php if (validation_errors() || isset($error)): ?> 
         <div class="notification attention png_bg mb20">
             <div>
                 <?php echo validation_errors('<p class="tac fwb fs14 mb5">', '</p>'); ?>
                 <?php if (isset($error)): ?>
                     <?php foreach ($error['messages'] as $e) : ?>
-                        <?php echo '<p class="tac fwb fs14 mb5">' . $error . '</p>'; ?>
+                        <?php echo '<p class="tac fwb fs14 mb5">' . $e . '</p>'; ?>
                     <?php endforeach ?>            
                 <?php endif; ?>
             </div>                            
@@ -14,7 +14,7 @@
 
     <?php echo form_open('login', array('id' => 'frm_login'), array(), FALSE); ?>
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140"><?php echo lang('authen_email'); ?></label>
+        <label for="email" class="fs18 fwb fLeft w140"><?php echo lang('authen_email'); ?></label>
         <div class="fLeft">
             <input name="email" id="email" value="<?php echo set_value('email') ?>" type="text" class="inputText" />
         </div>
@@ -23,7 +23,7 @@
     <div class="clear"></div>
 
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140"><?php echo lang('authen_password'); ?></label>
+        <label for="password" class="fs18 fwb fLeft w140"><?php echo lang('authen_password'); ?></label>
         <div class="fLeft">
             <input id="password" name="password" value="<?php echo set_value('password') ?>" type="password" class="inputText" />
         </div>

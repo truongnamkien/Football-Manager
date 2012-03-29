@@ -22,7 +22,7 @@ class Admin_Authen extends MY_Admin_Controller {
             if ($this->my_auth->login($inputs['username'], $inputs['password'], TRUE)) {
                 redirect(site_url('admin/admin'));
             } else {
-                $data['login_failed'] = array(
+                $data['error'] = array(
                     'title' => $this->lang->line('authen_login_fail'),
                     'messages' => array($this->lang->line('authen_login_fail_helper'),
                         $this->lang->line('authen_please_register')),

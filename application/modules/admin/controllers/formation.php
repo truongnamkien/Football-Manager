@@ -120,7 +120,7 @@ class Formation extends MY_Inner_Admin_Controller {
                 return lang('formation_error_invalid_format', '', lang('formation_' . $area));
             } else {
                 $total_players += $formats[$format]['number'];
-                if (strpos($area, 'swing') !== FALSE) {
+                if (strpos($area, 'wing') !== FALSE) {
                     $total_players += $formats[$format]['number'];
                 }
             }

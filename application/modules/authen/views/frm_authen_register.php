@@ -14,7 +14,7 @@
 
     <?php echo form_open(site_url('authen/register'), array('id' => 'registerForm')); ?>
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140">
+        <label for="display_name" class="fs18 fwb fLeft w140">
             <?php echo lang('authen_display_name'); ?>
             <span class="required">*</span>                    
         </label>
@@ -26,7 +26,7 @@
     <div class="clear"></div>
 
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140">
+        <label for="email" class="fs18 fwb fLeft w140">
             <?php echo lang('authen_email') ?>
             <span class="required">*</span>
         </label>
@@ -38,7 +38,7 @@
     <div class="clear"></div>
 
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140">
+        <label for="password" class="fs18 fwb fLeft w140">
             <?php echo lang('authen_password'); ?>
             <span class="required">*</span>
         </label>
@@ -50,7 +50,7 @@
     <div class="clear"></div>
 
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140">
+        <label for="password_confirm" class="fs18 fwb fLeft w140">
             <?php echo lang('authen_password_confirm'); ?>
             <span class="required">*</span>
         </label>
@@ -62,7 +62,7 @@
     <div class="clear"></div>
 
     <div class="ma10">
-        <label class="fs18 fwb fLeft w140">
+        <label for="team_name" class="fs18 fwb fLeft w140">
             <?php echo lang('authen_team_name'); ?>
             <span class="required">*</span>
         </label>
