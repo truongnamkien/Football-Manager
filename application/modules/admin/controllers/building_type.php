@@ -23,7 +23,6 @@ class Building_Type extends MY_Inner_Admin_Controller {
             Building_Type_Model::BUILDING_TYPE_RECOVERY => Building_Type_Model::BUILDING_TYPE_RECOVERY,
             Building_Type_Model::BUILDING_TYPE_SERVICE => Building_Type_Model::BUILDING_TYPE_SERVICE,
             Building_Type_Model::BUILDING_TYPE_RESEARCH => Building_Type_Model::BUILDING_TYPE_RESEARCH,
-            Building_Type_Model::BUILDING_TYPE_TRANSFER => Building_Type_Model::BUILDING_TYPE_TRANSFER,
             Building_Type_Model::BUILDING_TYPE_TRANSFER => Building_Type_Model::BUILDING_TYPE_TRANSFER);
     }
 
@@ -79,7 +78,8 @@ class Building_Type extends MY_Inner_Admin_Controller {
         }
 
         $specific_input = array(
-            'type' => array('input' => 'dropdown', 'options' => $this->_get_types())
+            'type' => array('input' => 'dropdown', 'options' => $this->_get_types()),
+            'description' => array('input' => 'textarea')
         );
         unset($object[$this->data['type'] . '_id']);
         return $this->parse_object_field($object, $specific_input);

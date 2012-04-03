@@ -18,7 +18,6 @@ class MY_Controller extends MX_Controller {
         $this->output->set_header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
         $this->load->helper(array('html', 'MY_Date'));
         $this->_masterview_enabled = TRUE;
-
     }
 
     /**
@@ -292,9 +291,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
     protected function handle_post_inputs() {
         $params = array();
         foreach ($this->input->post() as $key => $value) {
-            if (!empty($value)) {
-                $params[$key] = $value;
-            }
+            $params[$key] = $value;
         }
         return $params;
     }
@@ -377,6 +374,7 @@ abstract class MY_Inner_Admin_Controller extends MY_Admin_Controller {
         }
         return $result;
     }
+
     abstract protected function set_validation_rules($action);
 
     abstract protected function prepare_object($id = FALSE);

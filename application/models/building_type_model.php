@@ -7,12 +7,10 @@ class Building_Type_Model extends Abstract_Model {
     const BUILDING_TYPE_MANAGEMENT = 'quản lý';
     const BUILDING_TYPE_STADIUM_CONTAINER = 'sức chứa';
     const BUILDING_TYPE_TRANSPORT = 'giao thông';
-    const BUILDING_TYPE_TRAINING = 'huấn luyện';
     const BUILDING_TYPE_SUPPORT = 'hỗ trợ';
     const BUILDING_TYPE_RECOVERY = 'phục hồi';
     const BUILDING_TYPE_SERVICE = 'dịch vụ';
     const BUILDING_TYPE_RESEARCH = 'nghiên cứu';
-    const BUILDING_TYPE_STORAGE = 'lưu giữ';
     const BUILDING_TYPE_TRANSFER = 'chuyển nhượng';
 
     public function __construct() {

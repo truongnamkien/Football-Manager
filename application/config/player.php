@@ -27,3 +27,13 @@ $config['player_num_of_player'] = array(
     'for_center' => 2,
     'for_wing' => 3
 );
+
+$config['player_num_of_npc'] = array(
+    'goalkeeper' => 1,
+    'def_center' => 2,
+    'def_wing' => 2,
+    'mid_center' => 1,
+    'mid_wing' => 2,
+    'for_center' => 1,
+    'for_wing' => 2
+);

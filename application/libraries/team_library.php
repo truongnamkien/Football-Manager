@@ -28,8 +28,8 @@ class Team_Library extends Abstract_Library {
             $data['team_name'] = lang('team_team');
         }
         $team = parent::create($data);
-        if (empty($data)) {
-            return parent::update($team['team_id'], array('team_name' => $team['team_name'] . ' ' . $team['team_id']));
+        if (!empty($team) && isset($team['team_name']) && $team['team_name'] == lang('team_team')) {
+            return $this->update($team['team_id'], array('team_name' => $team['team_name'] . ' ' . $team['team_id']));
         }
         return $team;
     }
@@ -43,14 +43,18 @@ class Team_Library extends Abstract_Library {
 
         // Xóa player
         $players = parent::$CI->player_library->get_by_team($id);
-        foreach ($players as $player) {
-            parent::$CI->player_library->remove($player['player_id']);
+        if (!empty($players)) {
+            foreach ($players as $player) {
+                parent::$CI->player_library->remove($player['player_id']);
+            }
         }
 
         // Xóa formation của team
         $formations = parent::$CI->team_formation_library->get_formation_of_team($id);
-        foreach ($formations as $formation) {
-            parent::$CI->team_formation_library->remove($formation['team_formation_id']);
+        if (!empty($formations)) {
+            foreach ($formations as $formation) {
+                parent::$CI->team_formation_library->remove($formation['team_formation_id']);
+            }
         }
     }
 

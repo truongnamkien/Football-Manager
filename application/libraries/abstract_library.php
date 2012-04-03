@@ -63,6 +63,10 @@ abstract class Abstract_Library {
         if ($object['return_code'] == API_SUCCESS && !empty($object['data'])) {
             $object = $object['data'];
             $id = $object[get_object_key($object, $this->type)];
+            $key_all = $this->_get_key('cache.object.info.all');
+            if (!empty($key_all)) {
+                self::$CI->cache->delete($key_all);
+            }
             return $this->get($id, TRUE);
         }
         return FALSE;
@@ -78,6 +82,10 @@ abstract class Abstract_Library {
         $model_name = $this->type . '_model';
         $object = self::$CI->$model_name->update($id, $data);
         if ($object['return_code'] == API_SUCCESS) {
+            $key_all = $this->_get_key('cache.object.info.all');
+            if (!empty($key_all)) {
+                self::$CI->cache->delete($key_all);
+            }
             return $this->get($id, TRUE);
         }
         return FALSE;
@@ -91,9 +99,11 @@ abstract class Abstract_Library {
         $model_name = $this->type . '_model';
         self::$CI->$model_name->delete($id);
         $key = $this->_get_key('cache.object.info', array('$id' => $id));
-        $key_all = $this->_get_key('cache.object.info.all');
         self::$CI->cache->delete($key);
-        self::$CI->cache->delete($key_all);
+        $key_all = $this->_get_key('cache.object.info.all');
+        if (!empty($key_all)) {
+            self::$CI->cache->delete($key_all);
+        }
     }
 
     /**
@@ -144,8 +154,8 @@ abstract class Abstract_Library {
     protected function _get_key($key_name, array $variables = array()) {
         $key_map = $this->key_map;
 
-        if (empty($key_map[$key_name])) {
-            throw new Exception("Error: Key name is empty. Check your _get_key() call.");
+        if (!isset($key_map[$key_name]) || empty($key_map[$key_name])) {
+            return '';
         }
 
         $key = $key_map[$key_name];

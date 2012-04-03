@@ -62,7 +62,7 @@ class Street_Library extends Abstract_Library {
         $street = $this->get($street_id, TRUE);
 
         // Remove buildings
-        if (isset($street['buildings'])) {
+        if (isset($street['buildings']) && !empty($street['buildings'])) {
             foreach ($street['buildings'] as $building) {
                 parent::$CI->building_library->remove($building['street_building_id']);
             }

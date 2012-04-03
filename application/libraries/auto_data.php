@@ -39,8 +39,9 @@ class Auto_Data {
 
                 // Tạo team
                 $team = $this->CI->team_library->create();
+
                 // Tạo cầu thủ cho team
-                $this->auto_create_team_player($level, $team);
+                $this->auto_create_team_player($level, $team, 'npc');
 
                 // Tạo street (có trỏ tới team)
                 $street = $this->CI->street_library->create(array('area' => $i, 'street_type' => Street_Model::STREET_TYPE_NPC, 'team_id' => $team['team_id']));
@@ -108,8 +109,8 @@ class Auto_Data {
      * @param type $level
      * @param type $team 
      */
-    public function auto_create_team_player($level, $team) {
-        $position_amount = $this->CI->config->item('player_num_of_player', 'player');
+    public function auto_create_team_player($level, $team, $type = 'player') {
+        $position_amount = $this->CI->config->item('player_num_of_' . $type, 'player');
         foreach ($position_amount as $position => $amount) {
             for ($i = 0; $i < $amount; $i++) {
                 $this->auto_create_player($level, $position, $team['team_id']);

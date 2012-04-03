@@ -103,7 +103,7 @@ class Formation extends MY_Inner_Admin_Controller {
         $formats = $this->config->item('formation_all_format', 'formation');
         $data['format_photos'] = array();
         foreach ($formats as $key => $value) {
-            $data['format_photos'][$value['number']][$key] = asset_url('images/formation_' . $key . '.png');
+            $data['format_photos'][$value['number']][$key] = asset_url('images/formation/formation_' . $key . '.png');
         }
         return $this->load->view('formation/pagelet_all_formats', $data, TRUE);
     }

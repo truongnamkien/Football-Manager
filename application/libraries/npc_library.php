@@ -45,9 +45,9 @@ class NPC_Library extends Abstract_Library {
      * @return type 
      */
     public function get_npc_with_street($street_id) {
-        $street = $this->user_model->get_where(array('street_id' => $street_id));
-        if ($street_id['return_code'] == API_SUCCESS && !empty($street_id['data'])) {
-            return $street_id['data'];
+        $npc = parent::$CI->npc_model->get_where(array('street_id' => $street_id));
+        if ($npc['return_code'] == API_SUCCESS && !empty($npc['data'])) {
+            return $npc['data'];
         }
         return FALSE;
     }
