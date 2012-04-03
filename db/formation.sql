@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 29, 2012 at 03:48 AM
+-- Generation Time: Apr 03, 2012 at 12:28 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -37,14 +37,16 @@ CREATE TABLE IF NOT EXISTS `formation` (
   `def_center` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`formation_id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `formation`
 --
 
 INSERT INTO `formation` (`formation_id`, `name`, `for_wing`, `for_center`, `mid_wing`, `mid_center`, `def_wing`, `def_center`) VALUES
-(1, '4 - 3 - 3 A', 0, 10, 0, 12, 2, 4);
+(1, '4 - 3 - 3 A', 0, 10, 0, 12, 2, 4),
+(2, '4 - 4 - 2 A', 0, 4, 2, 4, 2, 4),
+(3, '5 - 3 - 2 A', 0, 4, 0, 9, 2, 8);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

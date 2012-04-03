@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2012 at 04:04 AM
+-- Generation Time: Apr 03, 2012 at 12:28 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `street_building` (
   `street_building_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `street_id` bigint(20) DEFAULT NULL,
   `building_type_id` tinyint(4) DEFAULT NULL,
-  `level` tinyint(4) DEFAULT '0',
+  `level` int(11) DEFAULT '0',
   PRIMARY KEY (`street_building_id`),
   KEY `street_id` (`street_id`,`building_type_id`),
   KEY `building_type_id` (`building_type_id`)
