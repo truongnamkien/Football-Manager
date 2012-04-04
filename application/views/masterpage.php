@@ -9,6 +9,8 @@
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
         <?php echo asset_link_tag('css/admin/style.css'); ?>
+        <?php echo asset_link_tag('css/client.css'); ?>
+        <?php echo asset_link_tag('css/default.css'); ?>
         <?php echo asset_link_tag('css/admin/invalid.css'); ?>
         <?php echo asset_link_tag('css/colorbox/colorbox.css'); ?>
 

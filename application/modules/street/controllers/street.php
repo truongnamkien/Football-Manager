@@ -30,4 +30,14 @@ class Street extends MY_Inner_Controller {
         $this->load->view('street_building_view', $data);
     }
 
+    public function indoor() {
+        $data = array();
+        $this->load->view('street_indoor_view', $data);
+    }
+
+    public function outdoor() {
+        $data = array();
+        $this->load->view('street_outdoor_view', $data);
+    }
+
 }

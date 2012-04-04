@@ -12,6 +12,7 @@
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
         <?php echo asset_link_tag('css/admin/style.css'); ?>
+        <?php echo asset_link_tag('css/default.css'); ?>
         <?php echo asset_link_tag('css/admin/invalid.css'); ?>
 
         <!--[if lte IE 7]>

@@ -24,8 +24,8 @@ class Navigator extends MY_Inner_Controller {
 
     private function _street_sub_nav() {
         return array('navs' => array(
-            'indoor' => site_url('street/player'),
-            'outdoor' => site_url('street/formation'),
+            'indoor' => site_url('street/indoor'),
+            'outdoor' => site_url('street/outdoor'),
         ));
     }
 
