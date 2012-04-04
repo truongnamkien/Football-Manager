@@ -1,0 +1,133 @@
+#formation_field {
+    width: 540px;
+    float: left;
+    margin-right: 50px;
+}
+
+#formation_field div.formation_area {
+    float: left;
+    width: 180px;
+    height: 180px;
+    text-align: center;
+    background: url('../images/formation/formation_none_180x180.png');
+}
+
+#formation_field div.formation_goalkeeper {
+    float: left;
+    width: 180px;
+    height: 40px;
+    text-align: center;
+    background: url('../images/formation/formation_none_180x180.png');
+}
+
+div.formation_area div.area1 {
+    float: left;
+    width: 180px;
+    height: 60px;
+}
+
+div.formation_area div.area2 {
+    float: left;
+    width: 90px;
+    height: 60px;
+}
+
+div.formation_area div.area3 {
+    float: left;
+    width: 60px;
+    height: 60px;
+}
+
+div#map_table {
+    border: solid 1px #9bb9d3;
+    width: 560px;
+    height: 560px;
+    padding: 2px;
+}
+
+div#map_table div.map_cell {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    padding: 0;
+    margin: 2px;
+    float: left;
+    border: solid 1px #9bb9d3;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px
+}
+
+#street_overview {
+    width: 960px;
+    height: 680px;
+    background: url(../images/building/bg.jpg) no-repeat;
+    position: relative;
+}
+
+.street_building {
+    width: 240px;
+    height: 227px;
+    position: absolute;
+}
+
+.street_building:hover, #center_building:hover {
+    /* Theoretically for IE 8 & 9 (more valid) */
+    /* ...but not required as filter works too */
+    /* should come BEFORE filter */
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+
+    /* This works in IE 8 & 9 too */
+    /* ... but also 5, 6, 7 */
+    filter: alpha(opacity=50);
+
+    /* Older than Firefox 0.9 */
+    -moz-opacity:0.5;
+
+    /* Safari 1.x (pre WebKit!) */
+    -khtml-opacity: 0.5;
+
+    /* Modern!
+    /* Firefox 0.9+, Safari 2?, Chrome any?
+    /* Opera 9+, IE 9+ */
+    opacity: 0.5;
+}
+
+#center_building {
+    width: 480px;
+    height: 227px;
+    position: absolute;
+    left: 250px;
+    top: 230px;
+}
+
+#left_building {
+    left: 0px;
+    top: 230px;
+}
+
+#right_building {
+    left: 720px;
+    top: 230px;
+}
+
+#top_left_building {
+    left: 20px;
+    top: 5px;
+}
+
+#bottom_left_building {
+    left: 240px;
+    top: 440px;
+}
+
+#top_right_building {
+    left: 470px;
+    top: 5px;
+}
+
+#bottom_right_building {
+    left: 735px;
+    top: 450px;
+}
+
