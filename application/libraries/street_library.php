@@ -96,7 +96,7 @@ class Street_Library extends Abstract_Library {
         } else {
             $cooldown_time = $this->get_cooldown_time($street_building_id);
             $building = parent::$CI->building_library->upgrade($street_building_id);
-            if (empty($building) || is_string($building)) {
+            if (is_string($building)) {
                 return $building;
             }
 
@@ -137,22 +137,6 @@ class Street_Library extends Abstract_Library {
     }
 
     /**
-     * Calculate the fee to upgrade a building
-     * @param type $street_building_id
-     * @return type 
-     */
-    public function get_fee($street_building_id) {
-        $building = parent::$CI->building_library->get($street_building_id);
-        $fee = $building['beginning_fee'];
-        $rate = $building['fee_rate'];
-        $level = $building['level'];
-        for ($i = 1; $i < $level; $i++) {
-            $fee = $fee * $rate;
-        }
-        return $fee;
-    }
-
-    /**
      * Get the cooldown time of a building
      * @param type $street_building_id
      * @return type 
@@ -160,7 +144,7 @@ class Street_Library extends Abstract_Library {
     public function get_cooldown_time($street_building_id) {
         $building = parent::$CI->building_library->get($street_building_id);
         $level = $building['level'];
-        $fee = $this->get_fee($street_building_id);
+        $fee = parent::$CI->building_library->get_fee($street_building_id);
         $rate = intval($level / Street_Building_Model::LEVEL_PER_SECTION) + 1;
         return intval($fee / $rate);
     }
@@ -262,20 +246,6 @@ class Street_Library extends Abstract_Library {
                 $result[$x_coor][$y_coor] = $street;
             }
             return $result;
-        }
-        return FALSE;
-    }
-
-    /**
-     * Get an object of building by in a street
-     * @param type $street_id
-     * @param type $building_type_id
-     * @return type 
-     */
-    public function get_street_building($street_id, $building_type_id) {
-        $street_buildings = parent::$CI->street_building_model->get_where(array('street_id' => $street_id, 'building_type_id' => $building_type_id));
-        if ($street_buildings['return_code'] == API_SUCCESS && !empty($street_buildings['data'])) {
-            return $street_buildings['data'];
         }
         return FALSE;
     }

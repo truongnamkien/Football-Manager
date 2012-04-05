@@ -22,6 +22,7 @@ $lang['building_type_type'] = 'Loại';
 
 $lang['building_level'] = 'Cấp độ';
 $lang['building_upgrade'] = 'Nâng cấp';
+$lang['building_upgrade_fee'] = 'Phí nâng cấp';
 
 // Upgrade
 $lang['building_upgrade_success'] = 'Nâng cấp thành công';

@@ -1,26 +1,35 @@
-<div id="building_detail_img">
-    <img class="not_hover" src="<?php echo asset_url('images/building/' . $image . '.png'); ?>" width="480" />
-    <img class="is_hover" src="<?php echo asset_url('images/building/' . $image . '_select.png'); ?>" width="480" />
+<div class="content-box">
+    <div class="content-box-header">
+        <h3><?php echo $name; ?></h3>
+    </div>
+
+    <?php if (!empty($building_types)): ?>
+        <div class="content-box-content">
+            <div id="building_detail_info">
+                <div id="building_detail_img">
+                    <img class="not_hover" src="<?php echo asset_url('images/building/' . $image . '.png'); ?>" width="480" />
+                    <img class="is_hover" src="<?php echo asset_url('images/building/' . $image . '_select.png'); ?>" width="480" />
+                </div>
+
+                <?php foreach ($building_types as $building): ?>
+                    <div class="building_detail">
+                        <?php if (count($building_types) > 1): ?>
+                            <h6><?php echo $building['name']; ?></h6>
+                        <?php endif; ?>
+                        <p class="fLeft">
+                            <?php echo $building['description']; ?><br />
+                            <span class="fLeft"><?php echo lang('building_level') . ': ' . $building['level']; ?></span><br />
+                            <span class="fLeft"><?php echo lang('building_upgrade_fee') . ': ' . $building['fee']; ?></span><br />
+                        </p>
+                        <div class="fLeft">
+                            <a href="#" rel="async" ajaxify="<?php echo site_url('ajax/street_ajax/upgrade/' . $building['street_building_id']); ?>" class="ma5 button fRight"><?php echo lang('building_upgrade'); ?></a>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                <?php endforeach; ?>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    <?php endif; ?>
 </div>
-
-<table id="building_detail_info">
-    <thead>
-        <tr>
-            <th><?php echo lang('building_type_name') ?></th>
-            <th><?php echo lang('building_type_description') ?></th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <?php foreach ($building_types as $building): ?>
-            <tr>
-                <td><?php echo $building['name'] ?></td>
-                <td><?php echo $building['description'] ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-
-<div class="clear"></div>

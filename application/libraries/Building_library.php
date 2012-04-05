@@ -83,7 +83,7 @@ class Building_Library extends Abstract_Library {
         }
         return FALSE;
     }
-    
+
     /**
      * Upgrade a building
      * @param type $street_building_id
@@ -140,11 +140,56 @@ class Building_Library extends Abstract_Library {
     private function get_building_extra_info($building) {
         $building_type = parent::$CI->building_type_library->get($building['building_type_id']);
         $building = array_merge($building, $building_type);
+        $fee = $building['beginning_fee'];
+        $rate = $building['fee_rate'];
+        $level = $building['level'];
+        for ($i = 1; $i < $level; $i++) {
+            $fee = $fee * $rate;
+        }
+        $building['fee'] = $fee;
         return $building;
     }
 
     protected function after_get_callback($building) {
         return $this->get_building_extra_info($building);
+    }
+
+    /**
+     * Get the building in the cell of the street
+     * @param type $street_id
+     * @param type $cell
+     * @return type 
+     */
+    public function get_by_street_cell($street_id, $cell) {
+        $building_types = parent::$CI->building_type_library->get_by_cell($cell);
+
+        if (!empty($building_types)) {
+            if (isset($building_types['building_type_id'])) {
+                $buildings = $this->get_by_type($street_id, $building_types['building_type_id']);
+            } else {
+                $buildings = array();
+                foreach ($building_types as $type) {
+                    $building = $this->get_street_building($street_id, $type['building_type_id']);
+                    $buildings[] = $this->get_building_extra_info($building);
+                }
+            }
+            return $buildings;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Get an object of building by in a street
+     * @param type $street_id
+     * @param type $building_type_id
+     * @return type 
+     */
+    public function get_street_building($street_id, $building_type_id) {
+        $street_buildings = parent::$CI->street_building_model->get_where(array('street_id' => $street_id, 'building_type_id' => $building_type_id));
+        if ($street_buildings['return_code'] == API_SUCCESS && !empty($street_buildings['data'])) {
+            return $street_buildings['data'];
+        }
+        return FALSE;
     }
 
 }

@@ -39,14 +39,19 @@ class Street extends MY_Inner_Controller {
         }
         $street_building_config = $this->config->item('street_building_area', 'street');
         $index = intval(($cell - 1) / 2);
-        $building_types = $this->building_type_library->get_by_cell($cell);
-        $this->set_title((empty($building_types) ? '' : (isset($building_types['name']) ? $building_types['name'] : lang('building_type_stadium'))));
+
+        $street_id = $this->my_auth->get_street_id();
+        $building_types = $this->building_library->get_by_street_cell($street_id, $cell);
+
+        $data['name'] = (empty($building_types) ? '' : (isset($building_types['name']) ? $building_types['name'] : lang('building_type_stadium')));
+        $this->set_title($data['name']);
+
         if (!empty($building_types) && isset($building_types['building_type_id'])) {
             $building_types = array($building_types);
         }
+
         $data['building_types'] = $building_types;
         $data['image'] = $street_building_config[$index]['image'][($cell + 1) % 2];
-
 
         $this->load->view('street_building_view', $data);
     }

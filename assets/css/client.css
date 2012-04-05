@@ -138,15 +138,16 @@ div#map_table div.map_cell {
     display: none;
 }
 
-#building_detail_info, #building_detail_img {
-    float: left;
-}
-
 #building_detail_img {
     width: 480px;
-    margin: 10px;
+    margin: auto;
 }
 
 #building_detail_info {
-    width: 480px;
+    max-width: 740px;
+}
+
+.building_detail p {
+    width: 620px;
+    margin: 10px;
 }

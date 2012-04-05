@@ -678,6 +678,399 @@ Function.prototype.deferUntil = function(cond, timeLimit, lang) {
     return interval;
 };
 
+function Dialog(data, noHistory) {
+    if(data) {
+        this._setFromModel(data, noHistory);
+    }
+    return this;
+}
+
+$.extend(Dialog, {
+    OK:{
+        name:'ok',
+        label: 'Đồng ý', 
+        className:'uiBtn uiBtn1 fRight mr10'
+    },
+    SURE : {
+        name : 'sure',
+        label: 'Chắc chắn',
+        className:'uiBtn uiBtn1 fRight mr10'
+    },
+    CONFIRM : {
+        name : 'confirm',
+        label: 'Xác nhận',
+        className:'uiBtn uiBtn1 fRight mr10'
+    },
+    CANCEL:{
+        name:'cancel', 
+        label:'Hủy bỏ', 
+        className:'uiBtn12 fRight mr10'
+    },
+    CLOSE:{
+        name:'close',
+        className:'uiBtn uiBtn1 fRight mr10',
+        label: 'Đóng'
+    }
+});
+
+$.extend(Dialog, {
+    _STANDARD_BUTTONS : [Dialog.OK,Dialog.CANCEL,Dialog.CLOSE,Dialog.SURE,Dialog.CONFIRM],
+    _STACK : new Array(), 
+    buildButton : function(buttons, grayLine) {
+        var html = '';
+        
+        if (buttons && buttons.length > 0) {
+            
+            html+= '<div class="lbFooter mt10">';
+            for (var i=buttons.length-1; i >= 0; i--) {
+                var button = buttons[i];
+
+                if (button && button.name && button.label) {
+                    var className = (button.className ? 'class="'+button.className+'"' : 'class="uiBtn uiBtn1 fRight mr10"')
+                    html += '<button '+className+' name="'+button.name+'">'+button.label+'</button>';
+                }
+            }
+            html += '        <div class="clear"></div>';
+            html+='</div>';
+        }
+        
+        return html;
+    },
+    buildHtml : function(title, body, buttons, type, className) {
+        var html = '';
+        if (type == 'alert') {
+            html += '<div>';
+            html += '    <div class="lightbox ma20 blueColor">';
+            html += '       <div class="lbTop"></div>';
+            html += '       <div class="lbMid por">';
+            if (title) {
+                html += '       <h3 class="fs24 mb20">'+title+'</h3>';
+                html += '        <div class="clear"></div>';
+            }
+            html += '           <div class="lbContent">';
+            html += '                <div class="lbBody">';
+            html += '                   <div class="lbLine mb20"></div>';
+            html += '                   <div class="lbMainBody"><p class="lbDescTitle fwb">';
+            if (body) html+= body;
+            html += '                   </p></div>';
+            html += '                </div>';
+            
+            html += Dialog.buildButton(buttons, true);
+            
+            html += '           </div>';                
+            html += '           <div class="lbPen"></div>';                
+            html += '       </div>';
+            html += '        <div class="lbBot"></div>';                
+            html += '   </div>';    
+            html += '</div>';    
+        } else if (type == 'loading') {
+        // Rem l?i d? s? d?ng loading default c?a colorbox
+        /*
+            html += '<div>';
+            html += '<div class="lightbox" id="loading-data">';
+            html += '<div class="lightbox-loading rounded-lb">�ang t?i d? li?u</div>';
+            html += '</div></div>';
+            */
+        } else if (type == 'share') {
+            html += '<div>';
+            html += '   <div class="lightbox ma20 blueColor">';
+            html += '       <div class="lbTop"></div>';
+            html += '       <div class="lbMid por">';
+            if (title) {
+                html += '       <h3 class="fs24 mb20">'+title+'</h3>';
+                html += '       <div class="clear"></div>';
+            }
+            html += '           <div class="lbContent">';
+            if (body) html +=       body;
+            html += '           </div><div class="lbPen"></div>';                
+            html += '       </div>';
+            html += '        <div class="lbBot"></div>';                
+            html += '   </div>';    
+            html += '</div>';
+
+        } else if(type == 'stream_detail'){
+            html += body;
+        } else {
+            className = className ? className : "lightbox";
+            html += '<div>';
+            html += '   <div class="'+className+' ma20 blueColor">';
+            html += '       <div class="lbTop"></div>';
+            html += '       <div class="lbMid por">';
+            if (title) {
+                html += '       <h3 class="fs24 mb20">'+title+'</h3>';
+                html += '       <div class="clear"></div>';
+            }
+            html += '           <div class="lbContent">';
+            html += '                <div class="lbBody">';
+            html += '                   <div class="lbLine mb20"></div>';
+            html += '                   <div class="lbMainBody"><p class="lbDescTitle fwb">';
+            if (body) html += body;
+            html += '                   </p></div>';
+            html += '                </div>';
+            
+            html += Dialog.buildButton(buttons, true);
+            
+            html += '           </div>';                
+            html += '           <div class="lbPen"></div>';                
+            html += '       </div>';
+            html += '        <div class="lbBot"></div>';                
+            html += '   </div>';    
+            html += '</div>';    
+        }
+        
+        return html;
+    },
+    
+    _findButton:function(name, buttons){
+        if(buttons) {
+            for(var i=0; i < buttons.length; ++i) {
+                if(buttons[i] && buttons[i].name == name) return buttons[i];
+            }
+        }
+        return null;
+    },
+    bootstrap : function(uri, data, is_get, method, option, obj)  {
+        try{
+            data = data || {};
+            
+            uri = new URI(uri);
+
+            $.extend(data, uri.getQueryData());
+            
+            method = method || (is_get ? 'GET' : 'POST');
+
+            if (method == 'POST') {
+                uri.setQueryData({});
+            }
+            
+            var stat_elem = $(obj).parents('.stat_elem').get(0) || obj;
+                    
+            if (stat_elem && $(stat_elem).hasClass('loading-ajax')) return false;
+            
+            var request = new AsyncRequest().setMethod(method).setRelativeTo(obj).setStatusElement(stat_elem);
+            
+            var dialog = new Dialog(option).setRelativeTo(obj).setAsync(request.setURI(uri).setData(data));
+            
+            dialog.show();
+        }catch(e) { }
+        return false;
+    }
+});
+
+$.extend( Dialog.prototype, {
+    _handler : null,
+    _clicked_button : null,
+    _relativeTo : null,
+    _showHadnler: null,
+    setPostURI:function(uri, showDialog) {
+        // b, a 
+        if(showDialog===undefined) showDialog=true;
+    
+       
+        var _this = this;
+        this.setHandler(function() {
+            _this._submitForm('POST', uri, false, showDialog);
+        });
+       
+        return this;
+    },
+    setHandler:function(handler) {
+        this._handler = handler;
+        return this;
+    },
+    _submitForm:function(method, uri, button, showDialog) {
+        var data = this.getFormData();
+        
+        if(button) data[button.name] = button.label;
+        
+        var request = new AsyncRequest().setURI(new URI(uri)).setData(data).setMethod(method).setRelativeTo(this._relativeTo);
+        
+        if (showDialog) {
+            this.setAsync(request);
+            this.show();    
+        } else request.send();
+        
+        this.show();
+        
+        return false;
+    },
+    getFormData:function() {
+        return $('#cboxLoadedContent *').serializeArray();
+    },
+    setCancelHandler:function(handler){
+        this._cancelHandler = handler;
+        return this;
+    },
+    setShowHandler:function(handler) {
+        this._showHadnler = handler;
+        return this;
+    },
+    setCloseHandler:function(a){
+        this._close_handler=Dialog.call_or_eval.bind(null,this,a);
+        return this;
+    },
+    show : function() {
+        if (this._async_request != null) 
+        {
+            $.colorbox({
+                html: Dialog.buildHtml(null, null, null, 'loading'),
+                transition: "none",
+                needLoading: false
+            });
+        } else this._update();
+    },
+    setAsync:function(request, f) {
+        var data = request.getData(), _this = this;
+        data.__d=1;
+        request.setData(data); 
+        
+        this._async_request = request;
+        
+        // dat su kien sau khi request xong 
+        request.setHandler(function(response) {
+            if(_this._async_request != request) return;
+            
+            _this._async_request = null;
+            
+            var payload = response.getPayload();
+            
+            if (typeof payload == 'string') {
+                _this.body = payload;
+            } else if (payload && payload.__dialog) 
+                _this._setFromModel(payload.__dialog);
+            else {
+                $.colorbox.close();
+                return;
+            }
+            
+            _this._update();
+        });        
+        
+        //e.setErrorHandler(chain(d,e.getErrorHandler())).setTransportErrorHandler(chain(d,e.getTransportErrorHandler()));
+        request.send();
+       
+        
+        return this;
+    },
+    _update : function() {
+        var _this = this;
+        $.colorbox({
+            html: Dialog.buildHtml(_this.title, _this.body, _this.buttons, _this.type, _this.className),
+            transition: "none",
+            needLoading: false,
+            onComplete: function() {
+                _this._onComplete()
+            },
+            onClosed : function() {
+                Dialog._STACK = Array();
+            }
+        });
+    },
+    _onComplete : function() {
+        var container = $('#cboxLoadedContent'), _this = this;
+        if (this._showHadnler) {
+            this._showHadnler();
+        }
+        
+        $('button', container).click(function() {
+            if ( this.name == 'cancel') {
+                $.colorbox.close();
+                if (_this._cancelHandler) _this._cancelHandler();
+            } else if (_this._handler) {
+                _this._handler();
+                _this._handler = null;
+            }
+            
+            if (_this._async_request  == null) {
+                if (_this.storeHistory || _this.goHistory)
+                {
+                    if (_this.goHistory)
+                    {
+                        for (var i=0; i < _this.goHistory; i++)
+                            Dialog._STACK.pop();
+                    } else if (_this.storeHistory) {
+                        Dialog._STACK.pop();
+                    }
+                    
+                
+                    if (Dialog._STACK.length > 0) {
+                        _this._setFromModel(Dialog._STACK.pop());
+                        _this._update();
+                        return;
+                    } 
+                }
+                $.colorbox.close();
+            }
+        });
+    },
+    _setFromModel:function(payload) {
+        this.storeHistory = null;
+        this.goHistory = null;
+        this.body = null;
+        this.title = null;
+        this.buttons = null;
+        this.type = null;
+        this.className = null;
+        this.postURI = null;
+        this._handler = null;
+        this._cancelHandler = null; 
+        
+        // luu vao stack
+        if (payload.storeHistory) {
+            Dialog._STACK.push(payload);
+        }
+            
+        
+        for (prop in payload) {
+            var method = this['set' + prop.substr(0,1).toUpperCase() + prop.substr(1)];
+            var args = new Array();
+            
+            if (typeof payload[prop] == 'object') {
+                for (var i=0; i < payload[prop].length; i++)
+                    args.push(payload[prop][i]);
+            } else args.push(payload[prop]);
+            
+            if(method) method.apply(this, args);
+        }
+    },
+    setGoHistory : function(goHistory) {
+        this.goHistory = goHistory;
+    }
+    ,
+    setStoreHistory : function(storeHistory) {
+        this.storeHistory = storeHistory;
+    },
+    setBody : function(body) {
+        this.body = body;
+    }, 
+    setTitle: function(title) {
+        this.title = title;
+    },
+    setButtons: function(buttons) {
+        this.buttons = [];
+        for (var i=0; i < arguments.length; i++) {
+            var button = arguments[i];
+            
+            if(typeof button =='string'){
+                button = Dialog._findButton(arguments[i], Dialog._STANDARD_BUTTONS);        
+            }
+            this.buttons[i] = button; 
+        }
+    
+        return this;
+    },
+    setType: function(type) {
+        this.type = type;
+    },
+    setClassName: function(className) {
+        this.className = className;
+    },
+    setRelativeTo : function(relativeTo) {
+        this._relativeTo = relativeTo;
+        return this;
+    }
+});
+
 
 $('a, button, area').live('click', function(e) {    
     var ajaxify = $(this).attr('ajaxify');
