@@ -13,7 +13,7 @@ class Street_Library extends Abstract_Library {
             'cache.object.info' => $this->cache_key . '$id',
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type,
         );
-        parent::$CI->load->model(array('street_model', 'cooldown_model'));
+        parent::$CI->load->model(array('street_model', 'cooldown_model', 'street_building_model'));
         parent::$CI->load->library(array('building_library', 'map_library', 'team_library'));
         parent::$CI->load->language('building');
     }
@@ -262,6 +262,20 @@ class Street_Library extends Abstract_Library {
                 $result[$x_coor][$y_coor] = $street;
             }
             return $result;
+        }
+        return FALSE;
+    }
+
+    /**
+     * Get an object of building by in a street
+     * @param type $street_id
+     * @param type $building_type_id
+     * @return type 
+     */
+    public function get_street_building($street_id, $building_type_id) {
+        $street_buildings = parent::$CI->street_building_model->get_where(array('street_id' => $street_id, 'building_type_id' => $building_type_id));
+        if ($street_buildings['return_code'] == API_SUCCESS && !empty($street_buildings['data'])) {
+            return $street_buildings['data'];
         }
         return FALSE;
     }

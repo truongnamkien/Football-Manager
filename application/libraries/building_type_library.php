@@ -15,4 +15,17 @@ class Building_Type_Library extends Abstract_Library {
         parent::$CI->load->model(array('building_type_model'));
     }
 
+    /**
+     * Get the information of building by position
+     * @param type $cell
+     * @return type 
+     */
+    public function get_by_cell($cell) {
+        $building_types = parent::$CI->building_type_model->get_where(array('street_cell' => $cell));
+        if ($building_types['return_code'] == API_SUCCESS && !empty($building_types['data'])) {
+            return $building_types['data'];
+        }
+        return FALSE;
+    }
+
 }
