@@ -13,7 +13,7 @@
 
     <div class="content-box-content">
         <div class="tab-content default-tab" style="display: block;">
-            <table>
+            <table id="table_list">
                 <tbody>
                     <?php
                     if (!empty($object)) {

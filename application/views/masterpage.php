@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div id="main-content"> <!-- Main Content Section with everything -->
+            <div id="main-content">
                 <?php echo $PAGE_CONTENT ?>
 
                 <div id="footer">

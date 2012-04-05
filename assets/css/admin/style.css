@@ -352,7 +352,6 @@ ul.content-box-tabs li a.current
 #main-content table
 {
     border-collapse: collapse;
-    width: 100%;
 }
 #main-content table thead th
 {
@@ -933,3 +932,6 @@ select[disabled] > input[type="button"],select[disabled] > input[type="button"]:
 textarea {  resize: none; color: #7B7B7B; overflow: auto}
 .container { background: #fff; -moz-border-radius: 5px 5px 0 0 ; -webkit-border-radius: 5px 5px 0 0; border-radius: 5px 5px 0 0}
 
+#table_list, #table_form {
+    width: 100%;
+}

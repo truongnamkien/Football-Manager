@@ -655,6 +655,30 @@ var Form = {
     }
 };
 
+Function.prototype.deferUntil = function(cond, timeLimit, lang) {
+    var ret = cond();
+
+    if (ret) {
+        this(ret);
+        return null;
+    }
+
+    var self = this, interval = null, time = ( + new Date());
+    interval = setInterval(function() {
+        ret = cond();
+        if (!ret) 
+            if (timeLimit && (new Date() - time) >= timeLimit) {
+            // still nothing
+            } else return;
+
+        interval && clearInterval(interval);
+        self(ret);
+    }, 20, lang);
+
+    return interval;
+};
+
+
 $('a, button, area').live('click', function(e) {    
     var ajaxify = $(this).attr('ajaxify');
     var href = $(this).attr('href');

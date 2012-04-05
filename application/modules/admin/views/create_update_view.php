@@ -22,7 +22,7 @@
                 </div>
             <?php endif ?>
 
-            <table>
+            <table id="table_form">
                 <tbody>
                     <?php
                     echo form_open_multipart('admin/' . $type . '/' . $action . '/' . (isset($id) ? $id : ''));
