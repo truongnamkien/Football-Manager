@@ -42,7 +42,7 @@ class Authen extends MY_Outer_Controller {
             //Dang ky thanh cong, goi email yeu cau verify             
             if (!empty($user_info)) {
                 $this->my_auth->login($collect['email'], $collect['password']);
-                redirect(site_url('street'));
+                redirect(site_url('street/indoor'));
             } else {
                 $data['error']['messages'] = array($this->lang->line('authen_register_fail'));
                 $team = $this->team_model->get_team_by_name($collect['team_name']);
@@ -60,7 +60,7 @@ class Authen extends MY_Outer_Controller {
      */
     public function login() {
         if ($this->my_auth->logged_in()) {
-            redirect(site_url('street'));
+            redirect(site_url('street/indoor'));
         }
         $this->set_title(lang('authen_login'));
 
@@ -83,7 +83,7 @@ class Authen extends MY_Outer_Controller {
                 if ($inputs['remember_me'] == 1) {
                     ini_set('session.cookie_lifetime', 2592000);
                 }
-                redirect(site_url('street'));
+                redirect(site_url('street/indoor'));
             } else {
                 $data['error'] = array(
                     'title' => $this->lang->line('authen_login_fail'),

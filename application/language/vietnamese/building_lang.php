@@ -32,5 +32,5 @@ $lang['building_upgrade_max_level_2'] = 'Công trình này đã đạt cấp đ�
 $lang['building_upgrade_non_permission'] = 'Bạn không có quyền nâng cấp công trình này!';
 $lang['building_not_enough_money'] = 'Bạn không có đủ tiền';
 
-
+$lang['building_type_stadium'] = 'Sân vận động';
 
