@@ -42,7 +42,6 @@ class Street extends MY_Inner_Controller {
 
         $street_id = $this->my_auth->get_street_id();
         $building_types = $this->building_library->get_by_street_cell($street_id, $cell);
-
         $data['name'] = (empty($building_types) ? '' : (isset($building_types['name']) ? $building_types['name'] : lang('building_type_stadium')));
         $this->set_title($data['name']);
 

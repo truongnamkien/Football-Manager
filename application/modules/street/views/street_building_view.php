@@ -12,18 +12,16 @@
                 </div>
 
                 <?php foreach ($building_types as $building): ?>
-                    <div class="building_detail">
+                    <div class="building_detail mt10">
                         <?php if (count($building_types) > 1): ?>
                             <h6><?php echo $building['name']; ?></h6>
                         <?php endif; ?>
-                        <p class="fLeft">
+                        <p>
                             <?php echo $building['description']; ?><br />
                             <span class="fLeft"><?php echo lang('building_level') . ': ' . $building['level']; ?></span><br />
                             <span class="fLeft"><?php echo lang('building_upgrade_fee') . ': ' . $building['fee']; ?></span><br />
-                        </p>
-                        <div class="fLeft">
                             <a href="#" rel="async" ajaxify="<?php echo site_url('ajax/street_ajax/upgrade/' . $building['street_building_id']); ?>" class="ma5 button fRight"><?php echo lang('building_upgrade'); ?></a>
-                        </div>
+                        </p>
                     </div>
                     <div class="clear"></div>
                 <?php endforeach; ?>

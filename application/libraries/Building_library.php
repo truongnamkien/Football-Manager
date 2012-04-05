@@ -165,7 +165,8 @@ class Building_Library extends Abstract_Library {
 
         if (!empty($building_types)) {
             if (isset($building_types['building_type_id'])) {
-                $buildings = $this->get_by_type($street_id, $building_types['building_type_id']);
+                $buildings = $this->get_street_building($street_id, $building_types['building_type_id']);
+                $buildings = $this->get_building_extra_info($buildings);
             } else {
                 $buildings = array();
                 foreach ($building_types as $type) {

@@ -144,10 +144,5 @@ div#map_table div.map_cell {
 }
 
 #building_detail_info {
-    max-width: 740px;
-}
-
-.building_detail p {
-    width: 620px;
-    margin: 10px;
+    max-width: 620px;
 }
