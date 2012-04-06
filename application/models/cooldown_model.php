@@ -29,8 +29,12 @@ class Cooldown_Model extends Abstract_Model {
     protected function check_existed($data) {
         $cooldowns = $this->get_where(array('street_id' => $data['street_id'], 'cooldown_type' => $data['cooldown_type']));
         if ($cooldowns['return_code'] == API_SUCCESS && !empty($cooldowns['data'])) {
-            if (($data['cooldown_type'] == self::COOLDOWN_TYPE_RESEARCH && count($cooldowns['data']) >= self::MAX_COOLDOWN_SLOT_BUILDING)
-                    || ($data['cooldown_type'] == self::COOLDOWN_TYPE_BUILDING && count($cooldowns['data']) >= self::MAX_COOLDOWN_SLOT_BUILDING)) {
+            $cooldowns = $cooldowns['data'];
+            if (isset($cooldowns['cooldown_id'])) {
+                $cooldowns = array($cooldowns);
+            }
+            if (($data['cooldown_type'] == self::COOLDOWN_TYPE_RESEARCH && count($cooldowns) >= self::MAX_COOLDOWN_SLOT_RESEARCHING)
+                    || ($data['cooldown_type'] == self::COOLDOWN_TYPE_BUILDING && count($cooldowns) >= self::MAX_COOLDOWN_SLOT_BUILDING)) {
                 return $this->_ret(API_SUCCESS, TRUE);
             }
         }

@@ -13,7 +13,7 @@ class Building_Library extends Abstract_Library {
             'cache.object.info.all' => $this->cache_key . 'all.' . $this->type . '.$street_id',
         );
         parent::$CI->load->model(array('street_building_model', 'building_type_model'));
-        parent::$CI->load->library(array('building_type_library'));
+        parent::$CI->load->library(array('building_type_library', 'cooldown_library'));
         parent::$CI->load->language('building');
     }
 
@@ -85,38 +85,6 @@ class Building_Library extends Abstract_Library {
     }
 
     /**
-     * Upgrade a building
-     * @param type $street_building_id
-     * @return type 
-     */
-    public function upgrade($street_building_id) {
-        $building = $this->get($street_building_id);
-        $street_id = parent::$CI->my_auth->get_street_id();
-
-        if (empty($building)) {
-            return lang('building_upgrade_error');
-        }
-        $level = $building['level'];
-        if ($building['type'] != Building_Type_Model::BUILDING_TYPE_MANAGEMENT) {
-            $manage_building = $this->get_by_type($street_id, Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
-            $max_level = (!empty($manage_building) ? $manage_building['level'] : Street_Building_Model::MAX_LEVEL);
-        } else {
-            $max_level = Street_Building_Model::MAX_LEVEL;
-        }
-        if ($level < $max_level) {
-            $building = $this->update($street_building_id, array('level' => ($level + 1)));
-            if (empty($building)) {
-                return lang('building_upgrade_error');
-            }
-            return $building;
-        } else if (isset($manage_building)) {
-            return lang_key('building_upgrade_max_level_2', '', array('name' => $manage_building['name']));
-        } else {
-            return lang('building_upgrade_max_level_1');
-        }
-    }
-
-    /**
      * Create building for street
      * @param type $street_id
      * @return type 
@@ -165,12 +133,12 @@ class Building_Library extends Abstract_Library {
 
         if (!empty($building_types)) {
             if (isset($building_types['building_type_id'])) {
-                $buildings = $this->get_street_building($street_id, $building_types['building_type_id']);
+                $buildings = $this->get_by_building_type($street_id, $building_types['building_type_id']);
                 $buildings = $this->get_building_extra_info($buildings);
             } else {
                 $buildings = array();
                 foreach ($building_types as $type) {
-                    $building = $this->get_street_building($street_id, $type['building_type_id']);
+                    $building = $this->get_by_building_type($street_id, $type['building_type_id']);
                     $buildings[] = $this->get_building_extra_info($building);
                 }
             }
@@ -185,12 +153,61 @@ class Building_Library extends Abstract_Library {
      * @param type $building_type_id
      * @return type 
      */
-    public function get_street_building($street_id, $building_type_id) {
+    public function get_by_building_type($street_id, $building_type_id) {
         $street_buildings = parent::$CI->street_building_model->get_where(array('street_id' => $street_id, 'building_type_id' => $building_type_id));
         if ($street_buildings['return_code'] == API_SUCCESS && !empty($street_buildings['data'])) {
             return $street_buildings['data'];
         }
         return FALSE;
+    }
+
+    /**
+     * Upgrade a building of street
+     * @param type $street_building_id
+     * @return type 
+     */
+    public function upgrade($street_building_id) {
+        $available_cd = parent::$CI->cooldown_library->get_available_building_cooldown();
+
+        if (empty($available_cd)) {
+            return lang('building_upgrade_non_cooldown');
+        } else {
+            $building = $this->get($street_building_id);
+            if (empty($building)) {
+                return lang('building_upgrade_error');
+            }
+
+            $level = $building['level'];
+            $fee = $building['fee'];
+            $rate = intval($level / Street_Building_Model::LEVEL_PER_SECTION) + 1;
+            $cooldown_time = intval($fee / $rate);
+
+            if ($building['type'] != Building_Type_Model::BUILDING_TYPE_MANAGEMENT) {
+                $manage_building = $this->get_by_type($building['street_id'], Building_Type_Model::BUILDING_TYPE_MANAGEMENT);
+                if (empty($manage_building)) {
+                    return lang('building_upgrade_error');
+                }
+                $max_level = $manage_building['level'];
+            } else {
+                $max_level = Street_Building_Model::MAX_LEVEL;
+            }
+            if ($level < $max_level) {
+                $building = $this->update($street_building_id, array('level' => ($level + 1)));
+                if (empty($building)) {
+                    return lang('building_upgrade_error');
+                }
+            } else if (isset($manage_building)) {
+                return lang_key('building_upgrade_max_level_2', '', array('name' => $manage_building['name']));
+            } else {
+                return lang('building_upgrade_max_level_1');
+            }
+            $current_time = now();
+            $cooldown = parent::$CI->cooldown_library->update($available_cd['cooldown_id'], array('end_time' => $current_time + $cooldown_time));
+            return array(
+                'building' => $building,
+                'cooldown' => $cooldown,
+            );
+        }
     }
 
 }
