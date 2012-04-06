@@ -1,38 +1,42 @@
-var Cooldown = {};
-Cooldown.data = [];
-
-Cooldown.init = function(_time, _elem) {
-    for (var _index in Cooldown.data) {
-        if (Cooldown.data[_index] == _elem) {
-            return;
+var Cooldown = {
+    timeout_list: {},
+    init: function(_time, _id) {
+        if (this.timeout_list[_id] != null && this.timeout_list[_id] != undefined) {
+            var _timeout = this.timeout_list[_id];
+            clearTimeout(_timeout);
+            this.timeout_list[_id] = null;
         }
-    }
-    Cooldown.data.push(_elem);
-    Cooldown.run(_time, _elem);
-}
-
-Cooldown.run = function(_time, _elem) {
-    if(_time <= 0) {
-        $("#" + _elem).html("");
-        for (var _index in Cooldown.data) {
-            var _cooldown = Cooldown.data[_index];
-            if (_cooldown == _elem) {
-                Cooldown.data.splice(_index, 1);
-                break;
+        $("#cooldown_list").append("<li>Nâng cấp: <span class='fRight' id='cooldown_" + _id + "'></span></li>");
+        $("#cooldown_info").removeClass("dpn");
+        Cooldown.run(_time, _id);
+    },
+    run: function(_time, _id) {
+        if(_time <= 0) {
+            $("#cooldown_" + _id).html("0:00:00");
+            $("#cooldown_" + _id).parents("li").fadeOut(500, function() {
+                $(this).remove();
+            });
+            if (this.timeout_list[_id] != null && this.timeout_list[_id] != undefined) {
+                var _timeout = this.timeout_list[_id];
+                clearTimeout(_timeout);
+                this.timeout_list[_id] = null;
+                return;
             }
         }
-        return;
-    }
-    var _last_time = _time - 500;
-    _time = Math.floor(_time / 1000);
-    var _second = _time % 60;
-    _time = Math.floor(_time / 60);
-    var _minute = Math.floor(_time % 60);
-    var _hour = Math.floor(_time / 60);
-    var _html = _hour + ':' + _minute + ':' + _second;
+        var _last_time = _time - 500;
+        _time = Math.floor(_time / 1000);
+        var _second = _time % 60;
+        _time = Math.floor(_time / 60);
+        var _minute = Math.floor(_time % 60);
+        var _hour = Math.floor(_time / 60);
+        var _html = _hour + ':' + (_minute < 10 ? '0' + _minute : _minute) + ':' + (_second < 10 ? '0' + _second : _second);
 
-    $("#" + _elem).html(_html);
-    setTimeout('Cooldown.run(' + _last_time + ', "' + _elem + '");', 500);
+        $("#cooldown_" + _id).html(_html);
+        this.timeout_list[_id] = setTimeout(function() {
+            Cooldown.run(_last_time, _id);
+        }, 500);
+        console.log(this.timeout_list);
+    }
 }
 
 var show_alert = function (msg, options) {
@@ -666,10 +670,13 @@ Function.prototype.deferUntil = function(cond, timeLimit, lang) {
     var self = this, interval = null, time = ( + new Date());
     interval = setInterval(function() {
         ret = cond();
-        if (!ret) 
+        if (!ret) {
             if (timeLimit && (new Date() - time) >= timeLimit) {
             // still nothing
-            } else return;
+            } else {
+                return;
+            }
+        }
 
         interval && clearInterval(interval);
         self(ret);

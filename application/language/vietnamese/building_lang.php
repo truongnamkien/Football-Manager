@@ -23,10 +23,12 @@ $lang['building_type_type'] = 'Loại';
 $lang['building_level'] = 'Cấp độ';
 $lang['building_upgrade'] = 'Nâng cấp';
 $lang['building_upgrade_fee'] = 'Phí nâng cấp';
+$lang['building_cooldown'] = 'Thời gian đóng băng';
+
 
 // Upgrade
 $lang['building_upgrade_success'] = 'Nâng cấp thành công';
-$lang['building_upgrade_non_cooldown'] = 'Thời gian chờ vẫn còn, bạn không thể nâng cấp công trình';
+$lang['building_upgrade_non_cooldown'] = 'Thời gian đóng băng vẫn còn, bạn không thể nâng cấp công trình';
 $lang['building_upgrade_error'] = 'Có lỗi xảy ra. Không thể nâng cấp!';
 $lang['building_upgrade_max_level_1'] = 'Công trình này đã đạt cấp độ tối đa. Không thể nâng cấp thêm.';
 $lang['building_upgrade_max_level_2'] = 'Công trình này đã đạt cấp độ tối đa vào thời điểm hiện tại. Vui lòng nâng cấp %name.';

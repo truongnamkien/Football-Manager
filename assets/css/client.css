@@ -139,10 +139,36 @@ div#map_table div.map_cell {
 }
 
 #building_detail_img {
-    width: 480px;
+    width: 240px;
     margin: auto;
 }
 
 #building_detail_info {
     max-width: 620px;
+}
+
+#user_info {
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2em;
+    padding: 0px 15px;
+}
+
+#cooldown_info {
+    padding-left: 15px;
+    color: #fff;
+}
+
+#cooldown_info ul {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+#cooldown_info ul li {
+    list-style: none;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1em;
+    padding: 5px 10px 5px 50px;
 }

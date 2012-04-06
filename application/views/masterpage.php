@@ -54,12 +54,11 @@
     <body>
         <div id="body-wrapper">
             <div id="sidebar">
+                <div id="sidebar-title">
+                    <?php echo Modules::run('profile/_user_info'); ?>
+                </div>
+
                 <div id="sidebar-wrapper">
-                    <h1 id="sidebar-title"><?php echo $PAGE_TITLE ?></h1>
-
-                    <div id="profile-links">
-                    </div>        
-
                     <?php echo Modules::run('navigator/_main_nav'); ?>
                 </div>
             </div>
