@@ -33,7 +33,7 @@ class Admin_Authen extends MY_Admin_Controller {
     }
 
     public function logout() {
-        $this->my_auth->logout();
+        $this->my_auth->logout(TRUE);
         redirect(site_url('admin_login'));
     }
 

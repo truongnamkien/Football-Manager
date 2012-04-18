@@ -35,7 +35,6 @@ var Cooldown = {
         this.timeout_list[_id] = setTimeout(function() {
             Cooldown.run(_last_time, _id);
         }, 500);
-        console.log(this.timeout_list);
     }
 }
 

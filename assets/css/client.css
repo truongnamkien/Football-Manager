@@ -172,3 +172,21 @@ div#map_table div.map_cell {
     line-height: 1em;
     padding: 5px 10px 5px 50px;
 }
+
+.formation_demo {
+    width: 210px;
+}
+
+.formation_demo_area {
+    height: 48px;
+    width: 70px;
+}
+
+span.required {
+    color: #C53727;
+}
+
+ul.loginFeatures label {
+    width: 100px;
+}
+

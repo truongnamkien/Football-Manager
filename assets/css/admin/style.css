@@ -935,3 +935,21 @@ textarea {  resize: none; color: #7B7B7B; overflow: auto}
 #table_list, #table_form {
     width: 100%;
 }
+
+.formation_demo {
+    width: 210px;
+}
+
+.formation_demo_area {
+    height: 48px;
+    width: 70px;
+}
+
+span.required {
+    color: #C53727;
+}
+
+ul.loginFeatures label {
+    width: 100px;
+}
+

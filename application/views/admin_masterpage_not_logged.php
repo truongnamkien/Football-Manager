@@ -12,28 +12,12 @@
         <!-- Reset Stylesheet -->
         <?php echo asset_link_tag('css/admin/reset.css'); ?>
         <?php echo asset_link_tag('css/admin/style.css'); ?>
-        <?php echo asset_link_tag('css/default.css'); ?>
-        <?php echo asset_link_tag('css/admin/invalid.css'); ?>
-
-        <!--[if lte IE 7]>
-        <?php echo asset_link_tag('css/admin/ie.css'); ?>
-        <![endif]-->
+        <?php echo asset_link_tag('css/common.css'); ?>
 
         <!-- jQuery -->
         <?php echo asset_js('js/jquery-1.6.4.js') ?>
         <?php echo asset_js('js/admin/jquery.configuration.js'); ?>
 
-        <!--[if IE]>
-        <?php echo asset_js('js/admin/jquery.bgiframe.js'); ?>
-        <![endif]-->
-
-        <!-- Internet Explorer .png-fix -->
-        <!--[if IE 6]>
-        <?php echo asset_js('js/admin/DD_belatedPNG_0.0.7a.js'); ?>
-            <script type="text/javascript">
-                DD_belatedPNG.fix('.png_bg, img, li');
-            </script>
-        <![endif]-->
     </head>
 
     <body id="login">

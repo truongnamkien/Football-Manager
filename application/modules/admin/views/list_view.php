@@ -18,7 +18,7 @@
                 <?php echo lang('empty_list_data'); ?>
             <?php else : ?>
                 <div>
-                    <input name="search" id="search" value="" class="text-input small-input" />
+                    <input autocomplete="off" name="search" id="search" value="" class="text-input small-input" />
                 </div>
 
                 <table id="table_list" class="filterable">
@@ -36,63 +36,61 @@
 
                     <tbody>                       
                         <?php
-                        if (count($objects) > 0) {
-                            foreach ($objects as $obj) {
-                                $obj_id = $obj[get_object_key($obj, $type)];
-                                echo '<tr class="inlineEdit" rel="' . $obj_id . '">';
-                                echo '<td><input type="checkbox" value="' . $obj_id . '" /></td>';
+                        foreach ($objects as $obj) {
+                            $obj_id = $obj[get_object_key($obj, $type)];
+                            echo '<tr class="inlineEdit" rel="' . $obj_id . '">';
+                            echo '<td><input type="checkbox" value="' . $obj_id . '" /></td>';
 
-                                foreach ($obj as $key => $val) {
-                                    if (preg_match('/id$/', $key)) {
-                                        echo '<td class="inlineDisable inline_id">';
+                            foreach ($obj as $key => $val) {
+                                if (preg_match('/id$/', $key)) {
+                                    echo '<td class="inlineDisable inline_id">';
+                                } else {
+                                    if (ctype_lower($key[0])) {
+                                        echo '<td field="' . $key . '" class="inlineDisable">';
                                     } else {
-                                        if (ctype_lower($key[0])) {
-                                            echo '<td field="' . $key . '" class="inlineDisable">';
-                                        } else {
-                                            echo '<td class="inlineDisable">';
-                                        }
+                                        echo '<td class="inlineDisable">';
                                     }
-
-                                    if ($key == 'actions' && is_array($val)) {
-                                        $index = 0;
-                                        foreach ($val as $action) {
-                                            echo $action;
-                                            if ($index < count($val) - 1) {
-                                                echo ' | ';
-                                            }
-                                            $index++;
-                                        }
-                                    } else if (preg_match('/([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/i', $val)) {
-                                        $base_url = '';
-
-                                        if (strpos($val, 'http://') === FALSE) {
-                                            $base_url = base_url();
-                                        }
-                                        echo '<img src="' . $base_url . $val . '" width=50 />';
-                                    } else {
-                                        echo $val;
-                                    }
-                                    echo '</td>';
                                 }
 
-                                echo '</tr>';
+                                if ($key == 'actions' && is_array($val)) {
+                                    $index = 0;
+                                    foreach ($val as $action) {
+                                        echo $action;
+                                        if ($index < count($val) - 1) {
+                                            echo ' | ';
+                                        }
+                                        $index++;
+                                    }
+                                } else if (preg_match('/([^\s]+(\.(?i)(jpg|png|gif|bmp))$)/i', $val)) {
+                                    $base_url = '';
+
+                                    if (strpos($val, 'http://') === FALSE) {
+                                        $base_url = base_url();
+                                    }
+                                    echo '<img src="' . $base_url . $val . '" width=50 />';
+                                } else {
+                                    echo $val;
+                                }
+                                echo '</td>';
                             }
-                        } else {
-                            echo lang($type . 'empty');
+
+                            echo '</tr>';
                         }
                         ?>
                     </tbody>
                 </table>
 
                 <div>
-                    <div class="bulk-actions align-left"><!-- Start Group Actions -->
-                        <?php
-                        echo form_open_multipart('admin/' . $type . '/mass', array('id' => 'frm_mass_action', 'onsubmit' => 'return mass_submit();'));
-                        echo form_hidden('ids');
-                        echo form_dropdown('mass_action_dropdown', $mass_action_options, 'select');
-                        echo form_submit(array('name' => 'submit', 'class' => 'button remove', 'disabled' => 'true'), lang('admin_mass_submit'));
-                        echo form_close();
-                        ?>
+                    <?php if (isset($mass_action_options) && !empty($mass_action_options)): ?>
+                        <div class="bulk-actions align-left"><!-- Start Group Actions -->
+                            <?php
+                            echo form_open_multipart('admin/' . $type . '/mass', array('id' => 'frm_mass_action', 'onsubmit' => 'return mass_submit();'));
+                            echo form_hidden('ids');
+                            echo form_dropdown('mass_action_dropdown', $mass_action_options, 'select');
+                            echo form_submit(array('name' => 'submit', 'class' => 'button remove', 'disabled' => 'true'), lang('admin_mass_submit'));
+                            echo form_close();
+                            ?>
+                        <?php endif; ?>
                     </div><!-- End Group Actions -->
                     <div class="clear"></div>
                 </div>
@@ -133,36 +131,40 @@
             }
         });
 
-        $('select[name="mass_action_dropdown"]').change(function() {
-            if ($('select[name="mass_action_dropdown"]').val() == '<?php echo key($mass_action_options) ?>') {
-                $('input[name="submit"].remove').attr('disabled', 'true');
-            } else {
-                $('input[name="submit"].remove').removeAttr('disabled');
-            }
-        });
-    });
-    
-    function mass_submit() {
-        var _checkboxs = $('#list tbody').find('input[type="checkbox"]');
-        var _ids = "";
-        for (var i = 0; i < _checkboxs.length; i++) {
-            if(_checkboxs[i].checked) {
-                if (_ids == "") {
-                    _ids = _checkboxs[i].value;
+<?php if (isset($mass_action_options) && !empty($mass_action_options)): ?>
+            $('select[name="mass_action_dropdown"]').change(function() {
+                if ($('select[name="mass_action_dropdown"]').val() == '<?php echo key($mass_action_options) ?>') {
+                    $('input[name="submit"].remove').attr('disabled', 'true');
                 } else {
-                    _ids += "," + _checkboxs[i].value;
+                    $('input[name="submit"].remove').removeAttr('disabled');
+                }
+            });
+        });
+<?php endif; ?>
+
+<?php if (isset($mass_action_options) && !empty($mass_action_options)): ?>
+        function mass_submit() {
+            var _checkboxs = $('#list tbody').find('input[type="checkbox"]');
+            var _ids = "";
+            for (var i = 0; i < _checkboxs.length; i++) {
+                if(_checkboxs[i].checked) {
+                    if (_ids == "") {
+                        _ids = _checkboxs[i].value;
+                    } else {
+                        _ids += "," + _checkboxs[i].value;
+                    }
                 }
             }
-        }
-        if (_ids == "") {
-            alert('<?php echo lang('admin_mass_select_empty') ?>');
-        } else {
-            var _result = confirm('<?php echo lang('admin_confirm_content'); ?>');
-            if(_result) {
-                $('input[name="ids"]').val(_ids);
-                return true;
+            if (_ids == "") {
+                alert('<?php echo lang('admin_mass_select_empty') ?>');
+            } else {
+                var _result = confirm('<?php echo lang('admin_confirm_content'); ?>');
+                if(_result) {
+                    $('input[name="ids"]').val(_ids);
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
-    }
+<?php endif; ?>
 </script>

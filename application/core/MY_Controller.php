@@ -68,6 +68,8 @@ class MY_Ajax extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->my_auth->auto_login();
+        $this->my_auth->auto_login(TRUE);
 
         $this->_data['status'] = 0;
         $this->_data['onload'] = array();
@@ -117,6 +119,7 @@ class MY_Outer_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->my_auth->auto_login();
         $this->_masterview = 'admin_masterpage_not_logged';
     }
 
@@ -126,6 +129,7 @@ class MY_Inner_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->my_auth->auto_login();
         $this->my_auth->login_required();
     }
 
@@ -135,6 +139,7 @@ class MY_Admin_Controller extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->my_auth->auto_login(TRUE);
         if ($this->my_auth->logged_in(TRUE)) {
             $this->_masterview = 'admin_masterpage_logged';
         } else {
